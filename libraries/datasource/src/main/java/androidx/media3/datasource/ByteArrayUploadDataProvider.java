@@ -17,8 +17,6 @@ package androidx.media3.datasource;
 
 import static java.lang.Math.min;
 
-import android.net.http.UploadDataProvider;
-import android.net.http.UploadDataSink;
 import android.os.Build;
 import androidx.annotation.RequiresExtension;
 import java.io.IOException;

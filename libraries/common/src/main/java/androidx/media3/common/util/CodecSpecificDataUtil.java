@@ -866,11 +866,14 @@ public final class CodecSpecificDataUtil {
       case "09":
         return MediaCodecInfo.CodecProfileLevel.DolbyVisionLevelUhd60;
       case "10":
-        return MediaCodecInfo.CodecProfileLevel.DolbyVisionLevelUhd120;
+//        return MediaCodecInfo.CodecProfileLevel.DolbyVisionLevelUhd120;
+        return 512;
       case "11":
-        return MediaCodecInfo.CodecProfileLevel.DolbyVisionLevel8k30;
+//        return MediaCodecInfo.CodecProfileLevel.DolbyVisionLevel8k30;
+        return 1024;
       case "12":
-        return MediaCodecInfo.CodecProfileLevel.DolbyVisionLevel8k60;
+//        return MediaCodecInfo.CodecProfileLevel.DolbyVisionLevel8k60;
+        return 2048;
       case "13":
         return 0x1000;
       default:

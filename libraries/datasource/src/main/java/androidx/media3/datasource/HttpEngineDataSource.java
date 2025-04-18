@@ -15,17 +15,11 @@
  */
 package androidx.media3.datasource;
 
-import static android.net.http.UrlRequest.REQUEST_PRIORITY_MEDIUM;
 import static androidx.media3.common.util.Util.castNonNull;
 import static androidx.media3.datasource.HttpUtil.buildRangeRequestHeader;
+import static androidx.media3.datasource.UrlRequest.REQUEST_PRIORITY_MEDIUM;
 
 import android.net.Uri;
-import android.net.http.HttpEngine;
-import android.net.http.HttpException;
-import android.net.http.NetworkException;
-import android.net.http.UrlRequest;
-import android.net.http.UrlRequest.Status;
-import android.net.http.UrlResponseInfo;
 import android.os.Build;
 import android.text.TextUtils;
 import androidx.annotation.Nullable;
@@ -38,6 +32,7 @@ import androidx.media3.common.util.Clock;
 import androidx.media3.common.util.ConditionVariable;
 import androidx.media3.common.util.UnstableApi;
 import androidx.media3.common.util.Util;
+import androidx.media3.datasource.UrlRequest.Status;
 import com.google.common.base.Ascii;
 import com.google.common.base.Predicate;
 import com.google.common.net.HttpHeaders;
@@ -281,7 +276,7 @@ public final class HttpEngineDataSource extends BaseDataSource implements HttpDa
 
     /**
      * Returns the status of the connection establishment at the moment when the error occurred, as
-     * defined by {@link UrlRequest.Status}.
+     * defined by {@link Status}.
      */
     public final int httpEngineConnectionStatus;
 

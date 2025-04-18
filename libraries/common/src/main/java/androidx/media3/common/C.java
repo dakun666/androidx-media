@@ -298,7 +298,8 @@ public final class C {
   @UnstableApi public static final int ENCODING_DTS_HD = AudioFormat.ENCODING_DTS_HD;
 
   /** See {@link AudioFormat#ENCODING_DTS_UHD_P2}. */
-  @UnstableApi public static final int ENCODING_DTS_UHD_P2 = AudioFormat.ENCODING_DTS_UHD_P2;
+//  @UnstableApi public static final int ENCODING_DTS_UHD_P2 = AudioFormat.ENCODING_DTS_UHD_P2;
+  @UnstableApi public static final int ENCODING_DTS_UHD_P2 = 30;
 
   /** See {@link AudioFormat#ENCODING_DOLBY_TRUEHD}. */
   @UnstableApi public static final int ENCODING_DOLBY_TRUEHD = AudioFormat.ENCODING_DOLBY_TRUEHD;
@@ -318,11 +319,13 @@ public final class C {
 
   /** See {@link AudioAttributes#SPATIALIZATION_BEHAVIOR_AUTO}. */
   public static final int SPATIALIZATION_BEHAVIOR_AUTO =
-      AudioAttributes.SPATIALIZATION_BEHAVIOR_AUTO;
+//      AudioAttributes.SPATIALIZATION_BEHAVIOR_AUTO;
+      0;
 
   /** See {@link AudioAttributes#SPATIALIZATION_BEHAVIOR_NEVER}. */
   public static final int SPATIALIZATION_BEHAVIOR_NEVER =
-      AudioAttributes.SPATIALIZATION_BEHAVIOR_NEVER;
+//      AudioAttributes.SPATIALIZATION_BEHAVIOR_NEVER;
+      1;
 
   /**
    * Stream types for an {@link android.media.AudioTrack}. One of {@link #STREAM_TYPE_ALARM}, {@link

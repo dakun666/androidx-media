@@ -258,6 +258,7 @@ public final class Util {
    * @param filter Selects the Intent broadcasts to be received.
    * @return The first sticky intent found that matches {@code filter}, or null if there are none.
    */
+  @SuppressLint("WrongConstant")
   @UnstableApi
   @Nullable
   public static Intent registerReceiverNotExported(
@@ -265,7 +266,8 @@ public final class Util {
     if (SDK_INT < 33) {
       return context.registerReceiver(receiver, filter);
     } else {
-      return context.registerReceiver(receiver, filter, Context.RECEIVER_NOT_EXPORTED);
+//      return context.registerReceiver(receiver, filter, Context.RECEIVER_NOT_EXPORTED);
+      return context.registerReceiver(receiver, filter, 4);
     }
   }
 
@@ -2242,29 +2244,41 @@ public final class Util {
         return AudioFormat.CHANNEL_OUT_7POINT1_SURROUND;
       case 10:
         if (Util.SDK_INT >= 32) {
-          return AudioFormat.CHANNEL_OUT_5POINT1POINT4;
+//          return AudioFormat.CHANNEL_OUT_5POINT1POINT4;
+          return 737532;
         } else {
           // Before API 32, height channel masks are not available. For those 10-channel streams
           // supported on the audio output devices (e.g. DTS:X P2), we use 7.1-surround instead.
           return AudioFormat.CHANNEL_OUT_7POINT1_SURROUND;
         }
       case 12:
-        return AudioFormat.CHANNEL_OUT_7POINT1POINT4;
+//        return AudioFormat.CHANNEL_OUT_7POINT1POINT4;
+        return 743676;
       case 24:
         if (Util.SDK_INT >= 32) {
-          return AudioFormat.CHANNEL_OUT_7POINT1POINT4
+//          return AudioFormat.CHANNEL_OUT_7POINT1POINT4
+          return 743676
               | AudioFormat.CHANNEL_OUT_FRONT_LEFT_OF_CENTER
               | AudioFormat.CHANNEL_OUT_FRONT_RIGHT_OF_CENTER
               | AudioFormat.CHANNEL_OUT_BACK_CENTER
-              | AudioFormat.CHANNEL_OUT_TOP_CENTER
-              | AudioFormat.CHANNEL_OUT_TOP_FRONT_CENTER
-              | AudioFormat.CHANNEL_OUT_TOP_BACK_CENTER
-              | AudioFormat.CHANNEL_OUT_TOP_SIDE_LEFT
-              | AudioFormat.CHANNEL_OUT_TOP_SIDE_RIGHT
-              | AudioFormat.CHANNEL_OUT_BOTTOM_FRONT_LEFT
-              | AudioFormat.CHANNEL_OUT_BOTTOM_FRONT_RIGHT
-              | AudioFormat.CHANNEL_OUT_BOTTOM_FRONT_CENTER
-              | AudioFormat.CHANNEL_OUT_LOW_FREQUENCY_2;
+//              | AudioFormat.CHANNEL_OUT_TOP_CENTER
+              | 8192
+//              | AudioFormat.CHANNEL_OUT_TOP_FRONT_CENTER
+              | 32768
+//              | AudioFormat.CHANNEL_OUT_TOP_BACK_CENTER
+              | 262144
+//              | AudioFormat.CHANNEL_OUT_TOP_SIDE_LEFT
+              | 1048576
+//              | AudioFormat.CHANNEL_OUT_TOP_SIDE_RIGHT
+              | 2097152
+//              | AudioFormat.CHANNEL_OUT_BOTTOM_FRONT_LEFT
+              | 4194304
+//              | AudioFormat.CHANNEL_OUT_BOTTOM_FRONT_RIGHT
+              | 16777216
+//              | AudioFormat.CHANNEL_OUT_BOTTOM_FRONT_CENTER
+              | 8388608
+//              | AudioFormat.CHANNEL_OUT_LOW_FREQUENCY_2;
+              | 33554432;
         } else {
           return AudioFormat.CHANNEL_INVALID;
         }
@@ -3752,15 +3766,19 @@ public final class Util {
 
   @RequiresApi(api = 33)
   private static boolean requestReadMediaPermissions(Activity activity) {
-    if (activity.checkSelfPermission(permission.READ_MEDIA_AUDIO)
+//    if (activity.checkSelfPermission(permission.READ_MEDIA_AUDIO)
+    if (activity.checkSelfPermission("android.permission.READ_MEDIA_AUDIO")
             != PackageManager.PERMISSION_GRANTED
-        || activity.checkSelfPermission(permission.READ_MEDIA_VIDEO)
+//        || activity.checkSelfPermission(permission.READ_MEDIA_VIDEO)
+        || activity.checkSelfPermission("android.permission.READ_MEDIA_VIDEO")
             != PackageManager.PERMISSION_GRANTED
-        || activity.checkSelfPermission(permission.READ_MEDIA_IMAGES)
+//        || activity.checkSelfPermission(permission.READ_MEDIA_IMAGES)
+        || activity.checkSelfPermission("android.permission.READ_MEDIA_IMAGES")
             != PackageManager.PERMISSION_GRANTED) {
       activity.requestPermissions(
           new String[] {
-            permission.READ_MEDIA_AUDIO, permission.READ_MEDIA_IMAGES, permission.READ_MEDIA_VIDEO
+//            permission.READ_MEDIA_AUDIO, permission.READ_MEDIA_IMAGES, permission.READ_MEDIA_VIDEO
+            "android.permission.READ_MEDIA_AUDIO", "android.permission.READ_MEDIA_IMAGES", "android.permission.READ_MEDIA_VIDEO"
           },
           /* requestCode= */ 0);
       return true;
