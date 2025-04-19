@@ -16,7 +16,6 @@
 package androidx.media3.session;
 
 import static com.google.common.truth.Truth.assertThat;
-import static org.robolectric.Shadows.shadowOf;
 
 import android.app.PendingIntent;
 import android.content.Context;
@@ -34,6 +33,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
+import org.robolectric.shadow.api.Shadow;
 import org.robolectric.shadows.ShadowPendingIntent;
 
 /** Tests for {@link DefaultActionFactory}. */
@@ -64,7 +64,8 @@ public class DefaultActionFactoryTest {
     PendingIntent pendingIntent =
         actionFactory.createMediaActionPendingIntent(mediaSession, Player.COMMAND_SEEK_FORWARD);
 
-    ShadowPendingIntent shadowPendingIntent = shadowOf(pendingIntent);
+//    ShadowPendingIntent shadowPendingIntent = shadowOf(pendingIntent);
+    ShadowPendingIntent shadowPendingIntent = Shadow.extract(pendingIntent);
     assertThat(actionFactory.isMediaAction(shadowPendingIntent.getSavedIntent())).isTrue();
     assertThat(shadowPendingIntent.getSavedIntent().getData()).isEqualTo(mediaSession.getUri());
   }
@@ -77,7 +78,7 @@ public class DefaultActionFactoryTest {
     PendingIntent pendingIntent =
         actionFactory.createMediaActionPendingIntent(mediaSession, Player.COMMAND_PLAY_PAUSE);
 
-    ShadowPendingIntent shadowPendingIntent = shadowOf(pendingIntent);
+    ShadowPendingIntent shadowPendingIntent = Shadow.extract(pendingIntent);
     assertThat(shadowPendingIntent.isForegroundService()).isTrue();
   }
 
@@ -90,7 +91,7 @@ public class DefaultActionFactoryTest {
     PendingIntent pendingIntent =
         actionFactory.createMediaActionPendingIntent(mediaSession, Player.COMMAND_PLAY_PAUSE);
 
-    ShadowPendingIntent shadowPendingIntent = shadowOf(pendingIntent);
+    ShadowPendingIntent shadowPendingIntent = Shadow.extract(pendingIntent);
     assertThat(actionFactory.isMediaAction(shadowPendingIntent.getSavedIntent())).isTrue();
     assertThat(shadowPendingIntent.isForegroundService()).isFalse();
   }
@@ -133,7 +134,7 @@ public class DefaultActionFactoryTest {
     NotificationCompat.Action notificationAction =
         actionFactory.createCustomActionFromCustomCommandButton(mediaSession, customSessionCommand);
 
-    ShadowPendingIntent shadowPendingIntent = shadowOf(notificationAction.actionIntent);
+    ShadowPendingIntent shadowPendingIntent = Shadow.extract(notificationAction.actionIntent);
     assertThat(shadowPendingIntent.getSavedIntent().getData()).isEqualTo(mediaSession.getUri());
     assertThat(String.valueOf(notificationAction.title)).isEqualTo("name");
     assertThat(notificationAction.getIconCompat().getResId())

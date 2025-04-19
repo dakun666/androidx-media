@@ -28,7 +28,6 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
-import static org.robolectric.Shadows.shadowOf;
 
 import android.os.Looper;
 import androidx.annotation.Nullable;
@@ -60,6 +59,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
+import org.robolectric.shadow.api.Shadow;
 
 /** Unit test for {@link PreloadMediaPeriod}. */
 @RunWith(AndroidJUnit4.class)
@@ -174,7 +174,7 @@ public final class PreloadMediaPeriodTest {
     preloadMediaPeriod.preload(preloadCallback, /* positionUs= */ 0L);
     preloadMediaPeriod.prepare(prepareCallback, /* positionUs= */ 0L);
     wrappedMediaPeriod.setPreparationComplete();
-    shadowOf(Looper.getMainLooper()).idle();
+    ((org.robolectric.shadows.ShadowLooper) Shadow.extract(Looper.getMainLooper())).idle();
 
     // Should only invoke the latest callback.
     assertThat(onPreparedOfPreloadCallbackCalled.get()).isFalse();

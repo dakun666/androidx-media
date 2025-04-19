@@ -256,7 +256,7 @@ public final class ExportException extends Exception {
           .put("ERROR_CODE_MUXING_FAILED", ERROR_CODE_MUXING_FAILED)
           .put("ERROR_CODE_MUXING_TIMEOUT", ERROR_CODE_MUXING_TIMEOUT)
           .put("ERROR_CODE_MUXING_APPEND", ERROR_CODE_MUXING_APPEND)
-          .buildOrThrow();
+          .build();
 
   /** Returns the name of a given {@code errorCode}. */
   public static String getErrorCodeName(@ErrorCode int errorCode) {

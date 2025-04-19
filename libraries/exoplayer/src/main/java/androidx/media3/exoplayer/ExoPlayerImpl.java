@@ -3444,9 +3444,9 @@ import java.util.concurrent.TimeoutException;
                 || device.getType() == AudioDeviceInfo.TYPE_BLE_SPEAKER)) {
           return true;
         }
-        if (Util.SDK_INT >= 33 && device.getType() == AudioDeviceInfo.TYPE_BLE_BROADCAST) {
-          return true;
-        }
+//        if (Util.SDK_INT >= 33 && device.getType() == AudioDeviceInfo.TYPE_BLE_BROADCAST) {
+//          return true;
+//        }
       }
       return false;
     }

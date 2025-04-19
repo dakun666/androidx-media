@@ -22,9 +22,9 @@ import androidx.annotation.RestrictTo;
 import androidx.media3.common.util.UnstableApi;
 
 /** Provides methods to check the suitability of selected media outputs. */
-@RequiresApi(35)
-@RestrictTo(LIBRARY_GROUP)
-@UnstableApi
+//@RequiresApi(35)
+//@RestrictTo(LIBRARY_GROUP)
+//@UnstableApi
 public interface SuitableOutputChecker {
 
   /** Callback to notify changes in the suitability of the selected media output. */

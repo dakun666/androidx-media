@@ -71,7 +71,7 @@ import com.google.common.base.Predicate;
   }
 
   /**
-   * Removes all font size information from {@code cue}.
+   * Removes all fonts size information from {@code cue}.
    *
    * <p>This involves:
    *

@@ -1,0 +1,11 @@
+gradle :lib-common:publishReleasePublicationToPublicRepository
+gradle :lib-container:publishReleasePublicationToPublicRepository
+gradle :lib-database:publishReleasePublicationToPublicRepository
+gradle :lib-datasource:publishReleasePublicationToPublicRepository
+gradle :lib-decoder:publishReleasePublicationToPublicRepository
+gradle :lib-exoplayer:publishReleasePublicationToPublicRepository
+gradle :lib-exoplayer-dash:publishReleasePublicationToPublicRepository
+gradle :lib-exoplayer-hls:publishReleasePublicationToPublicRepository
+gradle :lib-extractor:publishReleasePublicationToPublicRepository
+gradle :lib-session:publishReleasePublicationToPublicRepository
+gradle :lib-ui:publishReleasePublicationToPublicRepository

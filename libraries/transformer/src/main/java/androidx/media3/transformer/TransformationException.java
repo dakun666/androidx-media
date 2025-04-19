@@ -202,7 +202,7 @@ public final class TransformationException extends Exception {
           .put("ERROR_CODE_VIDEO_FRAME_PROCESSING_FAILED", ERROR_CODE_VIDEO_FRAME_PROCESSING_FAILED)
           .put("ERROR_CODE_AUDIO_PROCESSING_FAILED", ERROR_CODE_AUDIO_PROCESSING_FAILED)
           .put("ERROR_CODE_MUXING_FAILED", ERROR_CODE_MUXING_FAILED)
-          .buildOrThrow();
+          .build();
 
   /** Returns the name of a given {@code errorCode}. */
   public static String getErrorCodeName(@ErrorCode int errorCode) {

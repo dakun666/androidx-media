@@ -327,10 +327,12 @@ public final class DefaultEncoderFactory implements Codec.EncoderFactory {
     if (Util.SDK_INT >= 31 && ColorInfo.isTransferHdr(format.colorInfo)) {
       // TODO(b/260389841): Validate the picked encoder supports HDR editing.
       if (EncoderUtil.getSupportedColorFormats(encoderInfo, mimeType)
-          .contains(MediaCodecInfo.CodecCapabilities.COLOR_Format32bitABGR2101010)) {
+//          .contains(MediaCodecInfo.CodecCapabilities.COLOR_Format32bitABGR2101010)) {
+          .contains(0x7F00AAA2)) {
         mediaFormat.setInteger(
             MediaFormat.KEY_COLOR_FORMAT,
-            MediaCodecInfo.CodecCapabilities.COLOR_Format32bitABGR2101010);
+//            MediaCodecInfo.CodecCapabilities.COLOR_Format32bitABGR2101010);
+            0x7F00AAA2);
       } else {
         throw createExportException(
             format, /* errorString= */ "Encoding HDR is not supported on this device.");
@@ -373,9 +375,9 @@ public final class DefaultEncoderFactory implements Codec.EncoderFactory {
       }
     }
 
-    if (Util.SDK_INT >= 35) {
-      mediaFormat.setInteger(MediaFormat.KEY_IMPORTANCE, max(0, -codecPriority));
-    }
+//    if (Util.SDK_INT >= 35) {
+//      mediaFormat.setInteger(MediaFormat.KEY_IMPORTANCE, max(0, -codecPriority));
+//    }
 
     return new DefaultCodec(
         context,

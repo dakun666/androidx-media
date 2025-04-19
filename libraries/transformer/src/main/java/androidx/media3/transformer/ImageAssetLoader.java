@@ -158,9 +158,10 @@ public final class ImageAssetLoader implements AssetLoader {
                     .setColorInfo(ColorInfo.SRGB_BT709_FULL)
                     .build();
             Format outputFormat =
-                retainHdrFromUltraHdrImage && Util.SDK_INT >= 34 && bitmap.hasGainmap()
-                    ? inputFormat.buildUpon().setSampleMimeType(MimeTypes.IMAGE_JPEG_R).build()
-                    : inputFormat;
+//                retainHdrFromUltraHdrImage && Util.SDK_INT >= 34 && bitmap.hasGainmap()
+//                    ? inputFormat.buildUpon().setSampleMimeType(MimeTypes.IMAGE_JPEG_R).build()
+//                    : inputFormat;
+                inputFormat;
             try {
               listener.onTrackAdded(inputFormat, SUPPORTED_OUTPUT_TYPE_DECODED);
               scheduledExecutorService.submit(() -> queueBitmapInternal(bitmap, outputFormat));

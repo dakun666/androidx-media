@@ -19,7 +19,6 @@ package androidx.media3.exoplayer.mediacodec;
 import static com.google.common.truth.Truth.assertThat;
 import static org.junit.Assert.assertThrows;
 import static org.mockito.Mockito.doAnswer;
-import static org.robolectric.Shadows.shadowOf;
 
 import android.media.MediaCodec;
 import android.media.MediaFormat;
@@ -39,6 +38,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
+import org.robolectric.shadow.api.Shadow;
 
 /** Unit tests for {@link AsynchronousMediaCodecBufferEnqueuer}. */
 @RunWith(AndroidJUnit4.class)
@@ -82,7 +82,7 @@ public class AsynchronousMediaCodecBufferEnqueuerTest {
         /* size= */ 4,
         /* presentationTimeUs= */ 0,
         /* flags= */ 0);
-    shadowOf(handlerThread.getLooper()).idle();
+    ((org.robolectric.shadows.ShadowLooper) Shadow.extract(handlerThread.getLooper())).idle();
 
     MediaCodec.BufferInfo bufferInfo = new MediaCodec.BufferInfo();
     assertThat(codec.dequeueOutputBuffer(bufferInfo, 0))

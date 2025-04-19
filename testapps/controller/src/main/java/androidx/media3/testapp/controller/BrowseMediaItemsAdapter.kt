@@ -38,7 +38,7 @@ import java.util.Stack
 /** Helper class that enables navigation on tree in MediaBrowser. */
 class BrowseMediaItemsAdapter(
   private val activity: Activity,
-  private val mediaBrowser: MediaBrowser
+  private val mediaBrowser: MediaBrowser?
 ) : RecyclerView.Adapter<BrowseMediaItemsAdapter.ViewHolder>() {
   private var items: List<MediaItem> = emptyList()
   // Stack that holds ancestors of current item.
@@ -77,7 +77,7 @@ class BrowseMediaItemsAdapter(
     }
 
     if (
-      mediaBrowser.isSessionCommandAvailable(SessionCommand.COMMAND_CODE_LIBRARY_GET_LIBRARY_ROOT)
+      mediaBrowser?.isSessionCommandAvailable(SessionCommand.COMMAND_CODE_LIBRARY_GET_LIBRARY_ROOT) == true
     ) {
       val libraryResult: ListenableFuture<LibraryResult<MediaItem>> =
         mediaBrowser.getLibraryRoot(null)
@@ -139,9 +139,9 @@ class BrowseMediaItemsAdapter(
         subscribe()
       }
       if (mediaMetadata.isPlayable == true) {
-        mediaBrowser.setMediaItem(MediaItem.Builder().setMediaId(item.mediaId).build())
-        mediaBrowser.prepare()
-        mediaBrowser.play()
+        mediaBrowser?.setMediaItem(MediaItem.Builder().setMediaId(item.mediaId).build())
+        mediaBrowser?.prepare()
+        mediaBrowser?.play()
       }
     }
   }
@@ -153,10 +153,10 @@ class BrowseMediaItemsAdapter(
   }
 
   private fun supportsSubscribe(): Boolean =
-    mediaBrowser.isSessionCommandAvailable(SessionCommand.COMMAND_CODE_LIBRARY_SUBSCRIBE)
+    mediaBrowser?.isSessionCommandAvailable(SessionCommand.COMMAND_CODE_LIBRARY_SUBSCRIBE) == true
 
   private fun supportsUnsubscribe(): Boolean =
-    mediaBrowser.isSessionCommandAvailable(SessionCommand.COMMAND_CODE_LIBRARY_UNSUBSCRIBE)
+    mediaBrowser?.isSessionCommandAvailable(SessionCommand.COMMAND_CODE_LIBRARY_UNSUBSCRIBE) == true
 
   private fun setMessageForEmptyList(holder: ViewHolder, message: String) {
     holder.name.text = message
@@ -173,14 +173,14 @@ class BrowseMediaItemsAdapter(
   @SuppressWarnings("FutureReturnValueIgnored")
   private fun subscribe() {
     if (nodes.isNotEmpty() && supportsSubscribe()) {
-      mediaBrowser.subscribe(nodes.peek(), null)
+      mediaBrowser?.subscribe(nodes.peek(), null)
     }
   }
 
   @SuppressWarnings("FutureReturnValueIgnored")
   private fun unsubscribe() {
     if (nodes.isNotEmpty() && supportsUnsubscribe()) {
-      mediaBrowser.unsubscribe(nodes.peek())
+      mediaBrowser?.unsubscribe(nodes.peek())
     }
     updateItems(emptyList())
   }

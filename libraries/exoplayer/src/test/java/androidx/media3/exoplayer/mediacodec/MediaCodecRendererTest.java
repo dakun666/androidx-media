@@ -637,7 +637,8 @@ public class MediaCodecRendererTest {
         @Nullable MediaCrypto crypto,
         float codecOperatingRate) {
       return MediaCodecAdapter.Configuration.createForAudioDecoding(
-          codecInfo, new MediaFormat(), format, crypto, /* loudnessCodecController= */ null);
+//          codecInfo, new MediaFormat(), format, crypto, /* loudnessCodecController= */ null);
+          codecInfo, new MediaFormat(), format, crypto);
     }
 
     @Override
@@ -771,10 +772,10 @@ public class MediaCodecRendererTest {
       throw exceptionSupplier.get();
     }
 
-    @Override
-    public void detachOutputSurface() {
-      throw exceptionSupplier.get();
-    }
+//    @Override
+//    public void detachOutputSurface() {
+//      throw exceptionSupplier.get();
+//    }
 
     @Override
     public void setParameters(Bundle params) {

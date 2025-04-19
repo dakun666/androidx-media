@@ -2671,7 +2671,7 @@ import org.checkerframework.checker.nullness.qual.NonNull;
         commandButtonsForMediaItems.put(commandButton.sessionCommand.customAction, commandButton);
       }
     }
-    commandButtonsForMediaItemsMap = commandButtonsForMediaItems.buildOrThrow();
+    commandButtonsForMediaItemsMap = commandButtonsForMediaItems.build();
     playerInfo = result.playerInfo;
     MediaSession.Token platformToken =
         result.platformToken == null ? token.getPlatformToken() : result.platformToken;

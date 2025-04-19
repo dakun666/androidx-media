@@ -33,9 +33,9 @@ import androidx.recyclerview.widget.RecyclerView
 
 class TimelineAdapter(
   private val activity: Activity,
-  private val mediaController: MediaController
+  private val mediaController: MediaController?
 ) : RecyclerView.Adapter<TimelineAdapter.ViewHolder>() {
-  private var timeline: Timeline = mediaController.currentTimeline
+  private var timeline: Timeline? = mediaController?.currentTimeline
   private var currentIndex: Int = -1
 
   init {
@@ -46,7 +46,7 @@ class TimelineAdapter(
 
     val refreshButton: Button = activity.findViewById(R.id.refresh_button)
     refreshButton.setOnClickListener {
-      refreshTimeline(mediaController.currentTimeline, mediaController.currentMediaItemIndex)
+      refreshTimeline(mediaController?.currentTimeline, mediaController?.currentMediaItemIndex ?: 0)
     }
 
     val listener =
@@ -71,10 +71,10 @@ class TimelineAdapter(
         }
       }
 
-    mediaController.addListener(listener)
+    mediaController?.addListener(listener)
   }
 
-  fun refreshTimeline(newTimeline: Timeline, index: Int) {
+  fun refreshTimeline(newTimeline: Timeline?, index: Int) {
     timeline = newTimeline
     currentIndex = index
     notifyDataSetChanged()
@@ -86,16 +86,16 @@ class TimelineAdapter(
     )
 
   override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-    val window = timeline.getWindow(position, Timeline.Window())
-    val mediaMetadata = window.mediaItem.mediaMetadata
-    holder.name.text = mediaMetadata.title ?: "Title metadata empty"
-    holder.subtitle.text = mediaMetadata.subtitle ?: "Subtitle metadata empty"
+    val window = timeline?.getWindow(position, Timeline.Window())
+    val mediaMetadata = window?.mediaItem?.mediaMetadata
+    holder.name.text = mediaMetadata?.title ?: "Title metadata empty"
+    holder.subtitle.text = mediaMetadata?.subtitle ?: "Subtitle metadata empty"
 
     when {
-      mediaMetadata.artworkUri != null -> {
+      mediaMetadata?.artworkUri != null -> {
         holder.icon.setImageURI(mediaMetadata.artworkUri)
       }
-      mediaMetadata.artworkData != null -> {
+      mediaMetadata?.artworkData != null -> {
         val bitmap: Bitmap =
           BitmapFactory.decodeByteArray(
             mediaMetadata.artworkData,
@@ -109,11 +109,11 @@ class TimelineAdapter(
       }
     }
 
-    holder.itemView.setOnClickListener { mediaController.seekToDefaultPosition(position) }
+    holder.itemView.setOnClickListener { mediaController?.seekToDefaultPosition(position) }
     holder.removeButton.apply {
-      if (mediaController.availableCommands.contains(Player.COMMAND_CHANGE_MEDIA_ITEMS)) {
+      if (mediaController?.availableCommands?.contains(Player.COMMAND_CHANGE_MEDIA_ITEMS) == true) {
         visibility = View.VISIBLE
-        setOnClickListener { mediaController.removeMediaItem(position) }
+        setOnClickListener { mediaController?.removeMediaItem(position) }
       } else {
         visibility = View.GONE
         setOnClickListener {}
@@ -129,7 +129,7 @@ class TimelineAdapter(
     holder.itemView.setBackgroundColor(ResourcesCompat.getColor(activity.resources, colorId, null))
   }
 
-  override fun getItemCount(): Int = timeline.windowCount
+  override fun getItemCount(): Int = timeline?.windowCount ?: 0
 
   class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     val name: TextView = itemView.findViewById(R.id.item_name)

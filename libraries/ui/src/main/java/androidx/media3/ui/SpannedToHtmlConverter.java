@@ -164,14 +164,14 @@ import java.util.regex.Pattern;
           absoluteSizeSpan.getDip()
               ? absoluteSizeSpan.getSize()
               : absoluteSizeSpan.getSize() / displayDensity;
-      return Util.formatInvariant("<span style='font-size:%.2fpx;'>", sizeCssPx);
+      return Util.formatInvariant("<span style='fonts-size:%.2fpx;'>", sizeCssPx);
     } else if (span instanceof RelativeSizeSpan) {
       return Util.formatInvariant(
-          "<span style='font-size:%.2f%%;'>", ((RelativeSizeSpan) span).getSizeChange() * 100);
+          "<span style='fonts-size:%.2f%%;'>", ((RelativeSizeSpan) span).getSizeChange() * 100);
     } else if (span instanceof TypefaceSpan) {
       @Nullable String fontFamily = ((TypefaceSpan) span).getFamily();
       return fontFamily != null
-          ? Util.formatInvariant("<span style='font-family:\"%s\";'>", fontFamily)
+          ? Util.formatInvariant("<span style='fonts-family:\"%s\";'>", fontFamily)
           : null;
     } else if (span instanceof StyleSpan) {
       switch (((StyleSpan) span).getStyle()) {

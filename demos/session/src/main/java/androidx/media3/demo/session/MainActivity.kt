@@ -86,13 +86,13 @@ class MainActivity : AppCompatActivity() {
       }
     )
 
-    if (
-      Build.VERSION.SDK_INT >= 33 &&
-        checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) !=
-          PackageManager.PERMISSION_GRANTED
-    ) {
-      requestPermissions(arrayOf(Manifest.permission.POST_NOTIFICATIONS), /* requestCode= */ 0)
-    }
+//    if (
+//      Build.VERSION.SDK_INT >= 33 &&
+//        checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) !=
+//          PackageManager.PERMISSION_GRANTED
+//    ) {
+//      requestPermissions(arrayOf(Manifest.permission.POST_NOTIFICATIONS), /* requestCode= */ 0)
+//    }
   }
 
   override fun onOptionsItemSelected(item: MenuItem): Boolean {

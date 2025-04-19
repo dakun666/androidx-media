@@ -126,7 +126,7 @@ public class SpannedToHtmlConverterTest {
     // and we're using screen density xhdpi i.e. density=2.
     assertThat(htmlAndCss.cssRuleSets).isEmpty();
     assertThat(htmlAndCss.html)
-        .isEqualTo("String with <span style='font-size:5.00px;'>10px</span> section");
+        .isEqualTo("String with <span style='fonts-size:5.00px;'>10px</span> section");
   }
 
   // Set the screen density so we see that px are handled differently to dp.
@@ -145,7 +145,7 @@ public class SpannedToHtmlConverterTest {
 
     assertThat(htmlAndCss.cssRuleSets).isEmpty();
     assertThat(htmlAndCss.html)
-        .isEqualTo("String with <span style='font-size:10.00px;'>10dp</span> section");
+        .isEqualTo("String with <span style='fonts-size:10.00px;'>10dp</span> section");
   }
 
   @Test
@@ -162,7 +162,7 @@ public class SpannedToHtmlConverterTest {
 
     assertThat(htmlAndCss.cssRuleSets).isEmpty();
     assertThat(htmlAndCss.html)
-        .isEqualTo("String with <span style='font-size:10.00%;'>10%</span> section");
+        .isEqualTo("String with <span style='fonts-size:10.00%;'>10%</span> section");
   }
 
   @Test
@@ -180,7 +180,7 @@ public class SpannedToHtmlConverterTest {
     assertThat(htmlAndCss.cssRuleSets).isEmpty();
     assertThat(htmlAndCss.html)
         .isEqualTo(
-            "String with <span style='font-family:\"Times New Roman\";'>Times New Roman</span>"
+            "String with <span style='fonts-family:\"Times New Roman\";'>Times New Roman</span>"
                 + " section");
   }
 

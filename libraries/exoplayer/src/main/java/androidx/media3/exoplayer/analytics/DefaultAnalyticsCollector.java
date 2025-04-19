@@ -1132,7 +1132,7 @@ public class DefaultAnalyticsCollector implements AnalyticsCollector {
           addTimelineForMediaPeriodId(builder, currentPlayerMediaPeriod, preferredTimeline);
         }
       }
-      mediaPeriodTimelines = builder.buildOrThrow();
+      mediaPeriodTimelines = builder.build();
     }
 
     private void addTimelineForMediaPeriodId(

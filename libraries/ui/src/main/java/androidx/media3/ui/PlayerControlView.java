@@ -663,7 +663,8 @@ public class PlayerControlView extends FrameLayout {
       nextButton.setImageDrawable(getDrawable(context, resources, nextDrawableResId));
       nextButton.setOnClickListener(componentListener);
     }
-    Typeface typeface = ResourcesCompat.getFont(context, R.font.roboto_medium_numbers);
+//    Typeface typeface = ResourcesCompat.getFont(context, R.fonts.roboto_medium_numbers);
+    Typeface typeface = Typeface.createFromAsset(context.getAssets(), "fonts/roboto_medium_numbers.ttf");
     ImageView rewButton = findViewById(R.id.exo_rew);
     TextView rewButtonWithAmount = findViewById(R.id.exo_rew_with_amount);
     if (rewButton != null) {

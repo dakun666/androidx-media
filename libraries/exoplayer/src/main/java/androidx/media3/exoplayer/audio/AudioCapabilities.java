@@ -85,7 +85,7 @@ public final class AudioCapabilities {
           .put(C.ENCODING_E_AC3, 8)
           .put(C.ENCODING_DTS_HD, 8)
           .put(C.ENCODING_DOLBY_TRUEHD, 8)
-          .buildOrThrow();
+          .build();
 
   /** Global settings key for devices that can specify external surround sound. */
   private static final String EXTERNAL_SURROUND_SOUND_KEY = "external_surround_sound_enabled";
@@ -143,18 +143,19 @@ public final class AudioCapabilities {
     AudioManager audioManager =
         (AudioManager) checkNotNull(context.getSystemService(Context.AUDIO_SERVICE));
     AudioDeviceInfoApi23 currentDevice =
-        routedDevice != null
-            ? routedDevice
-            : Util.SDK_INT >= 33
-                ? Api33.getDefaultRoutedDeviceForAttributes(audioManager, audioAttributes)
-                : null;
+//        routedDevice != null
+//            ? routedDevice
+//            : Util.SDK_INT >= 33
+//                ? Api33.getDefaultRoutedDeviceForAttributes(audioManager, audioAttributes)
+//                : null;
+        routedDevice;
 
-    if (Util.SDK_INT >= 33 && (Util.isTv(context) || Util.isAutomotive(context))) {
+//    if (Util.SDK_INT >= 33 && (Util.isTv(context) || Util.isAutomotive(context))) {
       // TV or automotive devices generally shouldn't support audio offload for surround encodings,
       // so the encodings we get from AudioManager.getDirectProfilesForAttributes should include
       // the PCM encodings and surround encodings for passthrough mode.
-      return Api33.getCapabilitiesInternalForDirectPlayback(audioManager, audioAttributes);
-    }
+//      return Api33.getCapabilitiesInternalForDirectPlayback(audioManager, audioAttributes);
+//    }
 
     // If a connection to Bluetooth device is detected, we only return the minimum capabilities that
     // is supported by all the devices.
@@ -576,9 +577,9 @@ public final class AudioCapabilities {
         allBluetoothDeviceTypes.add(
             AudioDeviceInfo.TYPE_BLE_HEADSET, AudioDeviceInfo.TYPE_BLE_SPEAKER);
       }
-      if (Util.SDK_INT >= 33) {
-        allBluetoothDeviceTypes.add(AudioDeviceInfo.TYPE_BLE_BROADCAST);
-      }
+//      if (Util.SDK_INT >= 33) {
+//        allBluetoothDeviceTypes.add(AudioDeviceInfo.TYPE_BLE_BROADCAST);
+//      }
       return allBluetoothDeviceTypes.build();
     }
   }
@@ -638,41 +639,41 @@ public final class AudioCapabilities {
     }
   }
 
-  @RequiresApi(33)
-  private static final class Api33 {
-
-    private Api33() {}
-
-    public static AudioCapabilities getCapabilitiesInternalForDirectPlayback(
-        AudioManager audioManager, AudioAttributes audioAttributes) {
-      List<android.media.AudioProfile> directAudioProfiles =
-          audioManager.getDirectProfilesForAttributes(
-              audioAttributes.getAudioAttributesV21().audioAttributes);
-      return new AudioCapabilities(getAudioProfiles(directAudioProfiles));
-    }
-
-    @Nullable
-    public static AudioDeviceInfoApi23 getDefaultRoutedDeviceForAttributes(
-        AudioManager audioManager, AudioAttributes audioAttributes) {
-      List<AudioDeviceInfo> audioDevices;
-      try {
-        audioDevices =
-            checkNotNull(audioManager)
-                .getAudioDevicesForAttributes(
-                    audioAttributes.getAudioAttributesV21().audioAttributes);
-      } catch (RuntimeException e) {
-        // Audio manager failed to retrieve devices.
-        // TODO: b/306324391 - Remove once https://github.com/robolectric/robolectric/commit/442dff
-        //  is released.
-        return null;
-      }
-      if (audioDevices.isEmpty()) {
-        // Can't find current device.
-        return null;
-      }
-      // List only has more than one element if output devices are duplicated, so we assume the
-      // first device in the list has all the information we need.
-      return new AudioDeviceInfoApi23(audioDevices.get(0));
-    }
-  }
+//  @RequiresApi(33)
+//  private static final class Api33 {
+//
+//    private Api33() {}
+//
+//    public static AudioCapabilities getCapabilitiesInternalForDirectPlayback(
+//        AudioManager audioManager, AudioAttributes audioAttributes) {
+//      List<android.media.AudioProfile> directAudioProfiles =
+//          audioManager.getDirectProfilesForAttributes(
+//              audioAttributes.getAudioAttributesV21().audioAttributes);
+//      return new AudioCapabilities(getAudioProfiles(directAudioProfiles));
+//    }
+//
+//    @Nullable
+//    public static AudioDeviceInfoApi23 getDefaultRoutedDeviceForAttributes(
+//        AudioManager audioManager, AudioAttributes audioAttributes) {
+//      List<AudioDeviceInfo> audioDevices;
+//      try {
+//        audioDevices =
+//            checkNotNull(audioManager)
+//                .getAudioDevicesForAttributes(
+//                    audioAttributes.getAudioAttributesV21().audioAttributes);
+//      } catch (RuntimeException e) {
+//        // Audio manager failed to retrieve devices.
+//        // TODO: b/306324391 - Remove once https://github.com/robolectric/robolectric/commit/442dff
+//        //  is released.
+//        return null;
+//      }
+//      if (audioDevices.isEmpty()) {
+//        // Can't find current device.
+//        return null;
+//      }
+//      // List only has more than one element if output devices are duplicated, so we assume the
+//      // first device in the list has all the information we need.
+//      return new AudioDeviceInfoApi23(audioDevices.get(0));
+//    }
+//  }
 }

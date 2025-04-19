@@ -85,39 +85,39 @@ public final class EncoderUtil {
    */
   public static ImmutableList<MediaCodecInfo> getSupportedEncodersForHdrEditing(
       String mimeType, @Nullable ColorInfo colorInfo) {
-    if (Util.SDK_INT < 33 || colorInfo == null) {
+//    if (Util.SDK_INT < 33 || colorInfo == null) {
       return ImmutableList.of();
-    }
+//    }
 
-    ImmutableList<MediaCodecInfo> encoders = getSupportedEncoders(mimeType);
-    ImmutableList<Integer> allowedColorProfiles =
-        getCodecProfilesForHdrFormat(mimeType, colorInfo.colorTransfer);
-    ImmutableList.Builder<MediaCodecInfo> resultBuilder = new ImmutableList.Builder<>();
-    for (int i = 0; i < encoders.size(); i++) {
-      MediaCodecInfo mediaCodecInfo = encoders.get(i);
-      if (mediaCodecInfo.isAlias()) {
-        continue;
-      }
-      boolean hasNeededHdrSupport =
-          isFeatureSupported(
-                  mediaCodecInfo, mimeType, MediaCodecInfo.CodecCapabilities.FEATURE_HdrEditing)
-              || (colorInfo.colorTransfer == C.COLOR_TRANSFER_HLG
-                  && Util.SDK_INT >= 35
-                  && isFeatureSupported(
-                      mediaCodecInfo,
-                      mimeType,
-                      MediaCodecInfo.CodecCapabilities.FEATURE_HlgEditing));
-      if (!hasNeededHdrSupport) {
-        continue;
-      }
-      for (MediaCodecInfo.CodecProfileLevel codecProfileLevel :
-          mediaCodecInfo.getCapabilitiesForType(mimeType).profileLevels) {
-        if (allowedColorProfiles.contains(codecProfileLevel.profile)) {
-          resultBuilder.add(mediaCodecInfo);
-        }
-      }
-    }
-    return resultBuilder.build();
+//    ImmutableList<MediaCodecInfo> encoders = getSupportedEncoders(mimeType);
+//    ImmutableList<Integer> allowedColorProfiles =
+//        getCodecProfilesForHdrFormat(mimeType, colorInfo.colorTransfer);
+//    ImmutableList.Builder<MediaCodecInfo> resultBuilder = new ImmutableList.Builder<>();
+//    for (int i = 0; i < encoders.size(); i++) {
+//      MediaCodecInfo mediaCodecInfo = encoders.get(i);
+//      if (mediaCodecInfo.isAlias()) {
+//        continue;
+//      }
+//      boolean hasNeededHdrSupport =
+//          isFeatureSupported(
+//                  mediaCodecInfo, mimeType, MediaCodecInfo.CodecCapabilities.FEATURE_HdrEditing)
+//              || (colorInfo.colorTransfer == C.COLOR_TRANSFER_HLG
+//                  && Util.SDK_INT >= 35
+//                  && isFeatureSupported(
+//                      mediaCodecInfo,
+//                      mimeType,
+//                      MediaCodecInfo.CodecCapabilities.FEATURE_HlgEditing));
+//      if (!hasNeededHdrSupport) {
+//        continue;
+//      }
+//      for (MediaCodecInfo.CodecProfileLevel codecProfileLevel :
+//          mediaCodecInfo.getCapabilitiesForType(mimeType).profileLevels) {
+//        if (allowedColorProfiles.contains(codecProfileLevel.profile)) {
+//          resultBuilder.add(mediaCodecInfo);
+//        }
+//      }
+//    }
+//    return resultBuilder.build();
   }
 
   /**

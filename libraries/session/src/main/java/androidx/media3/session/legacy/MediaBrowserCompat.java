@@ -436,12 +436,6 @@ public final class MediaBrowserCompat {
     private final int mFlags;
     private final MediaDescriptionCompat mDescription;
 
-    @Retention(RetentionPolicy.SOURCE)
-    @IntDef(
-        flag = true,
-        value = {FLAG_BROWSABLE, FLAG_PLAYABLE})
-    private @interface Flags {}
-
     /** Flag: Indicates that the item has children of its own. */
     public static final int FLAG_BROWSABLE = 1 << 0;
 
@@ -504,7 +498,7 @@ public final class MediaBrowserCompat {
      * @param description The description of the media, which must include a media id.
      * @param flags The flags for this item.
      */
-    public MediaItem(@Nullable MediaDescriptionCompat description, @Flags int flags) {
+    public MediaItem(@Nullable MediaDescriptionCompat description, int flags) {
       if (description == null) {
         throw new IllegalArgumentException("description cannot be null");
       }
@@ -555,7 +549,6 @@ public final class MediaBrowserCompat {
         };
 
     /** Gets the flags of the item. */
-    @Flags
     public int getFlags() {
       return mFlags;
     }

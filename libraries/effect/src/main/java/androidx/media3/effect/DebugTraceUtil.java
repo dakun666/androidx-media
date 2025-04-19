@@ -216,7 +216,7 @@ public final class DebugTraceUtil {
                   EVENT_ACCEPTED_INPUT,
                   EVENT_INPUT_ENDED,
                   EVENT_OUTPUT_ENDED))
-          .buildOrThrow();
+          .build();
 
   /**
    * Whether to {@linkplain Log#d(String, String) log} tracing events to the logcat as they occur.

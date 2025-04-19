@@ -25,7 +25,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
-import static org.robolectric.Shadows.shadowOf;
 
 import android.app.Notification;
 import android.content.Context;
@@ -57,6 +56,7 @@ import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.robolectric.Robolectric;
+import org.robolectric.shadow.api.Shadow;
 import org.robolectric.shadows.ShadowLooper;
 
 /** Tests for {@link DefaultMediaNotificationProvider}. */
@@ -553,7 +553,8 @@ public class DefaultMediaNotificationProviderTest {
   @Test
   public void createNotification_withNewRequest_discardPendingCallback() {
     // We will advance the main looper manually in the test.
-    shadowOf(Looper.getMainLooper()).pause();
+//    shadowOf(Looper.getMainLooper()).pause();
+    ((org.robolectric.shadows.ShadowLooper) Shadow.extract(Looper.getMainLooper())).pause();
     // Create a MediaSession whose player returns non-null media metadata so that the
     // notification provider will request to load artwork bitmaps.
     Player player =

@@ -248,13 +248,13 @@ public class SampleChooserActivity extends AppCompatActivity
     if (downloadUnsupportedStringId != 0) {
       Toast.makeText(getApplicationContext(), downloadUnsupportedStringId, Toast.LENGTH_LONG)
           .show();
-    } else if (!notificationPermissionToastShown
-        && Build.VERSION.SDK_INT >= 33
-        && checkSelfPermission(Api33.getPostNotificationPermissionString())
-            != PackageManager.PERMISSION_GRANTED) {
-      downloadMediaItemWaitingForNotificationPermission = playlistHolder.mediaItems.get(0);
-      requestPermissions(
-          new String[] {Api33.getPostNotificationPermissionString()}, /* requestCode= */ 0);
+//    } else if (!notificationPermissionToastShown
+//        && Build.VERSION.SDK_INT >= 33
+//        && checkSelfPermission(Api33.getPostNotificationPermissionString())
+//            != PackageManager.PERMISSION_GRANTED) {
+//      downloadMediaItemWaitingForNotificationPermission = playlistHolder.mediaItems.get(0);
+//      requestPermissions(
+//          new String[] {Api33.getPostNotificationPermissionString()}, /* requestCode= */ 0);
     } else {
       toggleDownload(playlistHolder.mediaItems.get(0));
     }
@@ -663,11 +663,11 @@ public class SampleChooserActivity extends AppCompatActivity
     }
   }
 
-  @RequiresApi(33)
-  private static class Api33 {
-
-    public static String getPostNotificationPermissionString() {
-      return Manifest.permission.POST_NOTIFICATIONS;
-    }
-  }
+//  @RequiresApi(33)
+//  private static class Api33 {
+//
+//    public static String getPostNotificationPermissionString() {
+//      return Manifest.permission.POST_NOTIFICATIONS;
+//    }
+//  }
 }

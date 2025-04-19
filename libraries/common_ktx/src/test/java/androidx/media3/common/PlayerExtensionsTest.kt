@@ -34,7 +34,7 @@ import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.withContext
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.robolectric.Shadows.shadowOf
+import org.robolectric.shadow.api.Shadow
 
 /** Unit tests for Kotlin extension functions on the [Player]. */
 @RunWith(AndroidJUnit4::class)
@@ -60,7 +60,7 @@ class PlayerExtensionsTest {
     player.volume = 0.5f
 
     // Let the volume change propagate
-    shadowOf(Looper.getMainLooper()).idle()
+    (Shadow.extract(Looper.getMainLooper()) as org.robolectric.shadows.ShadowLooper).idle()
 
     assertThat(volumeFromInsideOnEvents).isEqualTo(0.5f)
     listenJob.cancelAndJoin()
@@ -84,7 +84,7 @@ class PlayerExtensionsTest {
     // Set the volume to a non-default value to trigger an event
     player.volume = 0.5f
     // Let the volume change propagate
-    shadowOf(Looper.getMainLooper()).idle()
+    (Shadow.extract(Looper.getMainLooper()) as org.robolectric.shadows.ShadowLooper).idle()
     // Let the CancellationException propagate and trigger listener removal
     testScheduler.runCurrent()
 
@@ -130,7 +130,7 @@ class PlayerExtensionsTest {
     // Set the volume to a non-default value to trigger an event
     player.volume = 0.5f
     // Let the volume change propagate
-    shadowOf(Looper.getMainLooper()).idle()
+    (Shadow.extract(Looper.getMainLooper()) as org.robolectric.shadows.ShadowLooper).idle()
 
     assertThat(exceptionFromListen.await()).hasMessageThat().isEqualTo("Volume event!")
     assertThat(player.listeners.size).isEqualTo(0)

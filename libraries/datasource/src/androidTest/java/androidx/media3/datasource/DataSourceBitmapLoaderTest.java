@@ -30,6 +30,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.MoreExecutors;
 import java.io.File;
+import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -222,7 +223,8 @@ public class DataSourceBitmapLoaderTest {
     byte[] imageData =
         TestUtil.getByteArray(ApplicationProvider.getApplicationContext(), TEST_IMAGE_PATH);
     File file = tempFolder.newFile();
-    Files.write(Path.of(file.getAbsolutePath()), imageData);
+//    Files.write(Path.of(file.getAbsolutePath()), imageData);
+    Files.write(FileSystems.getDefault().getPath(file.getAbsolutePath()), imageData);
     Uri uri = Uri.fromFile(file);
     int maximumOutputDimension = 2000;
     DataSourceBitmapLoader bitmapLoader =

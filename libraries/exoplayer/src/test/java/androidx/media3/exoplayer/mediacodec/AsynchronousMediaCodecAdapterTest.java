@@ -18,7 +18,6 @@ package androidx.media3.exoplayer.mediacodec;
 
 import static com.google.common.truth.Truth.assertThat;
 import static org.junit.Assert.assertThrows;
-import static org.robolectric.Shadows.shadowOf;
 
 import android.media.MediaCodec;
 import android.media.MediaFormat;
@@ -30,6 +29,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.robolectric.shadow.api.Shadow;
 
 /** Unit tests for {@link AsynchronousMediaCodecAdapter}. */
 @RunWith(AndroidJUnit4.class)
@@ -47,8 +47,9 @@ public class AsynchronousMediaCodecAdapterTest {
             codecInfo,
             createMediaFormat("format"),
             new Format.Builder().build(),
-            /* crypto= */ null,
-            /* loudnessCodecController= */ null);
+            /* crypto= */ null
+//            /* loudnessCodecController= */ null);
+            );
     callbackThread = new HandlerThread("TestCallbackThread");
     queueingThread = new HandlerThread("TestQueueingThread");
     adapter =
@@ -59,7 +60,7 @@ public class AsynchronousMediaCodecAdapterTest {
     bufferInfo = new MediaCodec.BufferInfo();
     // After starting the MediaCodec, the ShadowMediaCodec offers input buffer 0. We advance the
     // looper to make sure any messages have been propagated to the adapter.
-    shadowOf(callbackThread.getLooper()).idle();
+    ((org.robolectric.shadows.ShadowLooper) Shadow.extract(callbackThread.getLooper())).idle();
   }
 
   @After
@@ -89,7 +90,7 @@ public class AsynchronousMediaCodecAdapterTest {
         /* size= */ 0,
         /* presentationTimeUs= */ 0,
         /* flags= */ 0);
-    shadowOf(queueingThread.getLooper()).idle();
+    ((org.robolectric.shadows.ShadowLooper) Shadow.extract(queueingThread.getLooper())).idle();
 
     assertThrows(IllegalStateException.class, () -> adapter.dequeueInputBufferIndex());
   }
@@ -118,8 +119,8 @@ public class AsynchronousMediaCodecAdapterTest {
     // the ShadowMediaCodec processes the input buffer and produces an output buffer. Then, progress
     // the callback looper so that the available output buffer callback is handled and the output
     // buffer reaches the adapter.
-    shadowOf(queueingThread.getLooper()).idle();
-    shadowOf(callbackThread.getLooper()).idle();
+    ((org.robolectric.shadows.ShadowLooper) Shadow.extract(queueingThread.getLooper())).idle();
+    ((org.robolectric.shadows.ShadowLooper) Shadow.extract(callbackThread.getLooper())).idle();
 
     // The ShadowMediaCodec will first offer an output format and then the output buffer.
     assertThat(adapter.dequeueOutputBufferIndex(bufferInfo))
@@ -146,7 +147,7 @@ public class AsynchronousMediaCodecAdapterTest {
         /* size= */ 0,
         /* presentationTimeUs= */ 0,
         /* flags= */ 0);
-    shadowOf(queueingThread.getLooper()).idle();
+    ((org.robolectric.shadows.ShadowLooper) Shadow.extract(queueingThread.getLooper())).idle();
 
     assertThrows(IllegalStateException.class, () -> adapter.dequeueOutputBufferIndex(bufferInfo));
   }
@@ -156,7 +157,7 @@ public class AsynchronousMediaCodecAdapterTest {
     int index = adapter.dequeueInputBufferIndex();
     adapter.queueInputBuffer(index, 0, 0, 0, 0);
     // Progress the looper so that the ShadowMediaCodec processes the input buffer.
-    shadowOf(callbackThread.getLooper()).idle();
+    ((org.robolectric.shadows.ShadowLooper) Shadow.extract(callbackThread.getLooper())).idle();
     adapter.release();
 
     assertThat(adapter.dequeueOutputBufferIndex(bufferInfo))
@@ -191,7 +192,7 @@ public class AsynchronousMediaCodecAdapterTest {
     MediaFormat outputFormat = adapter.getOutputFormat();
     // Flush the adapter and progress the looper so that flush is completed.
     adapter.flush();
-    shadowOf(callbackThread.getLooper()).idle();
+    ((org.robolectric.shadows.ShadowLooper) Shadow.extract(callbackThread.getLooper())).idle();
 
     assertThat(adapter.getOutputFormat()).isEqualTo(outputFormat);
   }

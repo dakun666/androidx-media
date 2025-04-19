@@ -1944,7 +1944,7 @@ import java.util.concurrent.ExecutionException;
       updatedTrackGroupIdMap.put(mediaTrackGroup, uniqueId);
       updatedTrackGroups.add(trackGroup.copyWithId(uniqueId));
     }
-    trackGroupIdMap = updatedTrackGroupIdMap.buildOrThrow();
+    trackGroupIdMap = updatedTrackGroupIdMap.build();
     playerInfo = playerInfo.copyWithCurrentTracks(new Tracks(updatedTrackGroups.build()));
     if (playerInfo.trackSelectionParameters.overrides.isEmpty()) {
       return playerInfo;

@@ -592,8 +592,9 @@ public class MockMediaBrowserServiceCompat extends MediaBrowserServiceCompat {
                 // On API levels lower than 21 root hints are null.
                 int supportedRootChildrenFlags =
                     rootHints.getInt(
-                        androidx.media.utils.MediaConstants
-                            .BROWSER_ROOT_HINTS_KEY_ROOT_CHILDREN_SUPPORTED_FLAGS,
+//                        androidx.media.utils.MediaConstants
+//                            .BROWSER_ROOT_HINTS_KEY_ROOT_CHILDREN_SUPPORTED_FLAGS,
+                        "androidx.media.MediaBrowserCompat.Extras.KEY_ROOT_CHILDREN_SUPPORTED_FLAGS",
                         /* defaultValue= */ 0);
                 if ((supportedRootChildrenFlags == MediaItem.FLAG_BROWSABLE)) {
                   return new BrowserRoot(ROOT_ID_SUPPORTS_BROWSABLE_CHILDREN_ONLY, ROOT_EXTRAS);

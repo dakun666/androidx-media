@@ -20,7 +20,6 @@ import static androidx.media3.test.utils.robolectric.TestPlayerRunHelper.runUnti
 import static androidx.test.ext.truth.content.IntentSubject.assertThat;
 import static com.google.common.truth.Truth.assertThat;
 import static java.util.Arrays.stream;
-import static org.robolectric.Shadows.shadowOf;
 
 import android.app.Application;
 import android.content.ComponentName;
@@ -54,6 +53,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.annotation.Config;
+import org.robolectric.shadow.api.Shadow;
 import org.robolectric.shadows.AudioDeviceInfoBuilder;
 import org.robolectric.shadows.ShadowApplication;
 import org.robolectric.shadows.ShadowAudioManager;
@@ -94,9 +94,9 @@ public class WearUnsuitableOutputPlaybackSuppressionResolverListenerTest {
     }
 
     testPlayer = builder.build();
-    shadowApplication = shadowOf((Application) ApplicationProvider.getApplicationContext());
+    shadowApplication = Shadow.extract((Application) ApplicationProvider.getApplicationContext());
     shadowPackageManager =
-        shadowOf(ApplicationProvider.getApplicationContext().getPackageManager());
+        Shadow.extract(ApplicationProvider.getApplicationContext().getPackageManager());
   }
 
   @After
@@ -253,7 +253,7 @@ public class WearUnsuitableOutputPlaybackSuppressionResolverListenerTest {
     testPlayerListener.onEvents(
         testPlayer,
         new Player.Events(new FlagSet.Builder().add(Player.EVENT_PLAY_WHEN_READY_CHANGED).build()));
-    shadowOf(Looper.getMainLooper()).idle();
+    ((org.robolectric.shadows.ShadowLooper) Shadow.extract(Looper.getMainLooper())).idle();
 
     Intent activityIntentTriggered = shadowApplication.getNextStartedActivity();
     assertThat(activityIntentTriggered).isNull();
@@ -768,7 +768,7 @@ public class WearUnsuitableOutputPlaybackSuppressionResolverListenerTest {
     runUntilPlaybackState(testPlayer, Player.STATE_READY);
 
     fakeClock.advanceTime(TEST_TIME_OUT_MS * 2);
-    shadowOf(Looper.getMainLooper()).idle();
+    ((org.robolectric.shadows.ShadowLooper) Shadow.extract(Looper.getMainLooper())).idle();
 
     assertThat(ShadowPowerManager.getLatestWakeLock()).isNotNull();
     assertThat(ShadowPowerManager.getLatestWakeLock().isHeld()).isFalse();
@@ -797,7 +797,7 @@ public class WearUnsuitableOutputPlaybackSuppressionResolverListenerTest {
     addConnectedAudioOutput(
         AudioDeviceInfo.TYPE_BLUETOOTH_A2DP, /* notifyAudioDeviceCallbacks= */ true);
     runUntilPlayWhenReady(testPlayer, /* expectedPlayWhenReady= */ false);
-    shadowOf(Looper.getMainLooper()).idle();
+    ((org.robolectric.shadows.ShadowLooper) Shadow.extract(Looper.getMainLooper())).idle();
 
     assertThat(ShadowPowerManager.getLatestWakeLock()).isNotNull();
     assertThat(ShadowPowerManager.getLatestWakeLock().isHeld()).isFalse();
@@ -834,7 +834,7 @@ public class WearUnsuitableOutputPlaybackSuppressionResolverListenerTest {
 
     testPlayer.play();
     runUntilPlaybackState(testPlayer, Player.STATE_READY);
-    shadowOf(Looper.getMainLooper()).idle();
+    ((org.robolectric.shadows.ShadowLooper) Shadow.extract(Looper.getMainLooper())).idle();
 
     assertThat(lastPlayWhenReady.get()).isFalse();
     Intent intentTriggered = shadowApplication.getNextStartedActivity();
@@ -881,7 +881,7 @@ public class WearUnsuitableOutputPlaybackSuppressionResolverListenerTest {
 
     testPlayer.play();
     runUntilPlaybackState(testPlayer, Player.STATE_READY);
-    shadowOf(Looper.getMainLooper()).idle();
+    ((org.robolectric.shadows.ShadowLooper) Shadow.extract(Looper.getMainLooper())).idle();
 
     assertThat(lastPlayWhenReady.get()).isTrue();
     assertThat(shadowApplication.getNextStartedActivity()).isNull();
@@ -920,7 +920,7 @@ public class WearUnsuitableOutputPlaybackSuppressionResolverListenerTest {
     fakeClock.advanceTime(TEST_TIME_OUT_MS * 2);
     suitableMediaOutputChecker.updateIsSelectedSuitableOutputAvailableAndNotify(
         /* isSelectedOutputSuitableForPlayback= */ true);
-    shadowOf(Looper.getMainLooper()).idle();
+    ((org.robolectric.shadows.ShadowLooper) Shadow.extract(Looper.getMainLooper())).idle();
 
     assertThat(lastPlayWhenReady.get()).isFalse();
   }
@@ -944,7 +944,7 @@ public class WearUnsuitableOutputPlaybackSuppressionResolverListenerTest {
 
   private void setupConnectedAudioOutput(int... deviceTypes) {
     ShadowAudioManager shadowAudioManager =
-        shadowOf(ApplicationProvider.getApplicationContext().getSystemService(AudioManager.class));
+        Shadow.extract(ApplicationProvider.getApplicationContext().getSystemService(AudioManager.class));
     ImmutableList.Builder<AudioDeviceInfo> deviceListBuilder = ImmutableList.builder();
     for (int deviceType : deviceTypes) {
       deviceListBuilder.add(AudioDeviceInfoBuilder.newBuilder().setType(deviceType).build());
@@ -954,7 +954,7 @@ public class WearUnsuitableOutputPlaybackSuppressionResolverListenerTest {
 
   private void addConnectedAudioOutput(int deviceTypes, boolean notifyAudioDeviceCallbacks) {
     ShadowAudioManager shadowAudioManager =
-        shadowOf(ApplicationProvider.getApplicationContext().getSystemService(AudioManager.class));
+        Shadow.extract(ApplicationProvider.getApplicationContext().getSystemService(AudioManager.class));
     shadowAudioManager.addOutputDevice(
         AudioDeviceInfoBuilder.newBuilder().setType(deviceTypes).build(),
         notifyAudioDeviceCallbacks);
@@ -962,7 +962,7 @@ public class WearUnsuitableOutputPlaybackSuppressionResolverListenerTest {
 
   private void removeConnectedAudioOutput(int deviceType) {
     ShadowAudioManager shadowAudioManager =
-        shadowOf(ApplicationProvider.getApplicationContext().getSystemService(AudioManager.class));
+        Shadow.extract(ApplicationProvider.getApplicationContext().getSystemService(AudioManager.class));
     stream(shadowAudioManager.getDevices(AudioManager.GET_DEVICES_OUTPUTS))
         .filter(audioDeviceInfo -> deviceType == audioDeviceInfo.getType())
         .findFirst()

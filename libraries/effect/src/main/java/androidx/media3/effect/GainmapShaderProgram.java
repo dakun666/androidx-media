@@ -15,7 +15,7 @@
  */
 package androidx.media3.effect;
 
-import android.graphics.Gainmap;
+//import android.graphics.Gainmap;
 import androidx.media3.common.util.GlUtil.GlException;
 
 /** Interface for a {@link GlShaderProgram} that samples from a gainmap. */
@@ -26,5 +26,5 @@ import androidx.media3.common.util.GlUtil.GlException;
    *
    * @param gainmap The {@link Gainmap}.
    */
-  void setGainmap(Gainmap gainmap) throws GlException;
+//  void setGainmap(Gainmap gainmap) throws GlException;
 }

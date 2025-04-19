@@ -1345,11 +1345,11 @@ public interface ExoPlayer extends Player {
     public ExoPlayer build() {
       checkState(!buildCalled);
       buildCalled = true;
-      if (suitableOutputChecker == null
-          && Util.SDK_INT >= 35
-          && suppressPlaybackOnUnsuitableOutput) {
-        suitableOutputChecker = new DefaultSuitableOutputChecker(context, new Handler(looper));
-      }
+//      if (suitableOutputChecker == null
+//          && Util.SDK_INT >= 35
+//          && suppressPlaybackOnUnsuitableOutput) {
+//        suitableOutputChecker = new DefaultSuitableOutputChecker(context, new Handler(looper));
+//      }
       return new ExoPlayerImpl(/* builder= */ this, /* wrappingPlayer= */ null);
     }
 

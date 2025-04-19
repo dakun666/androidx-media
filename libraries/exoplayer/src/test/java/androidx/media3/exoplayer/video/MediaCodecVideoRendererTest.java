@@ -27,7 +27,6 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.robolectric.Shadows.shadowOf;
 
 import android.content.Context;
 import android.graphics.SurfaceTexture;
@@ -100,6 +99,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 import org.robolectric.Shadows;
+import org.robolectric.shadow.api.Shadow;
 import org.robolectric.shadows.ShadowDisplay;
 import org.robolectric.shadows.ShadowLooper;
 import org.robolectric.shadows.ShadowSystemClock;
@@ -235,7 +235,7 @@ public class MediaCodecVideoRendererTest {
       mediaCodecVideoRenderer.render(posUs, SystemClock.elapsedRealtime() * 1000);
       posUs += 40_000;
     }
-    shadowOf(testMainLooper).idle();
+    ((org.robolectric.shadows.ShadowLooper) Shadow.extract(testMainLooper)).idle();
 
     verify(eventListener).onDroppedFrames(eq(1), anyLong());
   }
@@ -263,7 +263,7 @@ public class MediaCodecVideoRendererTest {
         /* startPositionUs= */ 0,
         /* offsetUs= */ 0,
         /* mediaPeriodId= */ new MediaSource.MediaPeriodId(new Object()));
-    shadowOf(testMainLooper).idle();
+    ((org.robolectric.shadows.ShadowLooper) Shadow.extract(testMainLooper)).idle();
     ArgumentCaptor<DecoderCounters> argumentDecoderCounters =
         ArgumentCaptor.forClass(DecoderCounters.class);
     verify(eventListener).onVideoEnabled(argumentDecoderCounters.capture());
@@ -350,7 +350,7 @@ public class MediaCodecVideoRendererTest {
       mediaCodecVideoRenderer.render(posUs, SystemClock.elapsedRealtime() * 1000);
       posUs += 40_000;
     }
-    shadowOf(testMainLooper).idle();
+    ((org.robolectric.shadows.ShadowLooper) Shadow.extract(testMainLooper)).idle();
 
     verify(eventListener).onRenderedFirstFrame(eq(surface), /* renderTimeMs= */ anyLong());
     verify(eventListener).onVideoEnabled(argumentDecoderCounters.capture());
@@ -415,7 +415,7 @@ public class MediaCodecVideoRendererTest {
       mediaCodecVideoRenderer.render(posUs, SystemClock.elapsedRealtime() * 1000);
       posUs += 40_000;
     }
-    shadowOf(testMainLooper).idle();
+    ((org.robolectric.shadows.ShadowLooper) Shadow.extract(testMainLooper)).idle();
 
     verify(eventListener).onRenderedFirstFrame(eq(surface), /* renderTimeMs= */ anyLong());
     verify(eventListener).onVideoEnabled(argumentDecoderCounters.capture());
@@ -491,7 +491,7 @@ public class MediaCodecVideoRendererTest {
       mediaCodecVideoRenderer.render(posUs, SystemClock.elapsedRealtime() * 1000);
       posUs += 40_000;
     }
-    shadowOf(testMainLooper).idle();
+    ((org.robolectric.shadows.ShadowLooper) Shadow.extract(testMainLooper)).idle();
 
     verify(eventListener).onVideoEnabled(argumentDecoderCounters.capture());
     assertThat(argumentDecoderCounters.getValue().skippedInputBufferCount).isEqualTo(0);
@@ -596,7 +596,7 @@ public class MediaCodecVideoRendererTest {
     assertThat(mediaCodecVideoRenderer.hasReadStreamToEnd()).isTrue();
     // Following call to render should force-render last frame.
     mediaCodecVideoRenderer.render(100, SystemClock.elapsedRealtime() * 1000L);
-    shadowOf(testMainLooper).idle();
+    ((org.robolectric.shadows.ShadowLooper) Shadow.extract(testMainLooper)).idle();
 
     verify(eventListener).onRenderedFirstFrame(eq(surface), /* renderTimeMs= */ anyLong());
     verify(eventListener).onVideoEnabled(argumentDecoderCounters.capture());
@@ -702,7 +702,7 @@ public class MediaCodecVideoRendererTest {
     assertThat(mediaCodecVideoRenderer.hasReadStreamToEnd()).isTrue();
     // Following call to render should force-render last frame.
     mediaCodecVideoRenderer.render(100, SystemClock.elapsedRealtime() * 1000L);
-    shadowOf(testMainLooper).idle();
+    ((org.robolectric.shadows.ShadowLooper) Shadow.extract(testMainLooper)).idle();
 
     verify(eventListener).onRenderedFirstFrame(eq(surface), /* renderTimeMs= */ anyLong());
     verify(eventListener).onVideoEnabled(argumentDecoderCounters.capture());
@@ -740,7 +740,7 @@ public class MediaCodecVideoRendererTest {
       mediaCodecVideoRenderer.render(positionUs, SystemClock.elapsedRealtime() * 1000);
       positionUs += 10;
     } while (!mediaCodecVideoRenderer.isEnded());
-    shadowOf(testMainLooper).idle();
+    ((org.robolectric.shadows.ShadowLooper) Shadow.extract(testMainLooper)).idle();
 
     verify(eventListener)
         .onVideoSizeChanged(
@@ -798,7 +798,7 @@ public class MediaCodecVideoRendererTest {
       mediaCodecVideoRenderer.render(positionUs, msToUs(SystemClock.elapsedRealtime()));
       positionUs += 10_000;
     } while (!mediaCodecVideoRenderer.isEnded());
-    shadowOf(testMainLooper).idle();
+    ((org.robolectric.shadows.ShadowLooper) Shadow.extract(testMainLooper)).idle();
 
     ArgumentCaptor<VideoSize> videoSizesCaptor = ArgumentCaptor.forClass(VideoSize.class);
     verify(eventListener, times(3)).onVideoSizeChanged(videoSizesCaptor.capture());
@@ -845,7 +845,7 @@ public class MediaCodecVideoRendererTest {
       mediaCodecVideoRenderer.render(positionUs, SystemClock.elapsedRealtime() * 1000);
       positionUs += 10;
     } while (!mediaCodecVideoRenderer.isEnded());
-    shadowOf(testMainLooper).idle();
+    ((org.robolectric.shadows.ShadowLooper) Shadow.extract(testMainLooper)).idle();
 
     assertThat(currentOutputFormat).isEqualTo(VIDEO_H264);
   }
@@ -875,7 +875,7 @@ public class MediaCodecVideoRendererTest {
     for (int i = 0; i < 10; i++) {
       mediaCodecVideoRenderer.render(/* positionUs= */ 0, SystemClock.elapsedRealtime() * 1000);
     }
-    shadowOf(testMainLooper).idle();
+    ((org.robolectric.shadows.ShadowLooper) Shadow.extract(testMainLooper)).idle();
 
     verify(eventListener).onRenderedFirstFrame(eq(surface), /* renderTimeMs= */ anyLong());
   }
@@ -906,7 +906,7 @@ public class MediaCodecVideoRendererTest {
     for (int i = 0; i < 10; i++) {
       mediaCodecVideoRenderer.render(/* positionUs= */ 0, SystemClock.elapsedRealtime() * 1000);
     }
-    shadowOf(testMainLooper).idle();
+    ((org.robolectric.shadows.ShadowLooper) Shadow.extract(testMainLooper)).idle();
 
     verify(eventListener, never()).onRenderedFirstFrame(eq(surface), /* renderTimeMs= */ anyLong());
   }
@@ -937,7 +937,7 @@ public class MediaCodecVideoRendererTest {
     for (int i = 0; i < 10; i++) {
       mediaCodecVideoRenderer.render(/* positionUs= */ 0, SystemClock.elapsedRealtime() * 1000);
     }
-    shadowOf(testMainLooper).idle();
+    ((org.robolectric.shadows.ShadowLooper) Shadow.extract(testMainLooper)).idle();
 
     verify(eventListener).onRenderedFirstFrame(eq(surface), /* renderTimeMs= */ anyLong());
   }
@@ -970,14 +970,14 @@ public class MediaCodecVideoRendererTest {
     for (int i = 0; i < 10; i++) {
       mediaCodecVideoRenderer.render(/* positionUs= */ 0, SystemClock.elapsedRealtime() * 1000);
     }
-    shadowOf(testMainLooper).idle();
+    ((org.robolectric.shadows.ShadowLooper) Shadow.extract(testMainLooper)).idle();
 
     verify(eventListener).onRenderedFirstFrame(eq(surface), /* renderTimeMs= */ anyLong());
   }
 
   @Test
   public void replaceStream_rendersFirstFrameOnlyAfterStartPosition() throws Exception {
-    ShadowLooper shadowLooper = shadowOf(testMainLooper);
+    ShadowLooper shadowLooper =     ((org.robolectric.shadows.ShadowLooper) Shadow.extract(testMainLooper));
     FakeSampleStream fakeSampleStream1 =
         new FakeSampleStream(
             new DefaultAllocator(/* trimOnReset= */ true, /* individualAllocationSize= */ 1024),
@@ -1044,7 +1044,7 @@ public class MediaCodecVideoRendererTest {
 
   @Test
   public void replaceStream_whenNotStarted_doesNotRenderFirstFrameOfNewStream() throws Exception {
-    ShadowLooper shadowLooper = shadowOf(testMainLooper);
+    ShadowLooper shadowLooper =     ((org.robolectric.shadows.ShadowLooper) Shadow.extract(testMainLooper));
     FakeSampleStream fakeSampleStream1 =
         new FakeSampleStream(
             new DefaultAllocator(/* trimOnReset= */ true, /* individualAllocationSize= */ 1024),
@@ -1106,7 +1106,7 @@ public class MediaCodecVideoRendererTest {
 
   @Test
   public void resetPosition_toBeforeOriginalStartPosition_rendersFirstFrame() throws Exception {
-    ShadowLooper shadowLooper = shadowOf(testMainLooper);
+    ShadowLooper shadowLooper =     ((org.robolectric.shadows.ShadowLooper) Shadow.extract(testMainLooper));
     FakeSampleStream fakeSampleStream =
         new FakeSampleStream(
             new DefaultAllocator(/* trimOnReset= */ true, /* individualAllocationSize= */ 1024),
@@ -1322,7 +1322,7 @@ public class MediaCodecVideoRendererTest {
     DisplayManager displayManager =
         (DisplayManager) context.getSystemService(Context.DISPLAY_SERVICE);
     Display display = (displayManager != null) ? displayManager.getDisplay(DEFAULT_DISPLAY) : null;
-    ShadowDisplay shadowDisplay = Shadows.shadowOf(display);
+    ShadowDisplay shadowDisplay = (ShadowDisplay) Shadow.extract(display);
     int[] hdrCapabilities =
         new int[] {
           Display.HdrCapabilities.HDR_TYPE_HDR10, Display.HdrCapabilities.HDR_TYPE_DOLBY_VISION
@@ -1978,10 +1978,10 @@ public class MediaCodecVideoRendererTest {
       adapter.setOutputSurface(surface);
     }
 
-    @Override
-    public void detachOutputSurface() {
-      adapter.detachOutputSurface();
-    }
+//    @Override
+//    public void detachOutputSurface() {
+//      adapter.detachOutputSurface();
+//    }
 
     @Override
     public void setParameters(Bundle params) {

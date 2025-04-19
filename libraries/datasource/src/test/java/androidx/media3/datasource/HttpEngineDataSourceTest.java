@@ -15,7 +15,7 @@
  */
 package androidx.media3.datasource;
 
-import static android.net.http.NetworkException.ERROR_HOSTNAME_NOT_RESOLVED;
+//import static android.net.http.NetworkException.ERROR_HOSTNAME_NOT_RESOLVED;
 import static com.google.common.truth.Truth.assertThat;
 import static java.lang.Math.min;
 import static org.junit.Assert.fail;
@@ -33,11 +33,11 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import android.net.Uri;
-import android.net.http.HeaderBlock;
-import android.net.http.HttpEngine;
-import android.net.http.NetworkException;
-import android.net.http.UrlRequest;
-import android.net.http.UrlResponseInfo;
+//import android.net.http.HeaderBlock;
+//import android.net.http.HttpEngine;
+//import android.net.http.NetworkException;
+//import android.net.http.UrlRequest;
+//import android.net.http.UrlResponseInfo;
 import android.os.ConditionVariable;
 import android.os.SystemClock;
 import androidx.media3.common.C;
@@ -372,7 +372,8 @@ public final class HttpEngineDataSourceTest {
   @Test
   public void requestOpenFailDueToDnsFailure() {
     mockResponseStartFailure(
-        /* errorCode= */ ERROR_HOSTNAME_NOT_RESOLVED, /* cause= */ new UnknownHostException());
+//        /* errorCode= */ ERROR_HOSTNAME_NOT_RESOLVED, /* cause= */ new UnknownHostException());
+        /* errorCode= */ 1, /* cause= */ new UnknownHostException());
 
     try {
       dataSourceUnderTest.open(testDataSpec);

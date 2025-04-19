@@ -1121,7 +1121,8 @@ public class MediaControllerCompatPlaybackStateCompatActionsWithMediaSessionTest
 
     assertThat(
             controllerCompat.getPlaybackState().getActions()
-                & PlaybackStateCompat.ACTION_SET_PLAYBACK_SPEED)
+//                & PlaybackStateCompat.ACTION_SET_PLAYBACK_SPEED)
+                & 1 << 22)
         .isNotEqualTo(0);
 
     CountDownLatch latch = new CountDownLatch(1);
@@ -1155,7 +1156,8 @@ public class MediaControllerCompatPlaybackStateCompatActionsWithMediaSessionTest
 
     assertThat(
             controllerCompat.getPlaybackState().getActions()
-                & PlaybackStateCompat.ACTION_SET_PLAYBACK_SPEED)
+//                & PlaybackStateCompat.ACTION_SET_PLAYBACK_SPEED)
+                & 1 << 22)
         .isEqualTo(0);
 
     CountDownLatch latch = new CountDownLatch(1);

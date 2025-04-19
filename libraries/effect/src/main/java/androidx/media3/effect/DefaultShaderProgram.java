@@ -23,7 +23,7 @@ import static androidx.media3.common.util.Assertions.checkState;
 import static androidx.media3.effect.DefaultVideoFrameProcessor.WORKING_COLOR_SPACE_LINEAR;
 
 import android.content.Context;
-import android.graphics.Gainmap;
+//import android.graphics.Gainmap;
 import android.opengl.GLES20;
 import android.opengl.Matrix;
 import androidx.annotation.RequiresApi;
@@ -150,7 +150,7 @@ import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
    */
   private ImmutableList<float[]> visiblePolygon;
 
-  private @MonotonicNonNull Gainmap lastGainmap;
+//  private @MonotonicNonNull Gainmap lastGainmap;
   private int gainmapTexId;
   private @C.ColorTransfer int outputColorTransfer;
   private boolean shouldRepeatLastFrame;
@@ -553,23 +553,23 @@ import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
    *
    * <p>The gainmap is ignored if {@code useHdr} is {@code false}.
    */
-  @Override
-  @RequiresApi(34) // getGainmapContents() added in API level 34.
-  public void setGainmap(Gainmap gainmap) throws GlException {
-    if (!useHdr) {
-      return;
-    }
-    if (lastGainmap != null && GainmapUtil.equals(this.lastGainmap, gainmap)) {
-      return;
-    }
-    isRepeatingFrameDrawn = false;
-    this.lastGainmap = gainmap;
-    if (gainmapTexId == C.INDEX_UNSET) {
-      gainmapTexId = GlUtil.createTexture(gainmap.getGainmapContents());
-    } else {
-      GlUtil.setTexture(gainmapTexId, gainmap.getGainmapContents());
-    }
-  }
+//  @Override
+//  @RequiresApi(34) // getGainmapContents() added in API level 34.
+//  public void setGainmap(Gainmap gainmap) throws GlException {
+//    if (!useHdr) {
+//      return;
+//    }
+//    if (lastGainmap != null && GainmapUtil.equals(this.lastGainmap, gainmap)) {
+//      return;
+//    }
+//    isRepeatingFrameDrawn = false;
+//    this.lastGainmap = gainmap;
+//    if (gainmapTexId == C.INDEX_UNSET) {
+//      gainmapTexId = GlUtil.createTexture(gainmap.getGainmapContents());
+//    } else {
+//      GlUtil.setTexture(gainmapTexId, gainmap.getGainmapContents());
+//    }
+//  }
 
   @Override
   public void signalNewRepeatingFrameSequence() {
@@ -716,13 +716,13 @@ import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
   }
 
   private void setGainmapSamplerAndUniforms() throws GlUtil.GlException {
-    if (lastGainmap == null) {
-      return;
-    }
+//    if (lastGainmap == null) {
+//      return;
+//    }
     if (Util.SDK_INT < 34) {
       throw new IllegalStateException("Gainmaps not supported under API 34.");
     }
     glProgram.setSamplerTexIdUniform("uGainmapTexSampler", gainmapTexId, /* texUnitIndex= */ 1);
-    GainmapUtil.setGainmapUniforms(glProgram, lastGainmap, C.INDEX_UNSET);
+//    GainmapUtil.setGainmapUniforms(glProgram, lastGainmap, C.INDEX_UNSET);
   }
 }

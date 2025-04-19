@@ -43,8 +43,8 @@ include modulePrefix + 'lib-exoplayer-rtsp'
 project(modulePrefix + 'lib-exoplayer-rtsp').projectDir = new File(rootDir, 'libraries/exoplayer_rtsp')
 include modulePrefix + 'lib-exoplayer-smoothstreaming'
 project(modulePrefix + 'lib-exoplayer-smoothstreaming').projectDir = new File(rootDir, 'libraries/exoplayer_smoothstreaming')
-include modulePrefix + 'lib-exoplayer-ima'
-project(modulePrefix + 'lib-exoplayer-ima').projectDir = new File(rootDir, 'libraries/exoplayer_ima')
+//include modulePrefix + 'lib-exoplayer-ima'
+//project(modulePrefix + 'lib-exoplayer-ima').projectDir = new File(rootDir, 'libraries/exoplayer_ima')
 include modulePrefix + 'lib-exoplayer-workmanager'
 project(modulePrefix + 'lib-exoplayer-workmanager').projectDir = new File(rootDir, 'libraries/exoplayer_workmanager')
 

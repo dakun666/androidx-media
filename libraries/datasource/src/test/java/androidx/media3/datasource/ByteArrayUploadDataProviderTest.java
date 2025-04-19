@@ -19,7 +19,7 @@ import static com.google.common.truth.Truth.assertThat;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-import android.net.http.UploadDataSink;
+//import android.net.http.UploadDataSink;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import java.io.IOException;
 import java.nio.ByteBuffer;

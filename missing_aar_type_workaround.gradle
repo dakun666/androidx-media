@@ -33,6 +33,8 @@ def addMissingAarTypeToXml(xml) {
         "org.jetbrains.kotlin:kotlin-stdlib-jdk8",
         "org.jetbrains.kotlinx:kotlinx-coroutines-core",
         "org.jetbrains.kotlinx:kotlinx-coroutines-android",
+        "org.chromium.net:cronet-embedded",
+        "com.google.code.findbugs:jsr305",
     ]
     // Dependencies that have AAR files.
     def aar_dependencies = [

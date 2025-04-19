@@ -16,7 +16,7 @@
 package androidx.media3.demo.transformer;
 
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
-import static android.Manifest.permission.READ_MEDIA_VIDEO;
+//import static android.Manifest.permission.READ_MEDIA_VIDEO;
 import static androidx.media3.common.util.Assertions.checkState;
 import static androidx.media3.common.util.Util.SDK_INT;
 import static androidx.media3.transformer.Composition.HDR_MODE_EXPERIMENTAL_FORCE_INTERPRET_HDR_AS_SDR;
@@ -459,7 +459,8 @@ public final class ConfigurationActivity extends AppCompatActivity {
 
   private void selectLocalFile(
       ActivityResultLauncher<Intent> localFilePickerLauncher, String[] mimeTypes) {
-    String permission = SDK_INT >= 33 ? READ_MEDIA_VIDEO : READ_EXTERNAL_STORAGE;
+//    String permission = SDK_INT >= 33 ? READ_MEDIA_VIDEO : READ_EXTERNAL_STORAGE;
+    String permission = READ_EXTERNAL_STORAGE;
     if (ActivityCompat.checkSelfPermission(/* context= */ this, permission)
         != PackageManager.PERMISSION_GRANTED) {
       onPermissionsGranted = () -> launchLocalFilePicker(localFilePickerLauncher, mimeTypes);

@@ -242,12 +242,12 @@ import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
     }
   }
 
-  @Override
-  public void onCryptoError(MediaCodec codec, MediaCodec.CryptoException e) {
-    synchronized (lock) {
-      mediaCodecCryptoException = e;
-    }
-  }
+//  @Override
+//  public void onCryptoError(MediaCodec codec, MediaCodec.CryptoException e) {
+//    synchronized (lock) {
+//      mediaCodecCryptoException = e;
+//    }
+//  }
 
   @Override
   public void onOutputFormatChanged(MediaCodec codec, MediaFormat format) {

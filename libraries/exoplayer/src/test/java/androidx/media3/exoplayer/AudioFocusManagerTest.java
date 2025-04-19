@@ -20,7 +20,6 @@ import static androidx.media3.exoplayer.AudioFocusManager.PLAYER_COMMAND_PLAY_WH
 import static androidx.media3.exoplayer.AudioFocusManager.PLAYER_COMMAND_WAIT_FOR_CALLBACK;
 import static com.google.common.truth.Truth.assertThat;
 import static org.junit.Assert.fail;
-import static org.robolectric.Shadows.shadowOf;
 
 import android.content.Context;
 import android.media.AudioFocusRequest;
@@ -38,6 +37,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Shadows;
 import org.robolectric.annotation.Config;
+import org.robolectric.shadow.api.Shadow;
 import org.robolectric.shadows.ShadowAudioManager;
 
 /** Unit tests for {@link AudioFocusManager}. */
@@ -73,21 +73,24 @@ public class AudioFocusManagerTest {
     assertThat(audioFocusManager.updateAudioFocus(/* playWhenReady= */ true, Player.STATE_READY))
         .isEqualTo(PLAYER_COMMAND_PLAY_WHEN_READY);
     ShadowAudioManager.AudioFocusRequest request =
-        Shadows.shadowOf(audioManager).getLastAudioFocusRequest();
+//        Shadows.shadowOf(audioManager).getLastAudioFocusRequest();
+        ((ShadowAudioManager) Shadow.extract(audioManager)).getLastAudioFocusRequest();
     assertThat(request).isNull();
   }
 
   @Test
   @Config(maxSdk = 25)
   public void setAudioAttributes_withNullUsage_abandonsAudioFocus() {
-    Shadows.shadowOf(audioManager)
+//    Shadows.shadowOf(audioManager)
+    ((ShadowAudioManager) Shadow.extract(audioManager))
         .setNextFocusRequestResponse(AudioManager.AUDIOFOCUS_REQUEST_GRANTED);
     audioFocusManager.setAudioAttributes(AudioAttributes.DEFAULT);
 
     assertThat(audioFocusManager.updateAudioFocus(/* playWhenReady= */ true, Player.STATE_READY))
         .isEqualTo(PLAYER_COMMAND_PLAY_WHEN_READY);
     ShadowAudioManager.AudioFocusRequest request =
-        Shadows.shadowOf(audioManager).getLastAudioFocusRequest();
+//        Shadows.shadowOf(audioManager).getLastAudioFocusRequest();
+        ((ShadowAudioManager) Shadow.extract(audioManager)).getLastAudioFocusRequest();
     assertThat(request.durationHint).isEqualTo(AudioManager.AUDIOFOCUS_GAIN);
 
     // Ensure that setting null audio attributes with focus releases focus.
@@ -96,21 +99,24 @@ public class AudioFocusManagerTest {
     assertThat(audioFocusManager.updateAudioFocus(/* playWhenReady= */ true, Player.STATE_READY))
         .isEqualTo(PLAYER_COMMAND_PLAY_WHEN_READY);
     AudioManager.OnAudioFocusChangeListener lastRequest =
-        Shadows.shadowOf(audioManager).getLastAbandonedAudioFocusListener();
+//        Shadows.shadowOf(audioManager).getLastAbandonedAudioFocusListener();
+        ((ShadowAudioManager) Shadow.extract(audioManager)).getLastAbandonedAudioFocusListener();
     assertThat(lastRequest).isNotNull();
   }
 
   @Test
   @Config(minSdk = 26)
   public void setAudioAttributes_withNullUsage_abandonsAudioFocus_v26() {
-    Shadows.shadowOf(audioManager)
+//    Shadows.shadowOf(audioManager)
+    ((ShadowAudioManager) Shadow.extract(audioManager))
         .setNextFocusRequestResponse(AudioManager.AUDIOFOCUS_REQUEST_GRANTED);
     audioFocusManager.setAudioAttributes(AudioAttributes.DEFAULT);
 
     assertThat(audioFocusManager.updateAudioFocus(/* playWhenReady= */ true, Player.STATE_READY))
         .isEqualTo(PLAYER_COMMAND_PLAY_WHEN_READY);
     ShadowAudioManager.AudioFocusRequest request =
-        Shadows.shadowOf(audioManager).getLastAudioFocusRequest();
+//        Shadows.shadowOf(audioManager).getLastAudioFocusRequest();
+        ((ShadowAudioManager) Shadow.extract(audioManager)).getLastAudioFocusRequest();
     assertThat(getAudioFocusGainFromRequest(request)).isEqualTo(AudioManager.AUDIOFOCUS_GAIN);
 
     // Ensure that setting null audio attributes with focus releases focus.
@@ -118,7 +124,8 @@ public class AudioFocusManagerTest {
     assertThat(audioFocusManager.updateAudioFocus(/* playWhenReady= */ true, Player.STATE_READY))
         .isEqualTo(PLAYER_COMMAND_PLAY_WHEN_READY);
     AudioFocusRequest lastRequest =
-        Shadows.shadowOf(audioManager).getLastAbandonedAudioFocusRequest();
+//        Shadows.shadowOf(audioManager).getLastAbandonedAudioFocusRequest();
+        ((ShadowAudioManager) Shadow.extract(audioManager)).getLastAbandonedAudioFocusRequest();
     assertThat(lastRequest).isNotNull();
   }
 
@@ -136,7 +143,8 @@ public class AudioFocusManagerTest {
 
   @Test
   public void setAudioAttributes_withUsageMedia_usesAudioFocusGain() {
-    Shadows.shadowOf(audioManager)
+//    Shadows.shadowOf(audioManager)
+    ((ShadowAudioManager) Shadow.extract(audioManager))
         .setNextFocusRequestResponse(AudioManager.AUDIOFOCUS_REQUEST_GRANTED);
 
     AudioAttributes mediaAudioAttributes =
@@ -146,62 +154,64 @@ public class AudioFocusManagerTest {
     assertThat(audioFocusManager.updateAudioFocus(/* playWhenReady= */ true, Player.STATE_READY))
         .isEqualTo(PLAYER_COMMAND_PLAY_WHEN_READY);
     ShadowAudioManager.AudioFocusRequest request =
-        Shadows.shadowOf(audioManager).getLastAudioFocusRequest();
+//        Shadows.shadowOf(audioManager).getLastAudioFocusRequest();
+        ((ShadowAudioManager) Shadow.extract(audioManager)).getLastAudioFocusRequest();
     assertThat(getAudioFocusGainFromRequest(request)).isEqualTo(AudioManager.AUDIOFOCUS_GAIN);
   }
 
   @Test
   public void setAudioAttributes_inEndedState_requestsAudioFocus() {
-    Shadows.shadowOf(audioManager)
+//    Shadows.shadowOf(audioManager)
+    ((ShadowAudioManager) Shadow.extract(audioManager))
         .setNextFocusRequestResponse(AudioManager.AUDIOFOCUS_REQUEST_GRANTED);
 
     audioFocusManager.setAudioAttributes(AudioAttributes.DEFAULT);
     assertThat(audioFocusManager.updateAudioFocus(/* playWhenReady= */ true, Player.STATE_ENDED))
         .isEqualTo(PLAYER_COMMAND_PLAY_WHEN_READY);
     ShadowAudioManager.AudioFocusRequest request =
-        Shadows.shadowOf(audioManager).getLastAudioFocusRequest();
+        ((ShadowAudioManager) Shadow.extract(audioManager)).getLastAudioFocusRequest();
     assertThat(getAudioFocusGainFromRequest(request)).isEqualTo(AudioManager.AUDIOFOCUS_GAIN);
   }
 
   @Test
   public void updateAudioFocus_idleToBuffering_setsPlayerCommandPlayWhenReady() {
-    Shadows.shadowOf(audioManager)
+    ((ShadowAudioManager) Shadow.extract(audioManager))
         .setNextFocusRequestResponse(AudioManager.AUDIOFOCUS_REQUEST_GRANTED);
 
     audioFocusManager.setAudioAttributes(AudioAttributes.DEFAULT);
     assertThat(audioFocusManager.updateAudioFocus(/* playWhenReady= */ true, Player.STATE_IDLE))
         .isEqualTo(PLAYER_COMMAND_PLAY_WHEN_READY);
-    assertThat(Shadows.shadowOf(audioManager).getLastAudioFocusRequest()).isNull();
+    assertThat(((ShadowAudioManager) Shadow.extract(audioManager)).getLastAudioFocusRequest()).isNull();
     assertThat(
             audioFocusManager.updateAudioFocus(/* playWhenReady= */ true, Player.STATE_BUFFERING))
         .isEqualTo(PLAYER_COMMAND_PLAY_WHEN_READY);
     ShadowAudioManager.AudioFocusRequest request =
-        Shadows.shadowOf(audioManager).getLastAudioFocusRequest();
+        ((ShadowAudioManager) Shadow.extract(audioManager)).getLastAudioFocusRequest();
     assertThat(getAudioFocusGainFromRequest(request)).isEqualTo(AudioManager.AUDIOFOCUS_GAIN);
   }
 
   @Test
   public void updateAudioFocus_pausedToPlaying_setsPlayerCommandPlayWhenReady() {
-    Shadows.shadowOf(audioManager)
+    ((ShadowAudioManager) Shadow.extract(audioManager))
         .setNextFocusRequestResponse(AudioManager.AUDIOFOCUS_REQUEST_GRANTED);
     audioFocusManager.setAudioAttributes(AudioAttributes.DEFAULT);
 
     // Audio focus should not be requested yet, because playWhenReady is false.
     assertThat(audioFocusManager.updateAudioFocus(/* playWhenReady= */ false, Player.STATE_READY))
         .isEqualTo(PLAYER_COMMAND_PLAY_WHEN_READY);
-    assertThat(Shadows.shadowOf(audioManager).getLastAudioFocusRequest()).isNull();
+    assertThat(((ShadowAudioManager) Shadow.extract(audioManager)).getLastAudioFocusRequest()).isNull();
 
     // Audio focus should be requested now that playWhenReady is true.
     assertThat(audioFocusManager.updateAudioFocus(/* playWhenReady= */ true, Player.STATE_READY))
         .isEqualTo(PLAYER_COMMAND_PLAY_WHEN_READY);
     ShadowAudioManager.AudioFocusRequest request =
-        Shadows.shadowOf(audioManager).getLastAudioFocusRequest();
+        ((ShadowAudioManager) Shadow.extract(audioManager)).getLastAudioFocusRequest();
     assertThat(getAudioFocusGainFromRequest(request)).isEqualTo(AudioManager.AUDIOFOCUS_GAIN);
   }
 
   @Test
   public void updateAudioFocus_pausedToPlaying_withTransientLoss_setsPlayerCommandPlayWhenReady() {
-    Shadows.shadowOf(audioManager)
+    ((ShadowAudioManager) Shadow.extract(audioManager))
         .setNextFocusRequestResponse(AudioManager.AUDIOFOCUS_REQUEST_GRANTED);
     audioFocusManager.setAudioAttributes(AudioAttributes.DEFAULT);
 
@@ -219,7 +229,7 @@ public class AudioFocusManagerTest {
 
   @Test
   public void updateAudioFocus_pausedToPlaying_withTransientDuck_setsPlayerCommandPlayWhenReady() {
-    Shadows.shadowOf(audioManager)
+    ((ShadowAudioManager) Shadow.extract(audioManager))
         .setNextFocusRequestResponse(AudioManager.AUDIOFOCUS_REQUEST_GRANTED);
     audioFocusManager.setAudioAttributes(AudioAttributes.DEFAULT);
 
@@ -230,7 +240,7 @@ public class AudioFocusManagerTest {
     audioFocusManager
         .getFocusListener()
         .onAudioFocusChange(AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK);
-    shadowOf(Looper.getMainLooper()).idle();
+    ((org.robolectric.shadows.ShadowLooper)Shadow.extract(Looper.getMainLooper())).idle();
 
     assertThat(testPlayerControl.lastVolumeMultiplier).isLessThan(1.0f);
     // Focus should be re-requested, rather than staying in a state of transient ducking. This
@@ -243,7 +253,7 @@ public class AudioFocusManagerTest {
 
   @Test
   public void updateAudioFocus_toPausedBeforeRequestingFocus_setsPlayerCommandPlayWhenReady() {
-    Shadows.shadowOf(audioManager)
+    ((ShadowAudioManager) Shadow.extract(audioManager))
         .setNextFocusRequestResponse(AudioManager.AUDIOFOCUS_REQUEST_GRANTED);
     audioFocusManager.setAudioAttributes(AudioAttributes.DEFAULT);
 
@@ -256,7 +266,7 @@ public class AudioFocusManagerTest {
 
   @Test
   public void updateAudioFocus_toPausedWithFocus_setsPlayerCommandPlayWhenReady() {
-    Shadows.shadowOf(audioManager)
+    ((ShadowAudioManager) Shadow.extract(audioManager))
         .setNextFocusRequestResponse(AudioManager.AUDIOFOCUS_REQUEST_GRANTED);
     audioFocusManager.setAudioAttributes(AudioAttributes.DEFAULT);
     audioFocusManager.updateAudioFocus(/* playWhenReady= */ true, Player.STATE_READY);
@@ -270,12 +280,12 @@ public class AudioFocusManagerTest {
 
   @Test
   public void updateAudioFocus_toPausedWithFocusLoss_setsPlayerCommandDoNotPlay() {
-    Shadows.shadowOf(audioManager)
+    ((ShadowAudioManager) Shadow.extract(audioManager))
         .setNextFocusRequestResponse(AudioManager.AUDIOFOCUS_REQUEST_GRANTED);
     audioFocusManager.setAudioAttributes(AudioAttributes.DEFAULT);
     audioFocusManager.updateAudioFocus(/* playWhenReady= */ true, Player.STATE_READY);
     audioFocusManager.getFocusListener().onAudioFocusChange(AudioManager.AUDIOFOCUS_LOSS);
-    shadowOf(Looper.getMainLooper()).idle();
+    ((org.robolectric.shadows.ShadowLooper) Shadow.extract(Looper.getMainLooper())).idle();
 
     @AudioFocusManager.PlayerCommand
     int playerCommand =
@@ -286,12 +296,12 @@ public class AudioFocusManagerTest {
 
   @Test
   public void updateAudioFocus_toPausedWithTransientFocusLoss_setsPlayerCommandWaitForCallback() {
-    Shadows.shadowOf(audioManager)
+    ((ShadowAudioManager) Shadow.extract(audioManager))
         .setNextFocusRequestResponse(AudioManager.AUDIOFOCUS_REQUEST_GRANTED);
     audioFocusManager.setAudioAttributes(AudioAttributes.DEFAULT);
     audioFocusManager.updateAudioFocus(/* playWhenReady= */ true, Player.STATE_READY);
     audioFocusManager.getFocusListener().onAudioFocusChange(AudioManager.AUDIOFOCUS_LOSS_TRANSIENT);
-    shadowOf(Looper.getMainLooper()).idle();
+    ((org.robolectric.shadows.ShadowLooper) Shadow.extract(Looper.getMainLooper())).idle();
 
     @AudioFocusManager.PlayerCommand
     int playerCommand =
@@ -303,14 +313,14 @@ public class AudioFocusManagerTest {
   @Test
   public void
       updateAudioFocus_toPausedWithTransientFocusLossCanDuck_setsPlayerCommandPlayWhenReady() {
-    Shadows.shadowOf(audioManager)
+    ((ShadowAudioManager) Shadow.extract(audioManager))
         .setNextFocusRequestResponse(AudioManager.AUDIOFOCUS_REQUEST_GRANTED);
     audioFocusManager.setAudioAttributes(AudioAttributes.DEFAULT);
     audioFocusManager.updateAudioFocus(/* playWhenReady= */ true, Player.STATE_READY);
     audioFocusManager
         .getFocusListener()
         .onAudioFocusChange(AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK);
-    shadowOf(Looper.getMainLooper()).idle();
+    ((org.robolectric.shadows.ShadowLooper) Shadow.extract(Looper.getMainLooper())).idle();
 
     @AudioFocusManager.PlayerCommand
     int playerCommand =
@@ -321,7 +331,7 @@ public class AudioFocusManagerTest {
 
   @Test
   public void updateAudioFocus_abandonFocusWhenDucked_restoresFullVolume() {
-    Shadows.shadowOf(audioManager)
+    ((ShadowAudioManager) Shadow.extract(audioManager))
         .setNextFocusRequestResponse(AudioManager.AUDIOFOCUS_REQUEST_GRANTED);
     audioFocusManager.setAudioAttributes(AudioAttributes.DEFAULT);
 
@@ -332,7 +342,7 @@ public class AudioFocusManagerTest {
     audioFocusManager
         .getFocusListener()
         .onAudioFocusChange(AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK);
-    shadowOf(Looper.getMainLooper()).idle();
+    ((org.robolectric.shadows.ShadowLooper) Shadow.extract(Looper.getMainLooper())).idle();
 
     assertThat(testPlayerControl.lastVolumeMultiplier).isLessThan(1.0f);
 
@@ -348,82 +358,82 @@ public class AudioFocusManagerTest {
   @Test
   @Config(maxSdk = 25)
   public void updateAudioFocus_readyToIdle_abandonsAudioFocus() {
-    Shadows.shadowOf(audioManager)
+    ((ShadowAudioManager) Shadow.extract(audioManager))
         .setNextFocusRequestResponse(AudioManager.AUDIOFOCUS_REQUEST_GRANTED);
     audioFocusManager.setAudioAttributes(AudioAttributes.DEFAULT);
 
     assertThat(audioFocusManager.updateAudioFocus(/* playWhenReady= */ true, Player.STATE_READY))
         .isEqualTo(PLAYER_COMMAND_PLAY_WHEN_READY);
-    assertThat(Shadows.shadowOf(audioManager).getLastAbandonedAudioFocusListener()).isNull();
+    assertThat(((ShadowAudioManager) Shadow.extract(audioManager)).getLastAbandonedAudioFocusListener()).isNull();
 
     ShadowAudioManager.AudioFocusRequest request =
-        Shadows.shadowOf(audioManager).getLastAudioFocusRequest();
+        ((ShadowAudioManager) Shadow.extract(audioManager)).getLastAudioFocusRequest();
     assertThat(audioFocusManager.updateAudioFocus(/* playWhenReady= */ true, Player.STATE_IDLE))
         .isEqualTo(PLAYER_COMMAND_PLAY_WHEN_READY);
-    assertThat(Shadows.shadowOf(audioManager).getLastAbandonedAudioFocusListener())
+    assertThat(((ShadowAudioManager) Shadow.extract(audioManager)).getLastAbandonedAudioFocusListener())
         .isEqualTo(request.listener);
   }
 
   @Test
   @Config(minSdk = 26)
   public void updateAudioFocus_readyToIdle_abandonsAudioFocus_v26() {
-    Shadows.shadowOf(audioManager)
+    ((ShadowAudioManager) Shadow.extract(audioManager))
         .setNextFocusRequestResponse(AudioManager.AUDIOFOCUS_REQUEST_GRANTED);
     audioFocusManager.setAudioAttributes(AudioAttributes.DEFAULT);
 
     assertThat(audioFocusManager.updateAudioFocus(/* playWhenReady= */ true, Player.STATE_READY))
         .isEqualTo(PLAYER_COMMAND_PLAY_WHEN_READY);
-    assertThat(Shadows.shadowOf(audioManager).getLastAbandonedAudioFocusRequest()).isNull();
+    assertThat(((ShadowAudioManager) Shadow.extract(audioManager)).getLastAbandonedAudioFocusRequest()).isNull();
 
     ShadowAudioManager.AudioFocusRequest request =
-        Shadows.shadowOf(audioManager).getLastAudioFocusRequest();
+        ((ShadowAudioManager) Shadow.extract(audioManager)).getLastAudioFocusRequest();
     assertThat(audioFocusManager.updateAudioFocus(/* playWhenReady= */ true, Player.STATE_IDLE))
         .isEqualTo(PLAYER_COMMAND_PLAY_WHEN_READY);
-    assertThat(Shadows.shadowOf(audioManager).getLastAbandonedAudioFocusRequest())
+    assertThat(((ShadowAudioManager) Shadow.extract(audioManager)).getLastAbandonedAudioFocusRequest())
         .isEqualTo(request.audioFocusRequest);
   }
 
   @Test
   @Config(maxSdk = 25)
   public void updateAudioFocus_readyToIdle_withoutFocus_isNoOp() {
-    Shadows.shadowOf(audioManager)
+    ((ShadowAudioManager) Shadow.extract(audioManager))
         .setNextFocusRequestResponse(AudioManager.AUDIOFOCUS_REQUEST_GRANTED);
     audioFocusManager.setAudioAttributes(null);
 
     assertThat(audioFocusManager.updateAudioFocus(/* playWhenReady= */ false, Player.STATE_READY))
         .isEqualTo(PLAYER_COMMAND_PLAY_WHEN_READY);
-    assertThat(Shadows.shadowOf(audioManager).getLastAbandonedAudioFocusListener()).isNull();
+    assertThat(((ShadowAudioManager) Shadow.extract(audioManager)).getLastAbandonedAudioFocusListener()).isNull();
     ShadowAudioManager.AudioFocusRequest request =
-        Shadows.shadowOf(audioManager).getLastAudioFocusRequest();
+        ((ShadowAudioManager) Shadow.extract(audioManager)).getLastAudioFocusRequest();
     assertThat(request).isNull();
 
     assertThat(audioFocusManager.updateAudioFocus(/* playWhenReady= */ false, Player.STATE_IDLE))
         .isEqualTo(PLAYER_COMMAND_PLAY_WHEN_READY);
-    assertThat(Shadows.shadowOf(audioManager).getLastAbandonedAudioFocusListener()).isNull();
+    assertThat(((ShadowAudioManager) Shadow.extract(audioManager)).getLastAbandonedAudioFocusListener()).isNull();
   }
 
   @Test
   @Config(minSdk = 26)
   public void updateAudioFocus_readyToIdle_withoutFocus_isNoOp_v26() {
-    Shadows.shadowOf(audioManager)
+    ((ShadowAudioManager) Shadow.extract(audioManager))
         .setNextFocusRequestResponse(AudioManager.AUDIOFOCUS_REQUEST_GRANTED);
     audioFocusManager.setAudioAttributes(null);
 
     assertThat(audioFocusManager.updateAudioFocus(/* playWhenReady= */ false, Player.STATE_READY))
         .isEqualTo(PLAYER_COMMAND_PLAY_WHEN_READY);
-    assertThat(Shadows.shadowOf(audioManager).getLastAbandonedAudioFocusRequest()).isNull();
+    assertThat(((ShadowAudioManager) Shadow.extract(audioManager)).getLastAbandonedAudioFocusRequest()).isNull();
     ShadowAudioManager.AudioFocusRequest request =
-        Shadows.shadowOf(audioManager).getLastAudioFocusRequest();
+        ((ShadowAudioManager) Shadow.extract(audioManager)).getLastAudioFocusRequest();
     assertThat(request).isNull();
 
     assertThat(audioFocusManager.updateAudioFocus(/* playWhenReady= */ false, Player.STATE_IDLE))
         .isEqualTo(PLAYER_COMMAND_PLAY_WHEN_READY);
-    assertThat(Shadows.shadowOf(audioManager).getLastAbandonedAudioFocusRequest()).isNull();
+    assertThat(((ShadowAudioManager) Shadow.extract(audioManager)).getLastAbandonedAudioFocusRequest()).isNull();
   }
 
   @Test
   public void release_doesNotCallPlayerControlToRestoreVolume() {
-    Shadows.shadowOf(audioManager)
+    ((ShadowAudioManager) Shadow.extract(audioManager))
         .setNextFocusRequestResponse(AudioManager.AUDIOFOCUS_REQUEST_GRANTED);
     audioFocusManager.setAudioAttributes(AudioAttributes.DEFAULT);
 
@@ -434,7 +444,7 @@ public class AudioFocusManagerTest {
     audioFocusManager
         .getFocusListener()
         .onAudioFocusChange(AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK);
-    shadowOf(Looper.getMainLooper()).idle();
+    ((org.robolectric.shadows.ShadowLooper) Shadow.extract(Looper.getMainLooper())).idle();
 
     assertThat(testPlayerControl.lastVolumeMultiplier).isLessThan(1.0f);
 
@@ -446,7 +456,7 @@ public class AudioFocusManagerTest {
 
   @Test
   public void onAudioFocusChange_withDuckEnabled_reducesAndRestoresVolume() {
-    Shadows.shadowOf(audioManager)
+    ((ShadowAudioManager) Shadow.extract(audioManager))
         .setNextFocusRequestResponse(AudioManager.AUDIOFOCUS_REQUEST_GRANTED);
     audioFocusManager.setAudioAttributes(AudioAttributes.DEFAULT);
 
@@ -456,20 +466,20 @@ public class AudioFocusManagerTest {
     audioFocusManager
         .getFocusListener()
         .onAudioFocusChange(AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK);
-    shadowOf(Looper.getMainLooper()).idle();
+    ((org.robolectric.shadows.ShadowLooper) Shadow.extract(Looper.getMainLooper())).idle();
 
     assertThat(testPlayerControl.lastVolumeMultiplier).isLessThan(1.0f);
     assertThat(testPlayerControl.lastPlayerCommand).isEqualTo(NO_COMMAND_RECEIVED);
 
     audioFocusManager.getFocusListener().onAudioFocusChange(AudioManager.AUDIOFOCUS_GAIN);
-    shadowOf(Looper.getMainLooper()).idle();
+    ((org.robolectric.shadows.ShadowLooper) Shadow.extract(Looper.getMainLooper())).idle();
 
     assertThat(testPlayerControl.lastVolumeMultiplier).isEqualTo(1.0f);
   }
 
   @Test
   public void onAudioFocusChange_withPausedWhenDucked_sendsCommandWaitForCallback() {
-    Shadows.shadowOf(audioManager)
+    ((ShadowAudioManager) Shadow.extract(audioManager))
         .setNextFocusRequestResponse(AudioManager.AUDIOFOCUS_REQUEST_GRANTED);
 
     AudioAttributes speechAudioAttributes =
@@ -485,20 +495,20 @@ public class AudioFocusManagerTest {
     audioFocusManager
         .getFocusListener()
         .onAudioFocusChange(AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK);
-    shadowOf(Looper.getMainLooper()).idle();
+    ((org.robolectric.shadows.ShadowLooper) Shadow.extract(Looper.getMainLooper())).idle();
 
     assertThat(testPlayerControl.lastPlayerCommand).isEqualTo(PLAYER_COMMAND_WAIT_FOR_CALLBACK);
     assertThat(testPlayerControl.lastVolumeMultiplier).isEqualTo(1.0f);
 
     audioFocusManager.getFocusListener().onAudioFocusChange(AudioManager.AUDIOFOCUS_GAIN);
-    shadowOf(Looper.getMainLooper()).idle();
+    ((org.robolectric.shadows.ShadowLooper) Shadow.extract(Looper.getMainLooper())).idle();
 
     assertThat(testPlayerControl.lastPlayerCommand).isEqualTo(PLAYER_COMMAND_PLAY_WHEN_READY);
   }
 
   @Test
   public void onAudioFocusChange_withTransientLoss_sendsCommandWaitForCallback() {
-    Shadows.shadowOf(audioManager)
+    ((ShadowAudioManager) Shadow.extract(audioManager))
         .setNextFocusRequestResponse(AudioManager.AUDIOFOCUS_REQUEST_GRANTED);
     audioFocusManager.setAudioAttributes(AudioAttributes.DEFAULT);
 
@@ -506,7 +516,7 @@ public class AudioFocusManagerTest {
         .isEqualTo(PLAYER_COMMAND_PLAY_WHEN_READY);
 
     audioFocusManager.getFocusListener().onAudioFocusChange(AudioManager.AUDIOFOCUS_LOSS_TRANSIENT);
-    shadowOf(Looper.getMainLooper()).idle();
+    ((org.robolectric.shadows.ShadowLooper) Shadow.extract(Looper.getMainLooper())).idle();
 
     assertThat(testPlayerControl.lastVolumeMultiplier).isEqualTo(1.0f);
     assertThat(testPlayerControl.lastPlayerCommand).isEqualTo(PLAYER_COMMAND_WAIT_FOR_CALLBACK);
@@ -515,41 +525,41 @@ public class AudioFocusManagerTest {
   @Test
   @Config(maxSdk = 25)
   public void onAudioFocusChange_withFocusLoss_sendsDoNotPlayAndAbandonsFocus() {
-    Shadows.shadowOf(audioManager)
+    ((ShadowAudioManager) Shadow.extract(audioManager))
         .setNextFocusRequestResponse(AudioManager.AUDIOFOCUS_REQUEST_GRANTED);
     audioFocusManager.setAudioAttributes(AudioAttributes.DEFAULT);
 
     assertThat(audioFocusManager.updateAudioFocus(/* playWhenReady= */ true, Player.STATE_READY))
         .isEqualTo(PLAYER_COMMAND_PLAY_WHEN_READY);
-    assertThat(Shadows.shadowOf(audioManager).getLastAbandonedAudioFocusListener()).isNull();
+    assertThat(((ShadowAudioManager) Shadow.extract(audioManager)).getLastAbandonedAudioFocusListener()).isNull();
 
     ShadowAudioManager.AudioFocusRequest request =
-        Shadows.shadowOf(audioManager).getLastAudioFocusRequest();
+        ((ShadowAudioManager) Shadow.extract(audioManager)).getLastAudioFocusRequest();
     request.listener.onAudioFocusChange(AudioManager.AUDIOFOCUS_LOSS);
-    shadowOf(Looper.getMainLooper()).idle();
+    ((org.robolectric.shadows.ShadowLooper) Shadow.extract(Looper.getMainLooper())).idle();
 
     assertThat(testPlayerControl.lastPlayerCommand).isEqualTo(PLAYER_COMMAND_DO_NOT_PLAY);
-    assertThat(Shadows.shadowOf(audioManager).getLastAbandonedAudioFocusListener())
+    assertThat(((ShadowAudioManager) Shadow.extract(audioManager)).getLastAbandonedAudioFocusListener())
         .isEqualTo(request.listener);
   }
 
   @Test
   @Config(minSdk = 26)
   public void onAudioFocusChange_withFocusLoss_sendsDoNotPlayAndAbandonsFocus_v26() {
-    Shadows.shadowOf(audioManager)
+    ((ShadowAudioManager) Shadow.extract(audioManager))
         .setNextFocusRequestResponse(AudioManager.AUDIOFOCUS_REQUEST_GRANTED);
     audioFocusManager.setAudioAttributes(AudioAttributes.DEFAULT);
 
     assertThat(audioFocusManager.updateAudioFocus(/* playWhenReady= */ true, Player.STATE_READY))
         .isEqualTo(PLAYER_COMMAND_PLAY_WHEN_READY);
-    assertThat(Shadows.shadowOf(audioManager).getLastAbandonedAudioFocusRequest()).isNull();
+    assertThat(((ShadowAudioManager) Shadow.extract(audioManager)).getLastAbandonedAudioFocusRequest()).isNull();
 
     audioFocusManager.getFocusListener().onAudioFocusChange(AudioManager.AUDIOFOCUS_LOSS);
-    shadowOf(Looper.getMainLooper()).idle();
+    ((org.robolectric.shadows.ShadowLooper) Shadow.extract(Looper.getMainLooper())).idle();
 
     assertThat(testPlayerControl.lastPlayerCommand).isEqualTo(PLAYER_COMMAND_DO_NOT_PLAY);
-    assertThat(Shadows.shadowOf(audioManager).getLastAbandonedAudioFocusRequest())
-        .isEqualTo(Shadows.shadowOf(audioManager).getLastAudioFocusRequest().audioFocusRequest);
+    assertThat(((ShadowAudioManager) Shadow.extract(audioManager)).getLastAbandonedAudioFocusRequest())
+        .isEqualTo(((ShadowAudioManager) Shadow.extract(audioManager)).getLastAudioFocusRequest().audioFocusRequest);
   }
 
   private int getAudioFocusGainFromRequest(ShadowAudioManager.AudioFocusRequest audioFocusRequest) {

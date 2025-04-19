@@ -218,9 +218,9 @@ import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
               /* rboId= */ C.INDEX_UNSET,
               frameInfo.width,
               frameInfo.height);
-      if (Util.SDK_INT >= 34 && bitmap.hasGainmap()) {
-        checkNotNull(repeatingGainmapShaderProgram).setGainmap(checkNotNull(bitmap.getGainmap()));
-      }
+//      if (Util.SDK_INT >= 34 && bitmap.hasGainmap()) {
+//        checkNotNull(repeatingGainmapShaderProgram).setGainmap(checkNotNull(bitmap.getGainmap()));
+//      }
       if (signalRepeatingSequence) {
         checkNotNull(repeatingGainmapShaderProgram).signalNewRepeatingFrameSequence();
       }

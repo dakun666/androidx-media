@@ -426,7 +426,7 @@ public final class ImaServerSideAdInsertionMediaSource extends CompositeMediaSou
           adPlaybackStateMap.put(
               key, AdPlaybackState.fromAdPlaybackState(/* adsId= */ key, adPlaybackState));
         }
-        return new State(adPlaybackStateMap.buildOrThrow());
+        return new State(adPlaybackStateMap.build());
       }
     }
 

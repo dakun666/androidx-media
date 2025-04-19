@@ -29,7 +29,6 @@ import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.robolectric.Shadows.shadowOf;
 
 import android.media.MediaFormat;
 import android.os.Handler;
@@ -70,6 +69,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 import org.robolectric.annotation.Config;
+import org.robolectric.shadow.api.Shadow;
 
 /** Unit tests for {@link MediaCodecAudioRenderer} */
 @RunWith(AndroidJUnit4.class)
@@ -364,7 +364,7 @@ public class MediaCodecAudioRendererTest {
             /* errorCode= */ 1, new Format.Builder().build(), /* isRecoverable= */ true);
     audioSinkListener.onAudioSinkError(error);
 
-    shadowOf(Looper.getMainLooper()).idle();
+    ((org.robolectric.shadows.ShadowLooper) Shadow.extract(Looper.getMainLooper())).idle();
     verify(audioRendererEventListener).onAudioSinkError(error);
   }
 
@@ -379,7 +379,7 @@ public class MediaCodecAudioRendererTest {
 
     audioSinkListener.onAudioCapabilitiesChanged();
 
-    shadowOf(Looper.getMainLooper()).idle();
+    ((org.robolectric.shadows.ShadowLooper) Shadow.extract(Looper.getMainLooper())).idle();
     verify(rendererCapabilitiesListener).onRendererCapabilitiesChanged(mediaCodecAudioRenderer);
   }
 

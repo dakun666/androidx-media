@@ -27,7 +27,7 @@ import androidx.media3.common.Player
 import androidx.media3.session.MediaController
 
 /** Helper class which handles repeat mode changes and the UI surrounding this feature. */
-class RepeatModeHelper(activity: Activity, mediaController: MediaController) {
+class RepeatModeHelper(activity: Activity, mediaController: MediaController?) {
   private val container: ViewGroup = activity.findViewById(R.id.group_toggle_repeat)
   private val spinner: Spinner = container.findViewById(R.id.repeat_mode_spinner)
   private val icon: ImageView = container.findViewById(R.id.repeat_mode_icon)
@@ -38,7 +38,7 @@ class RepeatModeHelper(activity: Activity, mediaController: MediaController) {
     spinner.onItemSelectedListener =
       object : AdapterView.OnItemSelectedListener {
         override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-          mediaController.repeatMode = modes[p2]
+          mediaController?.repeatMode = modes[p2]
         }
 
         override fun onNothingSelected(parent: AdapterView<*>?) {}
@@ -54,10 +54,10 @@ class RepeatModeHelper(activity: Activity, mediaController: MediaController) {
         override fun onAvailableCommandsChanged(availableCommands: Player.Commands) =
           updateBackground(availableCommands.contains(Player.COMMAND_SET_REPEAT_MODE))
       }
-    mediaController.addListener(listener)
+    mediaController?.addListener(listener)
 
     val isSupported: Boolean =
-      mediaController.availableCommands.contains(Player.COMMAND_SET_REPEAT_MODE)
+      mediaController?.availableCommands?.contains(Player.COMMAND_SET_REPEAT_MODE) == true
     updateBackground(isSupported)
   }
 

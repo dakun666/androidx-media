@@ -680,9 +680,10 @@ public final class MediaCodecInfo {
   }
 
   private static boolean isDetachedSurfaceSupported(@Nullable CodecCapabilities capabilities) {
-    return Util.SDK_INT >= 35
-        && capabilities != null
-        && capabilities.isFeatureSupported(CodecCapabilities.FEATURE_DetachedSurface);
+//    return Util.SDK_INT >= 35
+//        && capabilities != null
+//        && capabilities.isFeatureSupported(CodecCapabilities.FEATURE_DetachedSurface);
+    return false;
   }
 
   private static boolean areSizeAndRateSupported(

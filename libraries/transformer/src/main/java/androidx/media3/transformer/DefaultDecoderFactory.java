@@ -290,9 +290,9 @@ public final class DefaultDecoderFactory implements Codec.DecoderFactory {
           mediaFormat, MediaFormat.KEY_LEVEL, codecProfileAndLevel.second);
     }
 
-    if (SDK_INT >= 35) {
-      mediaFormat.setInteger(MediaFormat.KEY_IMPORTANCE, max(0, -codecPriority));
-    }
+//    if (SDK_INT >= 35) {
+//      mediaFormat.setInteger(MediaFormat.KEY_IMPORTANCE, max(0, -codecPriority));
+//    }
 
     if (shouldConfigureOperatingRate) {
       configureOperatingRate(mediaFormat);

@@ -92,7 +92,6 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
-import static org.robolectric.Shadows.shadowOf;
 
 import android.content.Context;
 import android.content.Intent;
@@ -229,6 +228,7 @@ import org.mockito.ArgumentMatchers;
 import org.mockito.InOrder;
 import org.mockito.Mockito;
 import org.robolectric.annotation.Config;
+import org.robolectric.shadow.api.Shadow;
 import org.robolectric.shadows.AudioDeviceInfoBuilder;
 import org.robolectric.shadows.ShadowAudioManager;
 import org.robolectric.shadows.ShadowLooper;
@@ -4356,7 +4356,7 @@ public class ExoPlayerTest {
   @Test
   public void audioFocus_grantedWhenCallingPlay_startsPlayback() throws Exception {
     AudioManager audioManager = context.getSystemService(AudioManager.class);
-    shadowOf(audioManager).setNextFocusRequestResponse(AudioManager.AUDIOFOCUS_REQUEST_GRANTED);
+    ((ShadowAudioManager) Shadow.extract(audioManager)).setNextFocusRequestResponse(AudioManager.AUDIOFOCUS_REQUEST_GRANTED);
     Listener listener = mock(Player.Listener.class);
     ExoPlayer player = new TestExoPlayerBuilder(context).build();
     player.setAudioAttributes(AudioAttributes.DEFAULT, /* handleAudioFocus= */ true);
@@ -4380,7 +4380,7 @@ public class ExoPlayerTest {
   @Test
   public void audioFocus_deniedWhenCallingPlay_doesNotPlay() throws Exception {
     AudioManager audioManager = context.getSystemService(AudioManager.class);
-    shadowOf(audioManager).setNextFocusRequestResponse(AudioManager.AUDIOFOCUS_REQUEST_FAILED);
+    ((ShadowAudioManager) Shadow.extract(audioManager)).setNextFocusRequestResponse(AudioManager.AUDIOFOCUS_REQUEST_FAILED);
     Listener listener = mock(Player.Listener.class);
     ExoPlayer player = new TestExoPlayerBuilder(context).build();
     player.setAudioAttributes(AudioAttributes.DEFAULT, /* handleAudioFocus= */ true);
@@ -4404,7 +4404,7 @@ public class ExoPlayerTest {
   @Test
   public void audioFocus_lossWhilePlaying_pausesPlayback() throws Exception {
     AudioManager audioManager = context.getSystemService(AudioManager.class);
-    shadowOf(audioManager).setNextFocusRequestResponse(AudioManager.AUDIOFOCUS_REQUEST_GRANTED);
+    ((ShadowAudioManager) Shadow.extract(audioManager)).setNextFocusRequestResponse(AudioManager.AUDIOFOCUS_REQUEST_GRANTED);
     Listener listener = mock(Player.Listener.class);
     ExoPlayer player = new TestExoPlayerBuilder(context).build();
     player.setAudioAttributes(AudioAttributes.DEFAULT, /* handleAudioFocus= */ true);
@@ -4413,7 +4413,7 @@ public class ExoPlayerTest {
     player.prepare();
 
     player.play();
-    shadowOf(audioManager)
+    ((ShadowAudioManager) Shadow.extract(audioManager))
         .getLastAudioFocusRequest()
         .listener
         .onAudioFocusChange(AudioManager.AUDIOFOCUS_LOSS);
@@ -4440,7 +4440,7 @@ public class ExoPlayerTest {
   public void audioFocus_transientLossAndGainWhilePlaying_suppressesPlaybackWhileLost()
       throws Exception {
     AudioManager audioManager = context.getSystemService(AudioManager.class);
-    shadowOf(audioManager).setNextFocusRequestResponse(AudioManager.AUDIOFOCUS_REQUEST_GRANTED);
+    ((ShadowAudioManager) Shadow.extract(audioManager)).setNextFocusRequestResponse(AudioManager.AUDIOFOCUS_REQUEST_GRANTED);
     Listener listener = mock(Player.Listener.class);
     ExoPlayer player = new TestExoPlayerBuilder(context).build();
     player.setAudioAttributes(AudioAttributes.DEFAULT, /* handleAudioFocus= */ true);
@@ -4449,14 +4449,14 @@ public class ExoPlayerTest {
     player.prepare();
 
     player.play();
-    shadowOf(audioManager)
+    ((ShadowAudioManager) Shadow.extract(audioManager))
         .getLastAudioFocusRequest()
         .listener
         .onAudioFocusChange(AudioManager.AUDIOFOCUS_LOSS_TRANSIENT);
     run(player).untilPendingCommandsAreFullyHandled();
     boolean playWhenReady = player.getPlayWhenReady();
     @Player.PlaybackSuppressionReason int suppressionReason = player.getPlaybackSuppressionReason();
-    shadowOf(audioManager)
+    ((ShadowAudioManager) Shadow.extract(audioManager))
         .getLastAudioFocusRequest()
         .listener
         .onAudioFocusChange(AudioManager.AUDIOFOCUS_GAIN);
@@ -4492,7 +4492,7 @@ public class ExoPlayerTest {
   public void audioFocus_pauseDuringTransientLossWhilePlaying_keepsPlaybackPausedAndSuppressed()
       throws Exception {
     AudioManager audioManager = context.getSystemService(AudioManager.class);
-    shadowOf(audioManager).setNextFocusRequestResponse(AudioManager.AUDIOFOCUS_REQUEST_GRANTED);
+    ((ShadowAudioManager) Shadow.extract(audioManager)).setNextFocusRequestResponse(AudioManager.AUDIOFOCUS_REQUEST_GRANTED);
     Listener listener = mock(Player.Listener.class);
     ExoPlayer player = new TestExoPlayerBuilder(context).build();
     player.setAudioAttributes(AudioAttributes.DEFAULT, /* handleAudioFocus= */ true);
@@ -4501,7 +4501,7 @@ public class ExoPlayerTest {
     player.prepare();
 
     player.play();
-    shadowOf(audioManager)
+    ((ShadowAudioManager) Shadow.extract(audioManager))
         .getLastAudioFocusRequest()
         .listener
         .onAudioFocusChange(AudioManager.AUDIOFOCUS_LOSS_TRANSIENT);
@@ -4536,7 +4536,7 @@ public class ExoPlayerTest {
   public void audioFocus_transientLossDuckWhilePlaying_continuesPlaybackWithLowerVolume()
       throws Exception {
     AudioManager audioManager = context.getSystemService(AudioManager.class);
-    shadowOf(audioManager).setNextFocusRequestResponse(AudioManager.AUDIOFOCUS_REQUEST_GRANTED);
+    ((ShadowAudioManager) Shadow.extract(audioManager)).setNextFocusRequestResponse(AudioManager.AUDIOFOCUS_REQUEST_GRANTED);
     Listener listener = mock(Player.Listener.class);
     AtomicDouble lastAudioVolume = new AtomicDouble(1.0);
     ExoPlayer player =
@@ -4558,7 +4558,7 @@ public class ExoPlayerTest {
     player.prepare();
 
     player.play();
-    shadowOf(audioManager)
+    ((ShadowAudioManager) Shadow.extract(audioManager))
         .getLastAudioFocusRequest()
         .listener
         .onAudioFocusChange(AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK);
@@ -4582,7 +4582,7 @@ public class ExoPlayerTest {
   @Test
   public void audioFocus_lossWhilePaused_rereportsPausedWithFocusLoss() throws Exception {
     AudioManager audioManager = context.getSystemService(AudioManager.class);
-    shadowOf(audioManager).setNextFocusRequestResponse(AudioManager.AUDIOFOCUS_REQUEST_GRANTED);
+    ((ShadowAudioManager) Shadow.extract(audioManager)).setNextFocusRequestResponse(AudioManager.AUDIOFOCUS_REQUEST_GRANTED);
     Listener listener = mock(Player.Listener.class);
     ExoPlayer player = new TestExoPlayerBuilder(context).build();
     player.setAudioAttributes(AudioAttributes.DEFAULT, /* handleAudioFocus= */ true);
@@ -4592,7 +4592,7 @@ public class ExoPlayerTest {
 
     player.play();
     player.pause();
-    shadowOf(audioManager)
+    ((ShadowAudioManager) Shadow.extract(audioManager))
         .getLastAudioFocusRequest()
         .listener
         .onAudioFocusChange(AudioManager.AUDIOFOCUS_LOSS);
@@ -4622,7 +4622,7 @@ public class ExoPlayerTest {
   @Test
   public void audioFocus_transientLossAndGainWhilePaused_suppressesPlayback() throws Exception {
     AudioManager audioManager = context.getSystemService(AudioManager.class);
-    shadowOf(audioManager).setNextFocusRequestResponse(AudioManager.AUDIOFOCUS_REQUEST_GRANTED);
+    ((ShadowAudioManager) Shadow.extract(audioManager)).setNextFocusRequestResponse(AudioManager.AUDIOFOCUS_REQUEST_GRANTED);
     Listener listener = mock(Player.Listener.class);
     ExoPlayer player = new TestExoPlayerBuilder(context).build();
     player.setAudioAttributes(AudioAttributes.DEFAULT, /* handleAudioFocus= */ true);
@@ -4632,14 +4632,14 @@ public class ExoPlayerTest {
 
     player.play();
     player.pause();
-    shadowOf(audioManager)
+    ((ShadowAudioManager) Shadow.extract(audioManager))
         .getLastAudioFocusRequest()
         .listener
         .onAudioFocusChange(AudioManager.AUDIOFOCUS_LOSS_TRANSIENT);
     run(player).untilPendingCommandsAreFullyHandled();
     boolean playWhenReady = player.getPlayWhenReady();
     @Player.PlaybackSuppressionReason int suppressionReason = player.getPlaybackSuppressionReason();
-    shadowOf(audioManager)
+    ((ShadowAudioManager) Shadow.extract(audioManager))
         .getLastAudioFocusRequest()
         .listener
         .onAudioFocusChange(AudioManager.AUDIOFOCUS_GAIN);
@@ -4678,7 +4678,7 @@ public class ExoPlayerTest {
   @Test
   public void audioFocus_playDuringTransientLossWhilePaused_continuesPlayback() throws Exception {
     AudioManager audioManager = context.getSystemService(AudioManager.class);
-    shadowOf(audioManager).setNextFocusRequestResponse(AudioManager.AUDIOFOCUS_REQUEST_GRANTED);
+    ((ShadowAudioManager) Shadow.extract(audioManager)).setNextFocusRequestResponse(AudioManager.AUDIOFOCUS_REQUEST_GRANTED);
     Listener listener = mock(Player.Listener.class);
     ExoPlayer player = new TestExoPlayerBuilder(context).build();
     player.setAudioAttributes(AudioAttributes.DEFAULT, /* handleAudioFocus= */ true);
@@ -4688,7 +4688,7 @@ public class ExoPlayerTest {
 
     player.play();
     player.pause();
-    shadowOf(audioManager)
+    ((ShadowAudioManager) Shadow.extract(audioManager))
         .getLastAudioFocusRequest()
         .listener
         .onAudioFocusChange(AudioManager.AUDIOFOCUS_LOSS_TRANSIENT);
@@ -4728,7 +4728,7 @@ public class ExoPlayerTest {
   @Test
   public void audioFocus_transientLossDuckWhilePaused_lowersVolume() throws Exception {
     AudioManager audioManager = context.getSystemService(AudioManager.class);
-    shadowOf(audioManager).setNextFocusRequestResponse(AudioManager.AUDIOFOCUS_REQUEST_GRANTED);
+    ((ShadowAudioManager) Shadow.extract(audioManager)).setNextFocusRequestResponse(AudioManager.AUDIOFOCUS_REQUEST_GRANTED);
     Listener listener = mock(Player.Listener.class);
     AtomicDouble lastAudioVolume = new AtomicDouble(1.0);
     ExoPlayer player =
@@ -4751,7 +4751,7 @@ public class ExoPlayerTest {
 
     player.play();
     player.pause();
-    shadowOf(audioManager)
+    ((ShadowAudioManager) Shadow.extract(audioManager))
         .getLastAudioFocusRequest()
         .listener
         .onAudioFocusChange(AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK);
@@ -13959,7 +13959,7 @@ public class ExoPlayerTest {
         player, /* mediaItemIndex= */ 0, /* positionMs= */ 5 * C.MILLIS_PER_SECOND);
     player.stop();
 
-    shadowOf(Looper.getMainLooper()).idle();
+    ((org.robolectric.shadows.ShadowLooper) Shadow.extract(Looper.getMainLooper())).idle();
 
     assertThat(player.getMediaMetadata()).isEqualTo(mediaMetadata);
 
@@ -16250,12 +16250,12 @@ public class ExoPlayerTest {
   // Internal methods.
 
   private void addWatchAsSystemFeature() {
-    ShadowPackageManager shadowPackageManager = shadowOf(context.getPackageManager());
+    ShadowPackageManager shadowPackageManager = ((ShadowPackageManager) Shadow.extract(context.getPackageManager()));
     shadowPackageManager.setSystemFeature(PackageManager.FEATURE_WATCH, /* supported= */ true);
   }
 
   private void setupConnectedAudioOutput(int... deviceTypes) {
-    ShadowAudioManager shadowAudioManager = shadowOf(context.getSystemService(AudioManager.class));
+    ShadowAudioManager shadowAudioManager = ((ShadowAudioManager) Shadow.extract(context.getSystemService(AudioManager.class)));
     ImmutableList.Builder<AudioDeviceInfo> deviceListBuilder = ImmutableList.builder();
     for (int deviceType : deviceTypes) {
       deviceListBuilder.add(AudioDeviceInfoBuilder.newBuilder().setType(deviceType).build());
@@ -16264,14 +16264,14 @@ public class ExoPlayerTest {
   }
 
   private void addConnectedAudioOutput(int deviceTypes, boolean notifyAudioDeviceCallbacks) {
-    ShadowAudioManager shadowAudioManager = shadowOf(context.getSystemService(AudioManager.class));
+    ShadowAudioManager shadowAudioManager = ((ShadowAudioManager) Shadow.extract(context.getSystemService(AudioManager.class)));
     shadowAudioManager.addOutputDevice(
         AudioDeviceInfoBuilder.newBuilder().setType(deviceTypes).build(),
         notifyAudioDeviceCallbacks);
   }
 
   private void removeConnectedAudioOutput(int deviceType) {
-    ShadowAudioManager shadowAudioManager = shadowOf(context.getSystemService(AudioManager.class));
+    ShadowAudioManager shadowAudioManager = ((ShadowAudioManager) Shadow.extract(context.getSystemService(AudioManager.class)));
     stream(shadowAudioManager.getDevices(AudioManager.GET_DEVICES_OUTPUTS))
         .filter(audioDeviceInfo -> deviceType == audioDeviceInfo.getType())
         .findFirst()
@@ -16308,7 +16308,7 @@ public class ExoPlayerTest {
 
   private static void deliverBroadcast(Intent intent) {
     ApplicationProvider.getApplicationContext().sendBroadcast(intent);
-    shadowOf(Looper.getMainLooper()).idle();
+    ((org.robolectric.shadows.ShadowLooper) Shadow.extract(Looper.getMainLooper())).idle();
   }
 
   private static boolean containsEvent(List<Player.Events> eventsList, @Player.Event int event) {

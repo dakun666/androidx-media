@@ -26,14 +26,14 @@ import androidx.media3.common.Player
 import androidx.media3.session.MediaController
 
 /** Helper class which handles shuffle mode changes and the UI surrounding this feature. */
-class ShuffleModeHelper(activity: Activity, mediaController: MediaController) {
+class ShuffleModeHelper(activity: Activity, mediaController: MediaController?) {
   private val container: ViewGroup = activity.findViewById(R.id.group_toggle_shuffle)
   private val icon: ImageView = container.findViewById(R.id.shuffle_mode_icon)
   private val shuffleButton: ToggleButton = container.findViewById(R.id.shuffle_mode_button)
 
   init {
     shuffleButton.setOnClickListener {
-      mediaController.shuffleModeEnabled = shuffleButton.isChecked
+      mediaController?.shuffleModeEnabled = shuffleButton.isChecked
     }
     val listener: Player.Listener =
       object : Player.Listener {
@@ -45,12 +45,12 @@ class ShuffleModeHelper(activity: Activity, mediaController: MediaController) {
         override fun onAvailableCommandsChanged(availableCommands: Player.Commands) =
           updateBackground(availableCommands.contains(Player.COMMAND_SET_SHUFFLE_MODE))
       }
-    mediaController.addListener(listener)
+    mediaController?.addListener(listener)
 
     val isSupported: Boolean =
-      mediaController.availableCommands.contains(Player.COMMAND_SET_SHUFFLE_MODE)
+      mediaController?.availableCommands?.contains(Player.COMMAND_SET_SHUFFLE_MODE) == true
     updateBackground(isSupported)
-    val isEnabled: Boolean = mediaController.shuffleModeEnabled
+    val isEnabled: Boolean = mediaController?.shuffleModeEnabled == true
     updateColor(isEnabled)
     shuffleButton.isChecked = isEnabled
   }

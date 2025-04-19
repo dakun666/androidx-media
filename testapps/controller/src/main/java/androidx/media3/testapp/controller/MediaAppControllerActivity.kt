@@ -182,8 +182,8 @@ class MediaAppControllerActivity : AppCompatActivity() {
     Futures.addCallback(
       browserFuture,
       object : FutureCallback<MediaBrowser> {
-        override fun onSuccess(browser: MediaBrowser) {
-          browser.addListener(listener)
+        override fun onSuccess(browser: MediaBrowser?) {
+          browser?.addListener(listener)
           PreparePlayHelper(this@MediaAppControllerActivity, browser)
           AudioFocusHelper(this@MediaAppControllerActivity)
           customCommandsAdapter =
@@ -203,7 +203,7 @@ class MediaAppControllerActivity : AppCompatActivity() {
             SearchMediaItemsAdapter(this@MediaAppControllerActivity, browser)
 
           updateMediaInfoText()
-          updateMediaMetadataView(browser.mediaMetadata)
+          updateMediaMetadataView(browser?.mediaMetadata)
         }
 
         override fun onFailure(t: Throwable) {
@@ -304,7 +304,8 @@ class MediaAppControllerActivity : AppCompatActivity() {
     mediaInfoText.text = infoCharSequence
   }
 
-  private fun updateMediaMetadataView(mediaMetadata: MediaMetadata) {
+  private fun updateMediaMetadataView(mediaMetadata: MediaMetadata?) {
+    if (mediaMetadata == null) return
     mediaTitleView.text = mediaMetadata.title ?: "Title metadata empty"
     mediaArtistView.text = mediaMetadata.artist ?: "Artist metadata empty"
     mediaAlbumView.text = mediaMetadata.albumTitle ?: "Album title metadata empty"

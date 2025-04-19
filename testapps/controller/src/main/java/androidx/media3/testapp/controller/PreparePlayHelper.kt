@@ -25,7 +25,7 @@ import androidx.media3.common.MediaItem
 import androidx.media3.session.MediaController
 
 /** Helper class which handles prepare and play actions. */
-class PreparePlayHelper(activity: Activity, private val mediaController: MediaController) :
+class PreparePlayHelper(activity: Activity, private val mediaController: MediaController?) :
   View.OnClickListener {
   private val inputType: Spinner = activity.findViewById(R.id.input_type)
   private val uriInputText: EditText = activity.findViewById(R.id.uri_id_query)
@@ -46,7 +46,7 @@ class PreparePlayHelper(activity: Activity, private val mediaController: MediaCo
 
   @SuppressWarnings("FutureReturnValueIgnored")
   override fun onClick(v: View) {
-    mediaController.apply {
+    mediaController?.apply {
       setMediaItem(buildMediaItem())
       playWhenReady = v.id == R.id.action_play
       prepare()

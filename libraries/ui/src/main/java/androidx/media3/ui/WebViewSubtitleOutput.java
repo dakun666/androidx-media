@@ -49,7 +49,7 @@ import java.util.Map;
 
   /**
    * A hard-coded value for the line-height attribute, so we can use it to move text up and down by
-   * one line-height. Most browsers default 'normal' (CSS default) to 1.2 for most font families.
+   * one line-height. Most browsers default 'normal' (CSS default) to 1.2 for most fonts families.
    */
   private static final float CSS_LINE_HEIGHT = 1.2f;
 
@@ -174,7 +174,7 @@ import java.util.Map;
                 + "left:0;"
                 + "right:0;"
                 + "color:%s;"
-                + "font-size:%s;"
+                + "fonts-size:%s;"
                 + "line-height:%.2f;"
                 + "text-shadow:%s;"
                 + "'>",
@@ -283,7 +283,7 @@ import java.util.Map;
                       + "%s:%s;"
                       + "text-align:%s;"
                       + "writing-mode:%s;"
-                      + "font-size:%s;"
+                      + "fonts-size:%s;"
                       + "background-color:%s;"
                       + "transform:translate(%s%%,%s%%)"
                       + "%s;"

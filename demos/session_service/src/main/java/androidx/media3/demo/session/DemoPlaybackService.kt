@@ -135,14 +135,14 @@ open class DemoPlaybackService : MediaLibraryService() {
      * background.
      */
     override fun onForegroundServiceStartNotAllowedException() {
-      if (
-        Build.VERSION.SDK_INT >= 33 &&
-          checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) !=
-            PackageManager.PERMISSION_GRANTED
-      ) {
+//      if (
+//        Build.VERSION.SDK_INT >= 33 &&
+//          checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) !=
+//            PackageManager.PERMISSION_GRANTED
+//      ) {
         // Notification permission is required but not granted
-        return
-      }
+//        return
+//      }
       val notificationManagerCompat = NotificationManagerCompat.from(this@DemoPlaybackService)
       ensureNotificationChannel(notificationManagerCompat)
       val builder =

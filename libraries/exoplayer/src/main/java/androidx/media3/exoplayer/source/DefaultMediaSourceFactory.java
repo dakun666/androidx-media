@@ -262,13 +262,13 @@ public final class DefaultMediaSourceFactory implements MediaSourceFactory {
    * @param adViewProvider A provider for information about views for the ad playback UI.
    * @return This factory, for convenience.
    */
-  @CanIgnoreReturnValue
-  public DefaultMediaSourceFactory setLocalAdInsertionComponents(
-      AdsLoader.Provider adsLoaderProvider, AdViewProvider adViewProvider) {
-    this.adsLoaderProvider = checkNotNull(adsLoaderProvider);
-    this.adViewProvider = checkNotNull(adViewProvider);
-    return this;
-  }
+//  @CanIgnoreReturnValue
+//  public DefaultMediaSourceFactory setLocalAdInsertionComponents(
+//      AdsLoader.Provider adsLoaderProvider, AdViewProvider adViewProvider) {
+//    this.adsLoaderProvider = checkNotNull(adsLoaderProvider);
+//    this.adViewProvider = checkNotNull(adViewProvider);
+//    return this;
+//  }
 
   /**
    * Clear any values set via {@link #setLocalAdInsertionComponents(AdsLoader.Provider,

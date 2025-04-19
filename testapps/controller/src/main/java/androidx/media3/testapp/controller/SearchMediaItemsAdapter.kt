@@ -38,7 +38,7 @@ import com.google.common.util.concurrent.ListenableFuture
 
 class SearchMediaItemsAdapter(
   private val activity: Activity,
-  private val mediaBrowser: MediaBrowser
+  private val mediaBrowser: MediaBrowser?
 ) : RecyclerView.Adapter<SearchMediaItemsAdapter.ViewHolder>() {
   private var items: List<MediaItem> = emptyList()
 
@@ -61,18 +61,18 @@ class SearchMediaItemsAdapter(
         Toast.makeText(activity, R.string.search_query_empty_msg, Toast.LENGTH_SHORT).show()
         return@setOnClickListener
       }
-      val future: ListenableFuture<LibraryResult<Void>> = mediaBrowser.search(query, null)
-      future.addListener(
+      val future: ListenableFuture<LibraryResult<Void>>? = mediaBrowser?.search(query, null)
+      future?.addListener(
         {
           if (future.get().resultCode == LibraryResult.RESULT_SUCCESS) {
-            val searchFuture: ListenableFuture<LibraryResult<ImmutableList<MediaItem>>> =
-              mediaBrowser.getSearchResult(
+            val searchFuture: ListenableFuture<LibraryResult<ImmutableList<MediaItem>>>? =
+              mediaBrowser?.getSearchResult(
                 query,
                 /* page= */ 0,
                 /* pageSize= */ Int.MAX_VALUE,
                 /* params= */ null
               )
-            searchFuture.addListener(
+            searchFuture?.addListener(
               {
                 val mediaItems: List<MediaItem>? = searchFuture.get().value
                 updateItems(mediaItems ?: emptyList())
@@ -131,9 +131,9 @@ class SearchMediaItemsAdapter(
     val item: MediaItem = items[position]
     holder.itemView.setOnClickListener {
       if (mediaMetadata.isPlayable == true) {
-        mediaBrowser.setMediaItem(MediaItem.Builder().setMediaId(item.mediaId).build())
-        mediaBrowser.prepare()
-        mediaBrowser.play()
+        mediaBrowser?.setMediaItem(MediaItem.Builder().setMediaId(item.mediaId).build())
+        mediaBrowser?.prepare()
+        mediaBrowser?.play()
       }
     }
   }
@@ -144,7 +144,7 @@ class SearchMediaItemsAdapter(
   }
 
   private fun supportSearch(): Boolean =
-    mediaBrowser.availableSessionCommands.contains(SessionCommand.COMMAND_CODE_LIBRARY_SEARCH)
+    mediaBrowser?.availableSessionCommands?.contains(SessionCommand.COMMAND_CODE_LIBRARY_SEARCH) == true
 
   fun updateItems(newItems: List<MediaItem>) {
     items = newItems

@@ -16,9 +16,7 @@
 package androidx.media3.demo.main;
 
 import android.content.Context;
-import android.net.http.HttpEngine;
 import android.os.Build;
-import android.os.ext.SdkExtensions;
 import androidx.annotation.OptIn;
 import androidx.media3.database.DatabaseProvider;
 import androidx.media3.database.StandaloneDatabaseProvider;
@@ -56,20 +54,20 @@ public final class DemoUtil {
   private static DataSource.@MonotonicNonNull Factory dataSourceFactory;
   private static DataSource.@MonotonicNonNull Factory httpDataSourceFactory;
 
-  @OptIn(markerClass = androidx.media3.common.util.UnstableApi.class)
+//  @OptIn(markerClass = androidx.media3.common.util.UnstableApi.class)
   private static @MonotonicNonNull DatabaseProvider databaseProvider;
 
   private static @MonotonicNonNull File downloadDirectory;
 
-  @OptIn(markerClass = androidx.media3.common.util.UnstableApi.class)
+//  @OptIn(markerClass = androidx.media3.common.util.UnstableApi.class)
   private static @MonotonicNonNull Cache downloadCache;
 
-  @OptIn(markerClass = androidx.media3.common.util.UnstableApi.class)
+//  @OptIn(markerClass = androidx.media3.common.util.UnstableApi.class)
   private static @MonotonicNonNull DownloadManager downloadManager;
 
   private static @MonotonicNonNull DownloadTracker downloadTracker;
 
-  @OptIn(markerClass = androidx.media3.common.util.UnstableApi.class)
+//  @OptIn(markerClass = androidx.media3.common.util.UnstableApi.class)
   private static @MonotonicNonNull DownloadNotificationHelper downloadNotificationHelper;
 
   /** Returns whether extension renderers should be used. */
@@ -97,13 +95,13 @@ public final class DemoUtil {
       return httpDataSourceFactory;
     }
     context = context.getApplicationContext();
-    if (Build.VERSION.SDK_INT >= 30
-        && SdkExtensions.getExtensionVersion(Build.VERSION_CODES.S) >= 7) {
-      HttpEngine httpEngine = new HttpEngine.Builder(context).build();
-      httpDataSourceFactory =
-          new HttpEngineDataSource.Factory(httpEngine, Executors.newSingleThreadExecutor());
-      return httpDataSourceFactory;
-    }
+//    if (Build.VERSION.SDK_INT >= 30
+//        && SdkExtensions.getExtensionVersion(Build.VERSION_CODES.S) >= 7) {
+//      HttpEngine httpEngine = new HttpEngine.Builder(context).build();
+//      httpDataSourceFactory =
+//          new HttpEngineDataSource.Factory(httpEngine, Executors.newSingleThreadExecutor());
+//      return httpDataSourceFactory;
+//    }
     @Nullable CronetEngine cronetEngine = CronetUtil.buildCronetEngine(context);
     if (cronetEngine != null) {
       httpDataSourceFactory =

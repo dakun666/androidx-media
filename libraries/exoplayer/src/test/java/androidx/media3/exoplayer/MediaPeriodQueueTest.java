@@ -26,7 +26,6 @@ import static com.google.common.truth.Truth.assertThat;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
-import static org.robolectric.Shadows.shadowOf;
 
 import android.os.Looper;
 import android.util.Pair;
@@ -71,6 +70,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.robolectric.shadow.api.Shadow;
 
 /** Unit tests for {@link MediaPeriodQueue}. */
 @RunWith(AndroidJUnit4.class)
@@ -1923,7 +1923,7 @@ public final class MediaPeriodQueueTest {
         new SinglePeriodAdTimeline(CONTENT_TIMELINE, adPlaybackState);
     fakeMediaSources.get(mediaSourceIndex).setNewSourceInfo(adTimeline);
     // Progress the looper so that the source info events have been executed.
-    shadowOf(Looper.getMainLooper()).idle();
+    ((org.robolectric.shadows.ShadowLooper) Shadow.extract(Looper.getMainLooper())).idle();
     playbackInfo = playbackInfo.copyWithTimeline(mediaSourceList.createTimeline());
   }
 

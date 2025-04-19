@@ -48,7 +48,7 @@ import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 
   private static final String TAG = "SubtitlePainter";
 
-  /** Ratio of inner padding to font size. */
+  /** Ratio of inner padding to fonts size. */
   private static final float INNER_PADDING_RATIO = 0.125f;
 
   // Styled dimensions.
@@ -254,7 +254,7 @@ import org.checkerframework.checker.nullness.qual.RequiresNonNull;
           Spanned.SPAN_PRIORITY);
     }
 
-    // Remove embedded font color to not destroy edges, otherwise it overrides edge color.
+    // Remove embedded fonts color to not destroy edges, otherwise it overrides edge color.
     SpannableStringBuilder cueTextEdge = new SpannableStringBuilder(cueText);
     if (edgeType == CaptionStyleCompat.EDGE_TYPE_OUTLINE) {
       ForegroundColorSpan[] foregroundColorSpans =

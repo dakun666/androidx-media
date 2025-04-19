@@ -483,7 +483,7 @@ import org.checkerframework.checker.initialization.qual.UnderInitialization;
               }
             }
             if (commandButtonsForMediaItemsBuilder != null) {
-              commandButtonsForMediaItems = commandButtonsForMediaItemsBuilder.buildKeepingLast();
+              commandButtonsForMediaItems = commandButtonsForMediaItemsBuilder.build();
             }
           }
         }

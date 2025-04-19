@@ -411,22 +411,11 @@ public abstract class BinarySearchSeeker {
     /** The search didn't find any timestamps. */
     public static final int TYPE_NO_TIMESTAMP = -3;
 
-    @Documented
-    @Retention(RetentionPolicy.SOURCE)
-    @Target(TYPE_USE)
-    @IntDef({
-      TYPE_TARGET_TIMESTAMP_FOUND,
-      TYPE_POSITION_OVERESTIMATED,
-      TYPE_POSITION_UNDERESTIMATED,
-      TYPE_NO_TIMESTAMP
-    })
-    @interface Type {}
-
     public static final TimestampSearchResult NO_TIMESTAMP_IN_RANGE_RESULT =
         new TimestampSearchResult(TYPE_NO_TIMESTAMP, C.TIME_UNSET, C.INDEX_UNSET);
 
     /** The type of the result. */
-    private final @Type int type;
+    private final int type;
 
     /**
      * When {@link #type} is {@link #TYPE_POSITION_OVERESTIMATED}, the {@link
@@ -445,7 +434,7 @@ public abstract class BinarySearchSeeker {
     private final long bytePositionToUpdate;
 
     private TimestampSearchResult(
-        @Type int type, long timestampToUpdate, long bytePositionToUpdate) {
+        int type, long timestampToUpdate, long bytePositionToUpdate) {
       this.type = type;
       this.timestampToUpdate = timestampToUpdate;
       this.bytePositionToUpdate = bytePositionToUpdate;

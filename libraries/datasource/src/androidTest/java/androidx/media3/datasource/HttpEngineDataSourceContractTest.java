@@ -15,7 +15,7 @@
  */
 package androidx.media3.datasource;
 
-import android.net.http.HttpEngine;
+//import android.net.http.HttpEngine;
 import androidx.media3.test.utils.DataSourceContractTest;
 import androidx.media3.test.utils.HttpDataSourceTestEnv;
 import androidx.test.core.app.ApplicationProvider;

@@ -24,7 +24,7 @@ import static androidx.media3.common.util.Util.loadAsset;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.Gainmap;
+//import android.graphics.Gainmap;
 import android.opengl.GLES20;
 import android.opengl.Matrix;
 import android.util.SparseArray;
@@ -60,7 +60,7 @@ import java.io.IOException;
   private final ImmutableList<TextureOverlay> overlays;
 
   @Nullable private final int[] hdrTypes;
-  private final SparseArray<Gainmap> lastGainmaps;
+//  private final SparseArray<Gainmap> lastGainmaps;
   private final SparseIntArray gainmapTexIds;
 
   /**
@@ -88,7 +88,7 @@ import java.io.IOException;
 
     this.overlays = overlays;
     this.samplerOverlayMatrixProvider = new SamplerOverlayMatrixProvider();
-    lastGainmaps = new SparseArray<>();
+//    lastGainmaps = new SparseArray<>();
     gainmapTexIds = new SparseIntArray();
     try {
       glProgram =
@@ -119,67 +119,67 @@ import java.io.IOException;
   @SuppressLint("NewApi") // Checked API level in constructor
   public void drawFrame(int inputTexId, long presentationTimeUs)
       throws VideoFrameProcessingException {
-    try {
-      glProgram.use();
-      for (int texUnitIndex = 1; texUnitIndex <= overlays.size(); texUnitIndex++) {
-        TextureOverlay overlay = overlays.get(texUnitIndex - 1);
-
-        if (hdrTypes != null) {
-          if (hdrTypes[texUnitIndex - 1] == HDR_TYPE_ULTRA_HDR) {
-            checkArgument(overlay instanceof BitmapOverlay);
-            Bitmap bitmap = ((BitmapOverlay) overlay).getBitmap(presentationTimeUs);
-            checkArgument(bitmap.hasGainmap());
-            Gainmap gainmap = checkNotNull(bitmap.getGainmap());
-            @Nullable Gainmap lastGainmap = lastGainmaps.get(texUnitIndex);
-            if (lastGainmap == null || !GainmapUtil.equals(lastGainmap, gainmap)) {
-              lastGainmaps.put(texUnitIndex, gainmap);
-              if (gainmapTexIds.get(texUnitIndex, /* valueIfKeyNotFound= */ C.INDEX_UNSET)
-                  == C.INDEX_UNSET) {
-                gainmapTexIds.put(texUnitIndex, GlUtil.createTexture(gainmap.getGainmapContents()));
-              } else {
-                GlUtil.setTexture(gainmapTexIds.get(texUnitIndex), gainmap.getGainmapContents());
-              }
-              glProgram.setSamplerTexIdUniform(
-                  "uGainmapTexSampler" + texUnitIndex,
-                  gainmapTexIds.get(texUnitIndex),
-                  texUnitIndex);
-              GainmapUtil.setGainmapUniforms(
-                  glProgram, lastGainmaps.get(texUnitIndex), texUnitIndex);
-            }
-          } else if (hdrTypes[texUnitIndex - 1] == HDR_TYPE_TEXT) {
-            float[] luminanceMatrix = GlUtil.create4x4IdentityMatrix();
-            float multiplier =
-                overlay.getOverlaySettings(presentationTimeUs).hdrLuminanceMultiplier;
-            Matrix.scaleM(luminanceMatrix, /* mOffset= */ 0, multiplier, multiplier, multiplier);
-            glProgram.setFloatsUniform(
-                formatInvariant("uLuminanceMatrix%d", texUnitIndex), luminanceMatrix);
-          }
-        }
-
-        glProgram.setSamplerTexIdUniform(
-            formatInvariant("uOverlayTexSampler%d", texUnitIndex),
-            overlay.getTextureId(presentationTimeUs),
-            texUnitIndex);
-        glProgram.setFloatsUniform(
-            formatInvariant("uVertexTransformationMatrix%d", texUnitIndex),
-            overlay.getVertexTransformation(presentationTimeUs));
-        OverlaySettings overlaySettings = overlay.getOverlaySettings(presentationTimeUs);
-        Size overlaySize = overlay.getTextureSize(presentationTimeUs);
-        glProgram.setFloatsUniform(
-            formatInvariant("uTransformationMatrix%d", texUnitIndex),
-            samplerOverlayMatrixProvider.getTransformationMatrix(overlaySize, overlaySettings));
-        glProgram.setFloatUniform(
-            formatInvariant("uOverlayAlphaScale%d", texUnitIndex), overlaySettings.alphaScale);
-      }
-
-      glProgram.setSamplerTexIdUniform("uVideoTexSampler0", inputTexId, /* texUnitIndex= */ 0);
-      glProgram.bindAttributesAndUniforms();
-      // The four-vertex triangle strip forms a quad.
-      GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, /* first= */ 0, /* count= */ 4);
-      GlUtil.checkGlError();
-    } catch (GlUtil.GlException e) {
-      throw new VideoFrameProcessingException(e, presentationTimeUs);
-    }
+//    try {
+//      glProgram.use();
+//      for (int texUnitIndex = 1; texUnitIndex <= overlays.size(); texUnitIndex++) {
+//        TextureOverlay overlay = overlays.get(texUnitIndex - 1);
+//
+//        if (hdrTypes != null) {
+//          if (hdrTypes[texUnitIndex - 1] == HDR_TYPE_ULTRA_HDR) {
+//            checkArgument(overlay instanceof BitmapOverlay);
+//            Bitmap bitmap = ((BitmapOverlay) overlay).getBitmap(presentationTimeUs);
+//            checkArgument(bitmap.hasGainmap());
+//            Gainmap gainmap = checkNotNull(bitmap.getGainmap());
+//            @Nullable Gainmap lastGainmap = lastGainmaps.get(texUnitIndex);
+//            if (lastGainmap == null || !GainmapUtil.equals(lastGainmap, gainmap)) {
+//              lastGainmaps.put(texUnitIndex, gainmap);
+//              if (gainmapTexIds.get(texUnitIndex, /* valueIfKeyNotFound= */ C.INDEX_UNSET)
+//                  == C.INDEX_UNSET) {
+//                gainmapTexIds.put(texUnitIndex, GlUtil.createTexture(gainmap.getGainmapContents()));
+//              } else {
+//                GlUtil.setTexture(gainmapTexIds.get(texUnitIndex), gainmap.getGainmapContents());
+//              }
+//              glProgram.setSamplerTexIdUniform(
+//                  "uGainmapTexSampler" + texUnitIndex,
+//                  gainmapTexIds.get(texUnitIndex),
+//                  texUnitIndex);
+////              GainmapUtil.setGainmapUniforms(
+////                  glProgram, lastGainmaps.get(texUnitIndex), texUnitIndex);
+//            }
+//          } else if (hdrTypes[texUnitIndex - 1] == HDR_TYPE_TEXT) {
+//            float[] luminanceMatrix = GlUtil.create4x4IdentityMatrix();
+//            float multiplier =
+//                overlay.getOverlaySettings(presentationTimeUs).hdrLuminanceMultiplier;
+//            Matrix.scaleM(luminanceMatrix, /* mOffset= */ 0, multiplier, multiplier, multiplier);
+//            glProgram.setFloatsUniform(
+//                formatInvariant("uLuminanceMatrix%d", texUnitIndex), luminanceMatrix);
+//          }
+//        }
+//
+//        glProgram.setSamplerTexIdUniform(
+//            formatInvariant("uOverlayTexSampler%d", texUnitIndex),
+//            overlay.getTextureId(presentationTimeUs),
+//            texUnitIndex);
+//        glProgram.setFloatsUniform(
+//            formatInvariant("uVertexTransformationMatrix%d", texUnitIndex),
+//            overlay.getVertexTransformation(presentationTimeUs));
+//        OverlaySettings overlaySettings = overlay.getOverlaySettings(presentationTimeUs);
+//        Size overlaySize = overlay.getTextureSize(presentationTimeUs);
+//        glProgram.setFloatsUniform(
+//            formatInvariant("uTransformationMatrix%d", texUnitIndex),
+//            samplerOverlayMatrixProvider.getTransformationMatrix(overlaySize, overlaySettings));
+//        glProgram.setFloatUniform(
+//            formatInvariant("uOverlayAlphaScale%d", texUnitIndex), overlaySettings.alphaScale);
+//      }
+//
+//      glProgram.setSamplerTexIdUniform("uVideoTexSampler0", inputTexId, /* texUnitIndex= */ 0);
+//      glProgram.bindAttributesAndUniforms();
+//      // The four-vertex triangle strip forms a quad.
+//      GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, /* first= */ 0, /* count= */ 4);
+//      GlUtil.checkGlError();
+//    } catch (GlUtil.GlException e) {
+//      throw new VideoFrameProcessingException(e, presentationTimeUs);
+//    }
   }
 
   @Override

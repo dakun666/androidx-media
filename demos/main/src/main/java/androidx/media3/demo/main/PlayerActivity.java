@@ -45,8 +45,8 @@ import androidx.media3.exoplayer.ExoPlayer;
 import androidx.media3.exoplayer.RenderersFactory;
 import androidx.media3.exoplayer.drm.DefaultDrmSessionManagerProvider;
 import androidx.media3.exoplayer.drm.FrameworkMediaDrm;
-import androidx.media3.exoplayer.ima.ImaAdsLoader;
-import androidx.media3.exoplayer.ima.ImaServerSideAdInsertionMediaSource;
+//import androidx.media3.exoplayer.ima.ImaAdsLoader;
+//import androidx.media3.exoplayer.ima.ImaServerSideAdInsertionMediaSource;
 import androidx.media3.exoplayer.mediacodec.MediaCodecRenderer.DecoderInitializationException;
 import androidx.media3.exoplayer.mediacodec.MediaCodecUtil.DecoderQueryException;
 import androidx.media3.exoplayer.offline.DownloadRequest;
@@ -91,12 +91,12 @@ public class PlayerActivity extends AppCompatActivity
 
   // For ad playback only.
 
-  @Nullable private AdsLoader clientSideAdsLoader;
+//  @Nullable private AdsLoader clientSideAdsLoader;
 
-  @Nullable private ImaServerSideAdInsertionMediaSource.AdsLoader serverSideAdsLoader;
+//  @Nullable private ImaServerSideAdInsertionMediaSource.AdsLoader serverSideAdsLoader;
 
-  private ImaServerSideAdInsertionMediaSource.AdsLoader.@MonotonicNonNull State
-      serverSideAdsLoaderState;
+//  private ImaServerSideAdInsertionMediaSource.AdsLoader.@MonotonicNonNull State
+//      serverSideAdsLoaderState;
 
   // Activity lifecycle.
 
@@ -304,23 +304,23 @@ public class PlayerActivity extends AppCompatActivity
         new DefaultDrmSessionManagerProvider();
     drmSessionManagerProvider.setDrmHttpDataSourceFactory(
         DemoUtil.getHttpDataSourceFactory(/* context= */ this));
-    ImaServerSideAdInsertionMediaSource.AdsLoader.Builder serverSideAdLoaderBuilder =
-        new ImaServerSideAdInsertionMediaSource.AdsLoader.Builder(/* context= */ this, playerView);
-    if (serverSideAdsLoaderState != null) {
-      serverSideAdLoaderBuilder.setAdsLoaderState(serverSideAdsLoaderState);
-    }
-    serverSideAdsLoader = serverSideAdLoaderBuilder.build();
-    ImaServerSideAdInsertionMediaSource.Factory imaServerSideAdInsertionMediaSourceFactory =
-        new ImaServerSideAdInsertionMediaSource.Factory(
-            serverSideAdsLoader,
-            new DefaultMediaSourceFactory(/* context= */ this)
-                .setDataSourceFactory(dataSourceFactory));
+//    ImaServerSideAdInsertionMediaSource.AdsLoader.Builder serverSideAdLoaderBuilder =
+//        new ImaServerSideAdInsertionMediaSource.AdsLoader.Builder(/* context= */ this, playerView);
+//    if (serverSideAdsLoaderState != null) {
+//      serverSideAdLoaderBuilder.setAdsLoaderState(serverSideAdsLoaderState);
+//    }
+//    serverSideAdsLoader = serverSideAdLoaderBuilder.build();
+//    ImaServerSideAdInsertionMediaSource.Factory imaServerSideAdInsertionMediaSourceFactory =
+//        new ImaServerSideAdInsertionMediaSource.Factory(
+//            serverSideAdsLoader,
+//            new DefaultMediaSourceFactory(/* context= */ this)
+//                .setDataSourceFactory(dataSourceFactory));
     return new DefaultMediaSourceFactory(/* context= */ this)
         .setDataSourceFactory(dataSourceFactory)
-        .setDrmSessionManagerProvider(drmSessionManagerProvider)
-        .setLocalAdInsertionComponents(
-            this::getClientSideAdsLoader, /* adViewProvider= */ playerView)
-        .setServerSideAdInsertionMediaSourceFactory(imaServerSideAdInsertionMediaSourceFactory);
+        .setDrmSessionManagerProvider(drmSessionManagerProvider);
+//        .setLocalAdInsertionComponents(
+//            this::getClientSideAdsLoader, /* adViewProvider= */ playerView)
+//        .setServerSideAdInsertionMediaSourceFactory(imaServerSideAdInsertionMediaSourceFactory);
   }
 
   @OptIn(markerClass = UnstableApi.class)
@@ -332,7 +332,7 @@ public class PlayerActivity extends AppCompatActivity
   }
 
   private void configurePlayerWithServerSideAdsLoader() {
-    serverSideAdsLoader.setPlayer(player);
+//    serverSideAdsLoader.setPlayer(player);
   }
 
   private List<MediaItem> createMediaItems(Intent intent) {
@@ -371,14 +371,14 @@ public class PlayerActivity extends AppCompatActivity
     return mediaItems;
   }
 
-  private AdsLoader getClientSideAdsLoader(MediaItem.AdsConfiguration adsConfiguration) {
-    // The ads loader is reused for multiple playbacks, so that ad playback can resume.
-    if (clientSideAdsLoader == null) {
-      clientSideAdsLoader = new ImaAdsLoader.Builder(/* context= */ this).build();
-    }
-    clientSideAdsLoader.setPlayer(player);
-    return clientSideAdsLoader;
-  }
+//  private AdsLoader getClientSideAdsLoader(MediaItem.AdsConfiguration adsConfiguration) {
+//    // The ads loader is reused for multiple playbacks, so that ad playback can resume.
+//    if (clientSideAdsLoader == null) {
+//      clientSideAdsLoader = new ImaAdsLoader.Builder(/* context= */ this).build();
+//    }
+//    clientSideAdsLoader.setPlayer(player);
+//    return clientSideAdsLoader;
+//  }
 
   protected void releasePlayer() {
     if (player != null) {
@@ -392,37 +392,37 @@ public class PlayerActivity extends AppCompatActivity
       playerView.setPlayer(/* player= */ null);
       mediaItems = Collections.emptyList();
     }
-    if (clientSideAdsLoader != null) {
-      clientSideAdsLoader.setPlayer(null);
-    } else {
+//    if (clientSideAdsLoader != null) {
+//      clientSideAdsLoader.setPlayer(null);
+//    } else {
       playerView.getAdViewGroup().removeAllViews();
-    }
+//    }
   }
 
   private void releaseServerSideAdsLoader() {
-    serverSideAdsLoaderState = serverSideAdsLoader.release();
-    serverSideAdsLoader = null;
+//    serverSideAdsLoaderState = serverSideAdsLoader.release();
+//    serverSideAdsLoader = null;
   }
 
   private void releaseClientSideAdsLoader() {
-    if (clientSideAdsLoader != null) {
-      clientSideAdsLoader.release();
-      clientSideAdsLoader = null;
+//    if (clientSideAdsLoader != null) {
+//      clientSideAdsLoader.release();
+//      clientSideAdsLoader = null;
       playerView.getAdViewGroup().removeAllViews();
-    }
+//    }
   }
 
   private void saveServerSideAdsLoaderState(Bundle outState) {
-    if (serverSideAdsLoaderState != null) {
-      outState.putBundle(KEY_SERVER_SIDE_ADS_LOADER_STATE, serverSideAdsLoaderState.toBundle());
-    }
+//    if (serverSideAdsLoaderState != null) {
+//      outState.putBundle(KEY_SERVER_SIDE_ADS_LOADER_STATE, serverSideAdsLoaderState.toBundle());
+//    }
   }
 
   private void restoreServerSideAdsLoaderState(Bundle savedInstanceState) {
     Bundle adsLoaderStateBundle = savedInstanceState.getBundle(KEY_SERVER_SIDE_ADS_LOADER_STATE);
     if (adsLoaderStateBundle != null) {
-      serverSideAdsLoaderState =
-          ImaServerSideAdInsertionMediaSource.AdsLoader.State.fromBundle(adsLoaderStateBundle);
+//      serverSideAdsLoaderState =
+//          ImaServerSideAdInsertionMediaSource.AdsLoader.State.fromBundle(adsLoaderStateBundle);
     }
   }
 

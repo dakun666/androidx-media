@@ -43,6 +43,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Shadows;
 import org.robolectric.annotation.Config;
+import org.robolectric.shadow.api.Shadow;
+import org.robolectric.shadows.ShadowConnectivityManager;
 import org.robolectric.shadows.ShadowLooper;
 import org.robolectric.shadows.ShadowNetworkInfo;
 import org.robolectric.shadows.ShadowSystemClock;
@@ -76,7 +78,7 @@ public final class ExperimentalBandwidthMeterTest {
     telephonyManager =
         (TelephonyManager)
             ApplicationProvider.getApplicationContext().getSystemService(Context.TELEPHONY_SERVICE);
-    Shadows.shadowOf(telephonyManager).setNetworkCountryIso(FAST_COUNTRY_ISO);
+    ((ShadowTelephonyManager) Shadow.extract(telephonyManager)).setNetworkCountryIso(FAST_COUNTRY_ISO);
     networkInfoOffline =
         ShadowNetworkInfo.newInstance(
             DetailedState.DISCONNECTED,
@@ -745,12 +747,12 @@ public final class ExperimentalBandwidthMeterTest {
   @SuppressWarnings("StickyBroadcast")
   private void setActiveNetworkInfo(NetworkInfo networkInfo, int networkTypeOverride) {
     // Set network info in ConnectivityManager and TelephonyDisplayInfo in TelephonyManager.
-    Shadows.shadowOf(connectivityManager).setActiveNetworkInfo(networkInfo);
+    ((ShadowConnectivityManager) Shadow.extract(connectivityManager)).setActiveNetworkInfo(networkInfo);
     if (Util.SDK_INT >= 31) {
       Object displayInfo =
           ShadowTelephonyManager.createTelephonyDisplayInfo(
               networkInfo.getType(), networkTypeOverride);
-      Shadows.shadowOf(telephonyManager).setTelephonyDisplayInfo(displayInfo);
+      ((ShadowTelephonyManager) Shadow.extract(telephonyManager)).setTelephonyDisplayInfo(displayInfo);
     }
     // Create a sticky broadcast for the connectivity action because Robolectric isn't replying with
     // the current network state if a receiver for this intent is registered.
@@ -763,7 +765,7 @@ public final class ExperimentalBandwidthMeterTest {
   }
 
   private void setNetworkCountryIso(String countryIso) {
-    Shadows.shadowOf(telephonyManager).setNetworkCountryIso(countryIso);
+    ((ShadowTelephonyManager) Shadow.extract(telephonyManager)).setNetworkCountryIso(countryIso);
   }
 
   private static long[] simulateTransfers(

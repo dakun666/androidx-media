@@ -19,7 +19,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.media.AudioFormat;
 import android.media.AudioManager;
-import android.media.Spatializer;
+//import android.media.Spatializer;
 import android.os.Handler;
 import androidx.annotation.Nullable;
 import androidx.media3.common.AudioAttributes;
@@ -91,24 +91,24 @@ public class LibiamfAudioRenderer extends DecoderAudioRenderer<IamfDecoder> {
   @SuppressLint("WrongConstant")
   private boolean isSpatializationSupported() {
     // Spatializer is only available on API 32 and above.
-    if (Util.SDK_INT < 32) {
+//    if (Util.SDK_INT < 32) {
       return false;
-    }
+//    }
 
-    AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-    if (audioManager == null) {
-      return false;
-    }
-    AudioFormat audioFormat =
-        new AudioFormat.Builder()
-            .setEncoding(IamfDecoder.OUTPUT_PCM_ENCODING)
-            .setChannelMask(IamfDecoder.SPATIALIZED_OUTPUT_LAYOUT)
-            .build();
-    Spatializer spatializer = audioManager.getSpatializer();
-    return spatializer.getImmersiveAudioLevel() != Spatializer.SPATIALIZER_IMMERSIVE_LEVEL_NONE
-        && spatializer.isAvailable()
-        && spatializer.isEnabled()
-        && spatializer.canBeSpatialized(
-            AudioAttributes.DEFAULT.getAudioAttributesV21().audioAttributes, audioFormat);
+//    AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+//    if (audioManager == null) {
+//      return false;
+//    }
+//    AudioFormat audioFormat =
+//        new AudioFormat.Builder()
+//            .setEncoding(IamfDecoder.OUTPUT_PCM_ENCODING)
+//            .setChannelMask(IamfDecoder.SPATIALIZED_OUTPUT_LAYOUT)
+//            .build();
+//    Spatializer spatializer = audioManager.getSpatializer();
+//    return spatializer.getImmersiveAudioLevel() != Spatializer.SPATIALIZER_IMMERSIVE_LEVEL_NONE
+//        && spatializer.isAvailable()
+//        && spatializer.isEnabled()
+//        && spatializer.canBeSpatialized(
+//            AudioAttributes.DEFAULT.getAudioAttributesV21().audioAttributes, audioFormat);
   }
 }

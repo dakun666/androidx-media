@@ -24,7 +24,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.robolectric.Shadows.shadowOf;
 
 import android.net.Uri;
 import android.os.Looper;
@@ -85,6 +84,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.robolectric.shadow.api.Shadow;
 
 /** Unit test for {@link PreloadMediaSource}. */
 @RunWith(AndroidJUnit4.class)
@@ -242,7 +242,7 @@ public final class PreloadMediaSourceTest {
                 .build());
 
     preloadMediaSource.preload(/* startPositionUs= */ 0L);
-    shadowOf(Looper.getMainLooper()).idle();
+    ((org.robolectric.shadows.ShadowLooper) Shadow.extract(Looper.getMainLooper())).idle();
 
     assertThat(preloadMediaSourceReference.get()).isSameInstanceAs(preloadMediaSource);
     assertThat(preloadControl.onSourcePreparedCalledCount).isEqualTo(1);
@@ -277,9 +277,9 @@ public final class PreloadMediaSourceTest {
         (source, timeline) -> externalCallerMediaSourceReference.set(source);
     preloadMediaSource.prepareSource(
         externalCaller, bandwidthMeter.getTransferListener(), PlayerId.UNSET);
-    shadowOf(Looper.getMainLooper()).idle();
+    ((org.robolectric.shadows.ShadowLooper) Shadow.extract(Looper.getMainLooper())).idle();
     preloadMediaSource.preload(/* startPositionUs= */ 0L);
-    shadowOf(Looper.getMainLooper()).idle();
+    ((org.robolectric.shadows.ShadowLooper) Shadow.extract(Looper.getMainLooper())).idle();
 
     assertThat(externalCallerMediaSourceReference.get()).isSameInstanceAs(preloadMediaSource);
     assertThat(preloadControl.onSourcePreparedCalledCount).isEqualTo(0);
@@ -623,14 +623,14 @@ public final class PreloadMediaSourceTest {
     FakeMediaSource wrappedMediaSource = mediaSourceFactory.getLastCreatedSource();
     wrappedMediaSource.setAllowPreparation(false);
     preloadMediaSource.preload(/* startPositionUs= */ 0L);
-    shadowOf(Looper.getMainLooper()).idle();
+    ((org.robolectric.shadows.ShadowLooper) Shadow.extract(Looper.getMainLooper())).idle();
     AtomicReference<MediaSource> externalCallerMediaSourceReference = new AtomicReference<>();
     MediaSource.MediaSourceCaller externalCaller =
         (source, timeline) -> externalCallerMediaSourceReference.set(source);
     preloadMediaSource.prepareSource(
         externalCaller, bandwidthMeter.getTransferListener(), PlayerId.UNSET);
     wrappedMediaSource.setAllowPreparation(true);
-    shadowOf(Looper.getMainLooper()).idle();
+    ((org.robolectric.shadows.ShadowLooper) Shadow.extract(Looper.getMainLooper())).idle();
 
     assertThat(externalCallerMediaSourceReference.get()).isSameInstanceAs(preloadMediaSource);
     assertThat(preloadControl.onSourcePreparedCalledCount).isEqualTo(0);
@@ -660,7 +660,7 @@ public final class PreloadMediaSourceTest {
                 .build());
 
     preloadMediaSource.preload(/* startPositionUs= */ 0L);
-    shadowOf(Looper.getMainLooper()).idle();
+    ((org.robolectric.shadows.ShadowLooper) Shadow.extract(Looper.getMainLooper())).idle();
     AtomicReference<MediaSource> externalCallerMediaSourceReference = new AtomicReference<>();
     MediaSource.MediaSourceCaller externalCaller =
         (source, timeline) -> externalCallerMediaSourceReference.set(source);
@@ -734,7 +734,7 @@ public final class PreloadMediaSourceTest {
                 .build());
 
     preloadMediaSource.preload(/* startPositionUs= */ 0L);
-    shadowOf(Looper.getMainLooper()).idle();
+    ((org.robolectric.shadows.ShadowLooper) Shadow.extract(Looper.getMainLooper())).idle();
     AtomicReference<Timeline> externalCallerSourceInfoTimelineReference = new AtomicReference<>();
     MediaSource.MediaSourceCaller externalCaller =
         (source, timeline) -> externalCallerSourceInfoTimelineReference.set(timeline);
@@ -815,7 +815,7 @@ public final class PreloadMediaSourceTest {
                 .build());
 
     preloadMediaSource.preload(/* startPositionUs= */ 0L);
-    shadowOf(Looper.getMainLooper()).idle();
+    ((org.robolectric.shadows.ShadowLooper) Shadow.extract(Looper.getMainLooper())).idle();
     AtomicReference<Timeline> externalCallerSourceInfoTimelineReference = new AtomicReference<>();
     MediaSource.MediaSourceCaller externalCaller =
         (source, timeline) -> externalCallerSourceInfoTimelineReference.set(timeline);
@@ -882,10 +882,10 @@ public final class PreloadMediaSourceTest {
                 .setUri(Uri.parse("asset://android_asset/media/mp4/sample.mp4"))
                 .build());
     preloadMediaSource.preload(/* startPositionUs= */ 0L);
-    shadowOf(Looper.getMainLooper()).idle();
+    ((org.robolectric.shadows.ShadowLooper) Shadow.extract(Looper.getMainLooper())).idle();
 
     preloadMediaSource.clear();
-    shadowOf(Looper.getMainLooper()).idle();
+    ((org.robolectric.shadows.ShadowLooper) Shadow.extract(Looper.getMainLooper())).idle();
 
     assertThat(preloadingMediaPeriodReleased.get()).isTrue();
   }
@@ -933,7 +933,7 @@ public final class PreloadMediaSourceTest {
         (source, timeline) -> externalCallerSourceInfoRefreshedCalled.set(true);
     preloadMediaSource.prepareSource(
         externalCaller, bandwidthMeter.getTransferListener(), PlayerId.UNSET);
-    shadowOf(Looper.getMainLooper()).idle();
+    ((org.robolectric.shadows.ShadowLooper) Shadow.extract(Looper.getMainLooper())).idle();
     preloadMediaSource.releaseSource(externalCaller);
 
     assertThat(externalCallerSourceInfoRefreshedCalled.get()).isTrue();
@@ -985,7 +985,7 @@ public final class PreloadMediaSourceTest {
     MediaSource.MediaSourceCaller externalCaller =
         (source, timeline) -> externalCallerSourceInfoRefreshedCalled.set(true);
     preloadMediaSource.preload(/* startPositionUs= */ 0L);
-    shadowOf(Looper.getMainLooper()).idle();
+    ((org.robolectric.shadows.ShadowLooper) Shadow.extract(Looper.getMainLooper())).idle();
     preloadMediaSource.prepareSource(
         externalCaller, bandwidthMeter.getTransferListener(), PlayerId.UNSET);
     preloadMediaSource.releaseSource(externalCaller);
@@ -1096,9 +1096,9 @@ public final class PreloadMediaSourceTest {
                 .setUri(Uri.parse("asset://android_asset/media/mp4/sample.mp4"))
                 .build());
     preloadMediaSource.preload(/* startPositionUs= */ 0L);
-    shadowOf(Looper.getMainLooper()).idle();
+    ((org.robolectric.shadows.ShadowLooper) Shadow.extract(Looper.getMainLooper())).idle();
     preloadMediaSource.releasePreloadMediaSource();
-    shadowOf(Looper.getMainLooper()).idle();
+    ((org.robolectric.shadows.ShadowLooper) Shadow.extract(Looper.getMainLooper())).idle();
 
     assertThat(preloadControl.onSourcePreparedCalledCount).isGreaterThan(0);
     MediaSource internalSource = internalSourceReference.get();
@@ -1149,12 +1149,12 @@ public final class PreloadMediaSourceTest {
     MediaSource.MediaSourceCaller externalCaller =
         (source, timeline) -> externalCallerSourceInfoRefreshedCalled.set(true);
     preloadMediaSource.preload(/* startPositionUs= */ 0L);
-    shadowOf(Looper.getMainLooper()).idle();
+    ((org.robolectric.shadows.ShadowLooper) Shadow.extract(Looper.getMainLooper())).idle();
     preloadMediaSource.prepareSource(
         externalCaller, bandwidthMeter.getTransferListener(), PlayerId.UNSET);
-    shadowOf(Looper.getMainLooper()).idle();
+    ((org.robolectric.shadows.ShadowLooper) Shadow.extract(Looper.getMainLooper())).idle();
     preloadMediaSource.releasePreloadMediaSource();
-    shadowOf(Looper.getMainLooper()).idle();
+    ((org.robolectric.shadows.ShadowLooper) Shadow.extract(Looper.getMainLooper())).idle();
 
     assertThat(preloadControl.onSourcePreparedCalledCount).isGreaterThan(0);
     assertThat(externalCallerSourceInfoRefreshedCalled.get()).isTrue();

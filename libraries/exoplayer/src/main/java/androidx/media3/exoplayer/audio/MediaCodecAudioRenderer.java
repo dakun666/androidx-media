@@ -107,7 +107,7 @@ public class MediaCodecAudioRenderer extends MediaCodecRenderer implements Media
   private final Context context;
   private final EventDispatcher eventDispatcher;
   private final AudioSink audioSink;
-  @Nullable private final LoudnessCodecController loudnessCodecController;
+//  @Nullable private final LoudnessCodecController loudnessCodecController;
 
   private int codecMaxInputSize;
   private boolean codecNeedsDiscardChannelsWorkaround;
@@ -245,24 +245,24 @@ public class MediaCodecAudioRenderer extends MediaCodecRenderer implements Media
    * @param eventListener A listener of events. May be null if delivery of events is not required.
    * @param audioSink The sink to which audio will be output.
    */
-  public MediaCodecAudioRenderer(
-      Context context,
-      MediaCodecAdapter.Factory codecAdapterFactory,
-      MediaCodecSelector mediaCodecSelector,
-      boolean enableDecoderFallback,
-      @Nullable Handler eventHandler,
-      @Nullable AudioRendererEventListener eventListener,
-      AudioSink audioSink) {
-    this(
-        context,
-        codecAdapterFactory,
-        mediaCodecSelector,
-        enableDecoderFallback,
-        eventHandler,
-        eventListener,
-        audioSink,
-        Util.SDK_INT >= 35 ? new LoudnessCodecController() : null);
-  }
+//  public MediaCodecAudioRenderer(
+//      Context context,
+//      MediaCodecAdapter.Factory codecAdapterFactory,
+//      MediaCodecSelector mediaCodecSelector,
+//      boolean enableDecoderFallback,
+//      @Nullable Handler eventHandler,
+//      @Nullable AudioRendererEventListener eventListener,
+//      AudioSink audioSink) {
+//    this(
+//        context,
+//        codecAdapterFactory,
+//        mediaCodecSelector,
+//        enableDecoderFallback,
+//        eventHandler,
+//        eventListener,
+//        audioSink,
+//        Util.SDK_INT >= 35 ? new LoudnessCodecController() : null);
+//  }
 
   /**
    * Creates a new instance.
@@ -288,8 +288,9 @@ public class MediaCodecAudioRenderer extends MediaCodecRenderer implements Media
       boolean enableDecoderFallback,
       @Nullable Handler eventHandler,
       @Nullable AudioRendererEventListener eventListener,
-      AudioSink audioSink,
-      @Nullable LoudnessCodecController loudnessCodecController) {
+      AudioSink audioSink
+//      @Nullable LoudnessCodecController loudnessCodecController) {
+      ) {
     super(
         C.TRACK_TYPE_AUDIO,
         codecAdapterFactory,
@@ -299,7 +300,7 @@ public class MediaCodecAudioRenderer extends MediaCodecRenderer implements Media
     context = context.getApplicationContext();
     this.context = context;
     this.audioSink = audioSink;
-    this.loudnessCodecController = loudnessCodecController;
+//    this.loudnessCodecController = loudnessCodecController;
     rendererPriority = C.PRIORITY_PLAYBACK;
     eventDispatcher = new EventDispatcher(eventHandler, eventListener);
     nextBufferToWritePresentationTimeUs = C.TIME_UNSET;
@@ -482,7 +483,8 @@ public class MediaCodecAudioRenderer extends MediaCodecRenderer implements Media
             && !MimeTypes.AUDIO_RAW.equals(format.sampleMimeType);
     decryptOnlyCodecFormat = decryptOnlyCodecEnabled ? format : null;
     return MediaCodecAdapter.Configuration.createForAudioDecoding(
-        codecInfo, mediaFormat, format, crypto, loudnessCodecController);
+//        codecInfo, mediaFormat, format, crypto, loudnessCodecController);
+        codecInfo, mediaFormat, format, crypto);
   }
 
   @Override
@@ -727,9 +729,9 @@ public class MediaCodecAudioRenderer extends MediaCodecRenderer implements Media
   @Override
   protected void onRelease() {
     audioSink.release();
-    if (Util.SDK_INT >= 35 && loudnessCodecController != null) {
-      loudnessCodecController.release();
-    }
+//    if (Util.SDK_INT >= 35 && loudnessCodecController != null) {
+//      loudnessCodecController.release();
+//    }
   }
 
   @Override
@@ -1008,19 +1010,21 @@ public class MediaCodecAudioRenderer extends MediaCodecRenderer implements Media
       mediaFormat.setInteger(MediaFormat.KEY_PCM_ENCODING, AudioFormat.ENCODING_PCM_FLOAT);
     }
     if (Util.SDK_INT >= 32) {
-      mediaFormat.setInteger(MediaFormat.KEY_MAX_OUTPUT_CHANNEL_COUNT, 99);
+//      mediaFormat.setInteger(MediaFormat.KEY_MAX_OUTPUT_CHANNEL_COUNT, 99);
+      mediaFormat.setInteger("max-output-channel-count", 99);
     }
     if (Util.SDK_INT >= 35) {
-      mediaFormat.setInteger(MediaFormat.KEY_IMPORTANCE, max(0, -rendererPriority));
+//      mediaFormat.setInteger(MediaFormat.KEY_IMPORTANCE, max(0, -rendererPriority));
+      mediaFormat.setInteger("importance", max(0, -rendererPriority));
     }
     return mediaFormat;
   }
 
   private void setAudioSessionId(int audioSessionId) {
     audioSink.setAudioSessionId(audioSessionId);
-    if (Util.SDK_INT >= 35 && loudnessCodecController != null) {
-      loudnessCodecController.setAudioSessionId(audioSessionId);
-    }
+//    if (Util.SDK_INT >= 35 && loudnessCodecController != null) {
+//      loudnessCodecController.setAudioSessionId(audioSessionId);
+//    }
   }
 
   private void updateCodecImportance() {
@@ -1031,7 +1035,8 @@ public class MediaCodecAudioRenderer extends MediaCodecRenderer implements Media
     }
     if (Util.SDK_INT >= 35) {
       Bundle codecParameters = new Bundle();
-      codecParameters.putInt(MediaFormat.KEY_IMPORTANCE, max(0, -rendererPriority));
+//      codecParameters.putInt(MediaFormat.KEY_IMPORTANCE, max(0, -rendererPriority));
+      codecParameters.putInt("importance", max(0, -rendererPriority));
       codec.setParameters(codecParameters);
     }
   }

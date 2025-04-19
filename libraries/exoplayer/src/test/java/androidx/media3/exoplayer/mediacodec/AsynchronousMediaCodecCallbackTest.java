@@ -20,7 +20,6 @@ import static androidx.media3.test.utils.TestUtil.assertBufferInfosEqual;
 import static com.google.common.truth.Truth.assertThat;
 import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.fail;
-import static org.robolectric.Shadows.shadowOf;
 
 import android.media.MediaCodec;
 import android.media.MediaFormat;
@@ -37,6 +36,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.robolectric.shadow.api.Shadow;
 import org.robolectric.shadows.ShadowLooper;
 
 /** Unit tests for {@link AsynchronousMediaCodecCallback}. */
@@ -87,7 +87,7 @@ public class AsynchronousMediaCodecCallbackTest {
     AtomicBoolean flushCompleted = new AtomicBoolean();
     Looper callbackThreadLooper = callbackThread.getLooper();
     Handler callbackHandler = new Handler(callbackThreadLooper);
-    ShadowLooper shadowCallbackLooper = shadowOf(callbackThreadLooper);
+    ShadowLooper shadowCallbackLooper = (org.robolectric.shadows.ShadowLooper) Shadow.extract(callbackThreadLooper);
     // Pause the callback thread so that flush() never completes.
     shadowCallbackLooper.pause();
 
@@ -112,7 +112,7 @@ public class AsynchronousMediaCodecCallbackTest {
     AtomicBoolean flushCompleted = new AtomicBoolean();
     Looper callbackThreadLooper = callbackThread.getLooper();
     Handler callbackHandler = new Handler(callbackThreadLooper);
-    ShadowLooper shadowCallbackLooper = shadowOf(callbackThreadLooper);
+    ShadowLooper shadowCallbackLooper = Shadow.extract(callbackThreadLooper);
     // Pause the callback thread so that flush() never completes.
     shadowCallbackLooper.pause();
 
@@ -147,7 +147,7 @@ public class AsynchronousMediaCodecCallbackTest {
     asynchronousMediaCodecCallback.flush();
     new Handler(callbackThreadLooper).post(() -> flushCompleted.set(true));
     // Progress the callback thread so that flush() completes.
-    shadowOf(callbackThreadLooper).idle();
+    ((org.robolectric.shadows.ShadowLooper) Shadow.extract(callbackThreadLooper)).idle();
 
     assertThat(flushCompleted.get()).isTrue();
     assertThat(asynchronousMediaCodecCallback.dequeueInputBufferIndex())
@@ -166,7 +166,7 @@ public class AsynchronousMediaCodecCallbackTest {
     asynchronousMediaCodecCallback.flush();
     new Handler(callbackThreadLooper).post(() -> flushCompleted.set(true));
     // Progress the callback thread to complete flush.
-    shadowOf(callbackThread.getLooper()).idle();
+    ((org.robolectric.shadows.ShadowLooper) Shadow.extract(callbackThread.getLooper())).idle();
     // Send another input buffer to the callback
     asynchronousMediaCodecCallback.onInputBufferAvailable(codec, 2);
 
@@ -229,7 +229,7 @@ public class AsynchronousMediaCodecCallbackTest {
     AtomicBoolean flushCompleted = new AtomicBoolean();
     Looper callbackThreadLooper = callbackThread.getLooper();
     Handler callbackHandler = new Handler(callbackThreadLooper);
-    ShadowLooper shadowCallbackLooper = shadowOf(callbackThreadLooper);
+    ShadowLooper shadowCallbackLooper = Shadow.extract(callbackThreadLooper);
     // Pause the callback thread so that flush() never completes.
     shadowCallbackLooper.pause();
 
@@ -255,7 +255,7 @@ public class AsynchronousMediaCodecCallbackTest {
     AtomicBoolean flushCompleted = new AtomicBoolean();
     Looper callbackThreadLooper = callbackThread.getLooper();
     Handler callbackHandler = new Handler(callbackThreadLooper);
-    ShadowLooper shadowCallbackLooper = shadowOf(callbackThreadLooper);
+    ShadowLooper shadowCallbackLooper = Shadow.extract(callbackThreadLooper);
     // Pause the callback thread so that flush() never completes.
     shadowCallbackLooper.pause();
 
@@ -294,7 +294,8 @@ public class AsynchronousMediaCodecCallbackTest {
     asynchronousMediaCodecCallback.flush();
     new Handler(callbackThreadLooper).post(() -> flushCompleted.set(true));
     // Progress the callback looper so that flush() completes.
-    shadowOf(callbackThreadLooper).idle();
+    ((org.robolectric.shadows.ShadowLooper) Shadow.extract(callbackThreadLooper)).idle();
+
 
     assertThat(flushCompleted.get()).isTrue();
     assertThat(asynchronousMediaCodecCallback.dequeueOutputBufferIndex(new MediaCodec.BufferInfo()))
@@ -315,7 +316,7 @@ public class AsynchronousMediaCodecCallbackTest {
     asynchronousMediaCodecCallback.flush();
     new Handler(callbackThreadLooper).post(() -> flushCompleted.set(true));
     // Progress the callback looper so that flush() completes.
-    shadowOf(callbackThreadLooper).idle();
+    ((org.robolectric.shadows.ShadowLooper) Shadow.extract(callbackThreadLooper)).idle();
     // Emulate an output buffer is available.
     asynchronousMediaCodecCallback.onOutputBufferAvailable(codec, 2, bufferInfo);
     MediaCodec.BufferInfo outBufferInfo = new MediaCodec.BufferInfo();
@@ -342,7 +343,7 @@ public class AsynchronousMediaCodecCallbackTest {
     asynchronousMediaCodecCallback.flush();
     new Handler(callbackThreadLooper).post(() -> flushCompleted.set(true));
     // Progress the callback looper so that flush() completes.
-    shadowOf(callbackThreadLooper).idle();
+    ((org.robolectric.shadows.ShadowLooper) Shadow.extract(callbackThreadLooper)).idle();
     // Right after flush(), we send an output buffer: the pending output format should be
     // dequeued first.
     asynchronousMediaCodecCallback.onOutputBufferAvailable(codec, /* index= */ 1, outBufferInfo);
@@ -369,7 +370,7 @@ public class AsynchronousMediaCodecCallbackTest {
     asynchronousMediaCodecCallback.flush();
     new Handler(callbackThreadLooper).post(() -> flushCompleted.set(true));
     // Progress the callback looper so that flush() completes.
-    shadowOf(callbackThreadLooper).idle();
+    ((org.robolectric.shadows.ShadowLooper) Shadow.extract(callbackThreadLooper)).idle();
     // The first callback after flush() is a new MediaFormat, it should overwrite the pending
     // format.
     MediaFormat newFormat = new MediaFormat();
@@ -434,7 +435,7 @@ public class AsynchronousMediaCodecCallbackTest {
     asynchronousMediaCodecCallback.flush();
     new Handler(callbackThreadLooper).post(() -> flushCompleted.set(true));
     // Progress the callback looper so that flush() completes.
-    shadowOf(callbackThreadLooper).idle();
+    ((org.robolectric.shadows.ShadowLooper) Shadow.extract(callbackThreadLooper)).idle();
 
     assertThat(flushCompleted.get()).isTrue();
     assertThat(asynchronousMediaCodecCallback.getOutputFormat()).isEqualTo(format);
@@ -445,7 +446,7 @@ public class AsynchronousMediaCodecCallbackTest {
     MediaCodec.BufferInfo outInfo = new MediaCodec.BufferInfo();
     AtomicBoolean flushCompleted = new AtomicBoolean();
     Looper callbackThreadLooper = callbackThread.getLooper();
-    ShadowLooper shadowCallbackLooper = shadowOf(callbackThreadLooper);
+    ShadowLooper shadowCallbackLooper = Shadow.extract(callbackThreadLooper);
     shadowCallbackLooper.pause();
 
     asynchronousMediaCodecCallback.onOutputFormatChanged(codec, createMediaFormat("format0"));
@@ -476,7 +477,7 @@ public class AsynchronousMediaCodecCallbackTest {
     MediaCodec.BufferInfo outInfo = new MediaCodec.BufferInfo();
     AtomicInteger flushCompleted = new AtomicInteger();
     Handler callbackThreadHandler = new Handler(callbackThread.getLooper());
-    ShadowLooper shadowCallbackLooper = shadowOf(callbackThread.getLooper());
+    ShadowLooper shadowCallbackLooper = Shadow.extract(callbackThread.getLooper());
     shadowCallbackLooper.pause();
 
     asynchronousMediaCodecCallback.onOutputFormatChanged(codec, createMediaFormat("format0"));
@@ -505,7 +506,7 @@ public class AsynchronousMediaCodecCallbackTest {
   public void flush_withPendingError_doesntResetError() throws Exception {
     AtomicBoolean flushCompleted = new AtomicBoolean();
     Looper callbackThreadLooper = callbackThread.getLooper();
-    ShadowLooper shadowCallbackLooper = shadowOf(callbackThreadLooper);
+    ShadowLooper shadowCallbackLooper = Shadow.extract(callbackThreadLooper);
 
     MediaCodec.CodecException expectedException = createCodecException();
     asynchronousMediaCodecCallback.onError(codec, expectedException);

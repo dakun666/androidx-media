@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 @NonNullApi
-@OptIn(markerClass = UnstableApi.class)
+//@OptIn(markerClass = UnstableApi.class)
 package androidx.media3.demo.transformer;
 
 import androidx.annotation.OptIn;

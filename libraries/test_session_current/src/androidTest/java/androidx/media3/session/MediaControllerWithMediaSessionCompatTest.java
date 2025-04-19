@@ -151,7 +151,8 @@ public class MediaControllerWithMediaSessionCompatTest {
                 PlaybackStateCompat.STATE_PAUSED,
                 /* position= */ 10_000L,
                 /* playbackSpeed= */ 1.0f)
-            .setActions(PlaybackStateCompat.ACTION_SET_PLAYBACK_SPEED)
+//            .setActions(PlaybackStateCompat.ACTION_SET_PLAYBACK_SPEED)
+            .setActions(1 << 22)
             .build();
     session.setPlaybackState(playbackStateCompat);
     MediaController controller = controllerTestRule.createController(session.getSessionToken());

@@ -200,16 +200,16 @@ public class MediaStyleNotificationHelper {
       if (actionsToShowInCompact != null) {
         style.setShowActionsInCompactView(actionsToShowInCompact);
       }
-      if (Util.SDK_INT >= 34 && remoteDeviceName != null) {
-        Api34Impl.setRemotePlaybackInfo(
-            style, remoteDeviceName, remoteDeviceIconRes, remoteDeviceIntent);
-        builder.getBuilder().setStyle(style);
-      } else {
+//      if (Util.SDK_INT >= 34 && remoteDeviceName != null) {
+//        Api34Impl.setRemotePlaybackInfo(
+//            style, remoteDeviceName, remoteDeviceIconRes, remoteDeviceIntent);
+//        builder.getBuilder().setStyle(style);
+//      } else {
         builder.getBuilder().setStyle(style);
         Bundle bundle = new Bundle();
         bundle.putBundle(EXTRA_MEDIA3_SESSION, session.getToken().toBundle());
         builder.getBuilder().addExtras(bundle);
-      }
+//      }
     }
 
     /* package */ RemoteViews generateContentView() {
@@ -341,16 +341,16 @@ public class MediaStyleNotificationHelper {
       if (actionsToShowInCompact != null) {
         style.setShowActionsInCompactView(actionsToShowInCompact);
       }
-      if (Util.SDK_INT >= 34 && remoteDeviceName != null) {
-        Api34Impl.setRemotePlaybackInfo(
-            style, remoteDeviceName, remoteDeviceIconRes, remoteDeviceIntent);
-        builder.getBuilder().setStyle(style);
-      } else {
+//      if (Util.SDK_INT >= 34 && remoteDeviceName != null) {
+//        Api34Impl.setRemotePlaybackInfo(
+//            style, remoteDeviceName, remoteDeviceIconRes, remoteDeviceIntent);
+//        builder.getBuilder().setStyle(style);
+//      } else {
         builder.getBuilder().setStyle(style);
         Bundle bundle = new Bundle();
         bundle.putBundle(EXTRA_MEDIA3_SESSION, session.getToken().toBundle());
         builder.getBuilder().addExtras(bundle);
-      }
+//      }
     }
 
     @Override
@@ -458,21 +458,21 @@ public class MediaStyleNotificationHelper {
     }
   }
 
-  @RequiresApi(34)
-  private static class Api34Impl {
-
-    private Api34Impl() {}
-
-    // MEDIA_CONTENT_CONTROL permission is required by setRemotePlaybackInfo
-    @CanIgnoreReturnValue
-    @SuppressLint({"MissingPermission"})
-    public static Notification.MediaStyle setRemotePlaybackInfo(
-        Notification.MediaStyle style,
-        CharSequence remoteDeviceName,
-        @DrawableRes int remoteDeviceIconRes,
-        @Nullable PendingIntent remoteDeviceIntent) {
-      style.setRemotePlaybackInfo(remoteDeviceName, remoteDeviceIconRes, remoteDeviceIntent);
-      return style;
-    }
-  }
+//  @RequiresApi(34)
+//  private static class Api34Impl {
+//
+//    private Api34Impl() {}
+//
+//    // MEDIA_CONTENT_CONTROL permission is required by setRemotePlaybackInfo
+//    @CanIgnoreReturnValue
+//    @SuppressLint({"MissingPermission"})
+//    public static Notification.MediaStyle setRemotePlaybackInfo(
+//        Notification.MediaStyle style,
+//        CharSequence remoteDeviceName,
+//        @DrawableRes int remoteDeviceIconRes,
+//        @Nullable PendingIntent remoteDeviceIntent) {
+//      style.setRemotePlaybackInfo(remoteDeviceName, remoteDeviceIconRes, remoteDeviceIntent);
+//      return style;
+//    }
+//  }
 }

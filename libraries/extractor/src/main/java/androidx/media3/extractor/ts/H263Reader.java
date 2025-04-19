@@ -320,18 +320,6 @@ public final class H263Reader implements ElementaryStreamReader {
 
     private static final byte[] START_CODE = new byte[] {0, 0, 1};
 
-    @Documented
-    @Retention(RetentionPolicy.SOURCE)
-    @Target(TYPE_USE)
-    @IntDef({
-      STATE_SKIP_TO_VISUAL_OBJECT_SEQUENCE_START,
-      STATE_EXPECT_VISUAL_OBJECT_START,
-      STATE_EXPECT_VIDEO_OBJECT_START,
-      STATE_EXPECT_VIDEO_OBJECT_LAYER_START,
-      STATE_WAIT_FOR_VOP_START
-    })
-    private @interface State {}
-
     private static final int STATE_SKIP_TO_VISUAL_OBJECT_SEQUENCE_START = 0;
     private static final int STATE_EXPECT_VISUAL_OBJECT_START = 1;
     private static final int STATE_EXPECT_VIDEO_OBJECT_START = 2;
@@ -339,7 +327,7 @@ public final class H263Reader implements ElementaryStreamReader {
     private static final int STATE_WAIT_FOR_VOP_START = 4;
 
     private boolean isFilling;
-    private @State int state;
+    private int state;
 
     public int length;
     public int volStartPosition;

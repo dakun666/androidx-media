@@ -20,7 +20,17 @@ afterEvaluate {
         publishing {
             repositories {
                 maven {
+                    name = "public"
                     url = findProperty('mavenRepo') ?: "${buildDir}/repo"
+                    Properties properties = new Properties()
+                    properties.load(rootProject.file('local.properties').newDataInputStream())
+                    def codingArtifactsCommonUsername = properties.getProperty('codingArtifactsCommonUsername')
+                    def codingArtifactsCommonPassword = properties.getProperty('codingArtifactsCommonPassword')
+
+                    credentials {
+                        username = codingArtifactsCommonUsername
+                        password = codingArtifactsCommonPassword
+                    }
                 }
             }
             publications {

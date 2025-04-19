@@ -23,7 +23,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.robolectric.Shadows.shadowOf;
 
 import android.content.Context;
 import android.net.Uri;
@@ -58,6 +57,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
+import org.robolectric.shadow.api.Shadow;
 
 /** Unit tests for {@link AdsMediaSource}. */
 @RunWith(AndroidJUnit4.class)
@@ -135,7 +135,7 @@ public final class AdsMediaSourceTest {
             mockAdViewProvider);
     adsMediaSource.prepareSource(
         mockMediaSourceCaller, /* mediaTransferListener= */ null, PlayerId.UNSET);
-    shadowOf(Looper.getMainLooper()).idle();
+    ((org.robolectric.shadows.ShadowLooper) Shadow.extract(Looper.getMainLooper())).idle();
     verify(mockAdsLoader)
         .start(
             eq(adsMediaSource),
@@ -147,7 +147,7 @@ public final class AdsMediaSourceTest {
     // Simulate loading a preroll ad.
     AdsLoader.EventListener adsLoaderEventListener = eventListenerArgumentCaptor.getValue();
     adsLoaderEventListener.onAdPlaybackState(AD_PLAYBACK_STATE);
-    shadowOf(Looper.getMainLooper()).idle();
+    ((org.robolectric.shadows.ShadowLooper) Shadow.extract(Looper.getMainLooper())).idle();
   }
 
   @Test
@@ -162,7 +162,7 @@ public final class AdsMediaSourceTest {
             /* windowSequenceNumber= */ 0),
         mock(Allocator.class),
         /* startPositionUs= */ 0);
-    shadowOf(Looper.getMainLooper()).idle();
+    ((org.robolectric.shadows.ShadowLooper) Shadow.extract(Looper.getMainLooper())).idle();
 
     assertThat(prerollAdMediaSource.isPrepared()).isTrue();
     verify(mockMediaSourceCaller)
@@ -185,7 +185,7 @@ public final class AdsMediaSourceTest {
         mock(Allocator.class),
         /* startPositionUs= */ 0);
     prerollAdMediaSource.setNewSourceInfo(PREROLL_AD_TIMELINE);
-    shadowOf(Looper.getMainLooper()).idle();
+    ((org.robolectric.shadows.ShadowLooper) Shadow.extract(Looper.getMainLooper())).idle();
 
     verify(mockMediaSourceCaller)
         .onSourceInfoRefreshed(
@@ -206,7 +206,7 @@ public final class AdsMediaSourceTest {
         mock(Allocator.class),
         /* startPositionUs= */ 0);
     prerollAdMediaSource.setNewSourceInfo(PREROLL_AD_TIMELINE);
-    shadowOf(Looper.getMainLooper()).idle();
+    ((org.robolectric.shadows.ShadowLooper) Shadow.extract(Looper.getMainLooper())).idle();
 
     prerollAdMediaSource.assertMediaPeriodCreated(
         new MediaPeriodId(PREROLL_AD_PERIOD_UID, /* windowSequenceNumber= */ 0));
@@ -215,7 +215,7 @@ public final class AdsMediaSourceTest {
   @Test
   public void createPeriod_forContent_createsChildContentMediaPeriodAndLoadsContentTimeline() {
     contentMediaSource.setNewSourceInfo(CONTENT_TIMELINE);
-    shadowOf(Looper.getMainLooper()).idle();
+    ((org.robolectric.shadows.ShadowLooper) Shadow.extract(Looper.getMainLooper())).idle();
     adsMediaSource.createPeriod(
         new MediaPeriodId(CONTENT_PERIOD_UID, /* windowSequenceNumber= */ 0),
         mock(Allocator.class),
@@ -244,7 +244,7 @@ public final class AdsMediaSourceTest {
             mock(Allocator.class),
             /* startPositionUs= */ 0);
     prerollAdMediaSource.setNewSourceInfo(PREROLL_AD_TIMELINE);
-    shadowOf(Looper.getMainLooper()).idle();
+    ((org.robolectric.shadows.ShadowLooper) Shadow.extract(Looper.getMainLooper())).idle();
     MediaPeriod contentMediaPeriod =
         adsMediaSource.createPeriod(
             new MediaPeriodId(CONTENT_PERIOD_UID, /* windowSequenceNumber= */ 0),
@@ -256,7 +256,7 @@ public final class AdsMediaSourceTest {
 
     adsMediaSource.releasePeriod(contentMediaPeriod);
     adsMediaSource.releaseSource(mockMediaSourceCaller);
-    shadowOf(Looper.getMainLooper()).idle();
+    ((org.robolectric.shadows.ShadowLooper) Shadow.extract(Looper.getMainLooper())).idle();
     prerollAdMediaSource.assertReleased();
     contentMediaSource.assertReleased();
   }

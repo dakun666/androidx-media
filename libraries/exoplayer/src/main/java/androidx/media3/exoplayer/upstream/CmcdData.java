@@ -405,7 +405,7 @@ public final class CmcdData {
         Collections.sort(headerValues);
         httpRequestHeaders.put(headerKey, COMMA_JOINER.join(headerValues));
       }
-      return dataSpec.withAdditionalHeaders(httpRequestHeaders.buildOrThrow());
+      return dataSpec.withAdditionalHeaders(httpRequestHeaders.build());
     } else {
       List<String> keyValuePairs = new ArrayList<>();
       for (Collection<String> values : cmcdDataMap.asMap().values()) {

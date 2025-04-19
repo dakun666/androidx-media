@@ -34,7 +34,7 @@ import androidx.recyclerview.widget.RecyclerView
 /** Helper class that displays and handles custom commands. */
 class CustomCommandsAdapter(
   activity: Activity,
-  private val mediaController: MediaController,
+  private val mediaController: MediaController?,
   packageName: String,
 ) : RecyclerView.Adapter<CustomCommandsAdapter.ViewHolder>() {
   private var commands: List<CommandButton> = emptyList()
@@ -45,7 +45,7 @@ class CustomCommandsAdapter(
     customCommandsList.layoutManager = LinearLayoutManager(activity)
     customCommandsList.setHasFixedSize(true)
     customCommandsList.adapter = this
-    setCommands(mediaController.customLayout)
+    setCommands(mediaController?.customLayout)
   }
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
@@ -64,30 +64,32 @@ class CustomCommandsAdapter(
       holder.icon.setImageDrawable(iconDrawable)
     }
     holder.itemView.setOnClickListener {
-      commandButton.sessionCommand?.let { mediaController.sendCustomCommand(it, Bundle.EMPTY) }
+      commandButton.sessionCommand?.let { mediaController?.sendCustomCommand(it, Bundle.EMPTY) }
     }
   }
 
   override fun getItemCount(): Int = commands.size
 
-  fun setCommands(newCommands: List<CommandButton>) {
-    val diffResult: DiffUtil.DiffResult =
-      DiffUtil.calculateDiff(
-        object : DiffUtil.Callback() {
-          override fun getOldListSize(): Int = commands.size
+  fun setCommands(newCommands: List<CommandButton>?) {
+    if (newCommands != null) {
+      val diffResult: DiffUtil.DiffResult =
+        DiffUtil.calculateDiff(
+          object : DiffUtil.Callback() {
+            override fun getOldListSize(): Int = commands.size
 
-          override fun getNewListSize(): Int = newCommands.size
+            override fun getNewListSize(): Int = newCommands.size
 
-          override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean =
-            commands.size == newCommands.size &&
+            override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean =
+              commands.size == newCommands.size &&
+                      commands[oldItemPosition] == newCommands[newItemPosition]
+
+            override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean =
               commands[oldItemPosition] == newCommands[newItemPosition]
-
-          override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean =
-            commands[oldItemPosition] == newCommands[newItemPosition]
-        }
-      )
-    commands = newCommands
-    diffResult.dispatchUpdatesTo(this)
+          }
+        )
+      commands = newCommands
+      diffResult.dispatchUpdatesTo(this)
+    }
   }
 
   class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

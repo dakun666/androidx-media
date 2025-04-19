@@ -57,7 +57,7 @@ public final class SubtitleView extends FrameLayout {
      *
      * @param cues The cues to display.
      * @param style A {@link CaptionStyleCompat} to use for styling unset properties of cues.
-     * @param defaultTextSize The default font size to apply when {@link Cue#textSize} is {@link
+     * @param defaultTextSize The default fonts size to apply when {@link Cue#textSize} is {@link
      *     Cue#DIMEN_UNSET}.
      * @param defaultTextSizeType The type of {@code defaultTextSize}.
      * @param bottomPaddingFraction The bottom padding to apply when {@link Cue#line} is {@link
@@ -220,7 +220,7 @@ public final class SubtitleView extends FrameLayout {
    * Sets the text size based on {@link CaptioningManager#getFontScale()} if {@link
    * CaptioningManager} is available and enabled.
    *
-   * <p>Otherwise (and always before API level 19) uses a default font scale of 1.0.
+   * <p>Otherwise (and always before API level 19) uses a default fonts scale of 1.0.
    */
   public void setUserDefaultTextSize() {
     setFractionalTextSize(DEFAULT_TEXT_SIZE_FRACTION * getUserCaptionFontScale());
@@ -273,10 +273,10 @@ public final class SubtitleView extends FrameLayout {
   }
 
   /**
-   * Sets whether font sizes embedded within the cues should be applied. Enabled by default. Only
+   * Sets whether fonts sizes embedded within the cues should be applied. Enabled by default. Only
    * takes effect if {@link SubtitleView#setApplyEmbeddedStyles} is set to true.
    *
-   * @param applyEmbeddedFontSizes Whether font sizes embedded within the cues should be applied.
+   * @param applyEmbeddedFontSizes Whether fonts sizes embedded within the cues should be applied.
    */
   public void setApplyEmbeddedFontSizes(boolean applyEmbeddedFontSizes) {
     this.applyEmbeddedFontSizes = applyEmbeddedFontSizes;

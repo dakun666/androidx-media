@@ -25,7 +25,6 @@ import static java.lang.Math.abs;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.robolectric.Shadows.shadowOf;
 
 import android.content.Context;
 import android.net.Uri;
@@ -73,6 +72,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.robolectric.shadow.api.Shadow;
 
 /** Unit test for {@link DefaultPreloadManager}. */
 @RunWith(AndroidJUnit4.class)
@@ -209,7 +209,7 @@ public class DefaultPreloadManagerTest {
     preloadManager.add(mediaItem2, /* rankingData= */ 2);
 
     preloadManager.invalidate();
-    shadowOf(preloadThread.getLooper()).idle();
+    ((org.robolectric.shadows.ShadowLooper) Shadow.extract(preloadThread.getLooper())).idle();
     runMainLooperUntil(() -> preloadManagerListener.onCompletedMediaItemRecords.size() == 3);
 
     assertThat(targetPreloadStatusControlCallStates).containsExactly(0, 1, 2).inOrder();
@@ -270,7 +270,7 @@ public class DefaultPreloadManagerTest {
     currentPlayingItemIndex.set(2);
 
     preloadManager.invalidate();
-    shadowOf(preloadThread.getLooper()).idle();
+    ((org.robolectric.shadows.ShadowLooper) Shadow.extract(preloadThread.getLooper())).idle();
     runMainLooperUntil(() -> preloadManagerListener.onCompletedMediaItemRecords.size() == 3);
 
     assertThat(targetPreloadStatusControlCallStates).containsExactly(2, 1, 0).inOrder();
@@ -323,7 +323,7 @@ public class DefaultPreloadManagerTest {
         PlayerId.UNSET);
     wrappedMediaSource0.setAllowPreparation(true);
     wrappedMediaSource1.setAllowPreparation(true);
-    shadowOf(preloadThread.getLooper()).idle();
+    ((org.robolectric.shadows.ShadowLooper) Shadow.extract(preloadThread.getLooper())).idle();
     runMainLooperUntil(() -> preloadManagerListener.onCompletedMediaItemRecords.size() == 1);
 
     assertThat(targetPreloadStatusControlCallStates).containsExactly(0, 1).inOrder();
@@ -372,7 +372,7 @@ public class DefaultPreloadManagerTest {
 
     preloadManager.invalidate();
     wrappedMediaSource0.setAllowPreparation(true);
-    shadowOf(preloadThread.getLooper()).idle();
+    ((org.robolectric.shadows.ShadowLooper) Shadow.extract(preloadThread.getLooper())).idle();
     runMainLooperUntil(() -> preloadManagerListener.onCompletedMediaItemRecords.size() == 1);
     assertThat(targetPreloadStatusControlCallStates).containsExactly(0, 1).inOrder();
     assertThat(preloadManagerListener.onCompletedMediaItemRecords).containsExactly(mediaItem0);
@@ -389,7 +389,7 @@ public class DefaultPreloadManagerTest {
     // preloadManagerListener.onCompletedMediaItemRecords.
     wrappedMediaSource1.setAllowPreparation(true);
     wrappedMediaSource2.setAllowPreparation(true);
-    shadowOf(preloadThread.getLooper()).idle();
+    ((org.robolectric.shadows.ShadowLooper) Shadow.extract(preloadThread.getLooper())).idle();
     runMainLooperUntil(() -> preloadManagerListener.onCompletedMediaItemRecords.size() == 3);
     assertThat(targetPreloadStatusControlCallStates).containsExactly(2, 1, 0).inOrder();
     assertThat(preloadManagerListener.onCompletedMediaItemRecords)
@@ -438,7 +438,7 @@ public class DefaultPreloadManagerTest {
     preloadManager.add(mediaItem1, /* rankingData= */ 1);
 
     preloadManager.invalidate();
-    shadowOf(preloadThread.getLooper()).idle();
+    ((org.robolectric.shadows.ShadowLooper) Shadow.extract(preloadThread.getLooper())).idle();
     runMainLooperUntil(() -> preloadManagerListener.onCompletedMediaItemRecords.size() == 1);
 
     assertThat(targetPreloadStatusControlCallStates).containsExactly(0, 1);
@@ -522,7 +522,7 @@ public class DefaultPreloadManagerTest {
     preloadManager.add(mediaItem1, /* rankingData= */ 1);
 
     preloadManager.invalidate();
-    shadowOf(preloadThread.getLooper()).idle();
+    ((org.robolectric.shadows.ShadowLooper) Shadow.extract(preloadThread.getLooper())).idle();
     runMainLooperUntil(() -> preloadManagerListener.onCompletedMediaItemRecords.size() == 1);
 
     assertThat(targetPreloadStatusControlCallStates).containsExactly(0, 1).inOrder();
@@ -694,11 +694,11 @@ public class DefaultPreloadManagerTest {
             });
     preloadManager.add(mediaItem1, /* rankingData= */ 1);
     preloadManager.invalidate();
-    shadowOf(Looper.getMainLooper()).idle();
+    ((org.robolectric.shadows.ShadowLooper) Shadow.extract(Looper.getMainLooper())).idle();
 
     boolean mediaItem1Removed = preloadManager.remove(mediaItem1);
     boolean mediaItem2Removed = preloadManager.remove(mediaItem2);
-    shadowOf(Looper.getMainLooper()).idle();
+    ((org.robolectric.shadows.ShadowLooper) Shadow.extract(Looper.getMainLooper())).idle();
 
     assertThat(mediaItem1Removed).isTrue();
     assertThat(mediaItem2Removed).isFalse();
@@ -742,7 +742,7 @@ public class DefaultPreloadManagerTest {
             });
     preloadManager.add(mediaItem1, /* rankingData= */ 1);
     preloadManager.invalidate();
-    shadowOf(Looper.getMainLooper()).idle();
+    ((org.robolectric.shadows.ShadowLooper) Shadow.extract(Looper.getMainLooper())).idle();
     MediaSource mediaSource1 = preloadManager.getMediaSource(mediaItem1);
     DefaultMediaSourceFactory defaultMediaSourceFactory =
         new DefaultMediaSourceFactory((Context) ApplicationProvider.getApplicationContext());
@@ -752,7 +752,7 @@ public class DefaultPreloadManagerTest {
     boolean mediaSource1Removed = preloadManager.remove(mediaSource1);
     boolean mediaSource2Removed = preloadManager.remove(mediaSource2);
     boolean mediaSource3Removed = preloadManager.remove(mediaSource3);
-    shadowOf(Looper.getMainLooper()).idle();
+    ((org.robolectric.shadows.ShadowLooper) Shadow.extract(Looper.getMainLooper())).idle();
 
     assertThat(mediaSource1Removed).isTrue();
     assertThat(mediaSource2Removed).isFalse();
@@ -817,10 +817,10 @@ public class DefaultPreloadManagerTest {
     preloadManager.add(mediaItem1, /* rankingData= */ 1);
     preloadManager.add(mediaItem2, /* rankingData= */ 2);
     preloadManager.invalidate();
-    shadowOf(Looper.getMainLooper()).idle();
+    ((org.robolectric.shadows.ShadowLooper) Shadow.extract(Looper.getMainLooper())).idle();
 
     preloadManager.reset();
-    shadowOf(Looper.getMainLooper()).idle();
+    ((org.robolectric.shadows.ShadowLooper) Shadow.extract(Looper.getMainLooper())).idle();
 
     assertThat(preloadManager.getSourceCount()).isEqualTo(0);
     assertThat(internalSourceToReleaseReferenceByMediaId).containsExactly("mediaId1", "mediaId2");
@@ -887,11 +887,11 @@ public class DefaultPreloadManagerTest {
     preloadManager.add(mediaItem1, /* rankingData= */ 1);
     preloadManager.add(mediaItem2, /* rankingData= */ 2);
     preloadManager.invalidate();
-    shadowOf(preloadThread.getLooper()).idle();
-    shadowOf(Looper.getMainLooper()).idle();
+    ((org.robolectric.shadows.ShadowLooper) Shadow.extract(preloadThread.getLooper())).idle();
+    ((org.robolectric.shadows.ShadowLooper) Shadow.extract(Looper.getMainLooper())).idle();
 
     preloadManager.release();
-    shadowOf(preloadThread.getLooper()).idle();
+    ((org.robolectric.shadows.ShadowLooper) Shadow.extract(preloadThread.getLooper())).idle();
 
     assertThat(preloadManager.getSourceCount()).isEqualTo(0);
     assertThat(internalSourceToReleaseReferenceByMediaId).containsExactly("mediaId1", "mediaId2");

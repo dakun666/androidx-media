@@ -35,22 +35,22 @@ import androidx.media3.common.ThumbRating
 import androidx.media3.session.MediaController
 
 /** Helper class to manage displaying and setting different kinds of media ratings. */
-class RatingHelper(private val rootView: ViewGroup, private val mediaController: MediaController) {
+class RatingHelper(private val rootView: ViewGroup, private val mediaController: MediaController?) {
   private var ratingUiHelper: RatingUiHelper?
   init {
-    ratingUiHelper = ratingUiHelperFor(rootView, mediaController.mediaMetadata)
+    ratingUiHelper = ratingUiHelperFor(rootView, mediaController?.mediaMetadata)
 
     val listener: Player.Listener =
       object : Player.Listener {
         override fun onMediaMetadataChanged(mediaMetadata: MediaMetadata) =
           updateRating(mediaMetadata)
       }
-    mediaController.addListener(listener)
-    updateRating(mediaController.mediaMetadata)
+    mediaController?.addListener(listener)
+    updateRating(mediaController?.mediaMetadata)
   }
 
-  fun updateRating(mediaMetadata: MediaMetadata) {
-    val rating: Rating? = mediaMetadata.userRating ?: mediaMetadata.overallRating
+  fun updateRating(mediaMetadata: MediaMetadata?) {
+    val rating: Rating? = mediaMetadata?.userRating ?: mediaMetadata?.overallRating
     if (rating != null) {
       if (ratingUiHelper == null) {
         ratingUiHelper = ratingUiHelperFor(rootView, mediaMetadata)
@@ -63,9 +63,9 @@ class RatingHelper(private val rootView: ViewGroup, private val mediaController:
 
   private fun ratingUiHelperFor(
     viewGroup: ViewGroup,
-    mediaMetadata: MediaMetadata
+    mediaMetadata: MediaMetadata?
   ): RatingUiHelper? {
-    val rating: Rating? = mediaMetadata.userRating ?: mediaMetadata.overallRating
+    val rating: Rating? = mediaMetadata?.userRating ?: mediaMetadata?.overallRating
     viewGroup.visibility = View.VISIBLE
     return when (rating) {
       is ThumbRating -> RatingUiHelper.Thumbs(viewGroup, mediaController)
@@ -92,7 +92,7 @@ class RatingHelper(private val rootView: ViewGroup, private val mediaController:
 @SuppressWarnings("FutureReturnValueIgnored")
 private abstract class RatingUiHelper(
   private val rootView: ViewGroup,
-  mediaController: MediaController
+  mediaController: MediaController?
 ) {
   private var currentRating: Rating = unrated()
 
@@ -104,11 +104,11 @@ private abstract class RatingUiHelper(
       if (ratingView !is Editable) {
         ratingView.setOnClickListener { view ->
           val newRating: Rating = ratingFor(view.id, currentRating)
-          val mediaItem: MediaItem? = mediaController.currentMediaItem
+          val mediaItem: MediaItem? = mediaController?.currentMediaItem
           if (mediaItem != null && !TextUtils.isEmpty(mediaItem.mediaId)) {
             mediaController.setRating(mediaItem.mediaId, newRating)
           } else {
-            mediaController.setRating(newRating)
+            mediaController?.setRating(newRating)
           }
         }
       }
@@ -144,7 +144,7 @@ private abstract class RatingUiHelper(
     currentRating = rating
   }
 
-  open class Stars3(viewGroup: ViewGroup, controller: MediaController) :
+  open class Stars3(viewGroup: ViewGroup, controller: MediaController?) :
     RatingUiHelper(viewGroup, controller) {
     override fun enabled(viewId: Int, rating: Rating): Boolean {
       if (rating is StarRating) {
@@ -173,7 +173,7 @@ private abstract class RatingUiHelper(
     override fun unrated(): Rating = StarRating(3)
   }
 
-  open class Stars4(viewGroup: ViewGroup, controller: MediaController) :
+  open class Stars4(viewGroup: ViewGroup, controller: MediaController?) :
     Stars3(viewGroup, controller) {
     override fun enabled(viewId: Int, rating: Rating): Boolean {
       if (rating is StarRating && viewId == R.id.rating_star_4) {
@@ -197,7 +197,7 @@ private abstract class RatingUiHelper(
     override fun unrated(): Rating = StarRating(4)
   }
 
-  class Stars5(viewGroup: ViewGroup, controller: MediaController) : Stars4(viewGroup, controller) {
+  class Stars5(viewGroup: ViewGroup, controller: MediaController?) : Stars4(viewGroup, controller) {
     override fun enabled(viewId: Int, rating: Rating): Boolean {
       if (rating is StarRating && viewId == R.id.rating_star_5) {
         return rating.starRating >= 5.0f
@@ -221,7 +221,7 @@ private abstract class RatingUiHelper(
     override fun unrated(): Rating = StarRating(5)
   }
 
-  class Thumbs(viewGroup: ViewGroup, controller: MediaController) :
+  class Thumbs(viewGroup: ViewGroup, controller: MediaController?) :
     RatingUiHelper(viewGroup, controller) {
     override fun enabled(viewId: Int, rating: Rating): Boolean {
       if (rating is ThumbRating) {
@@ -249,7 +249,7 @@ private abstract class RatingUiHelper(
     private fun isThumbDown(rating: ThumbRating): Boolean = rating.isRated && !rating.isThumbsUp
   }
 
-  class Heart(viewGroup: ViewGroup, controller: MediaController) :
+  class Heart(viewGroup: ViewGroup, controller: MediaController?) :
     RatingUiHelper(viewGroup, controller) {
     override fun enabled(viewId: Int, rating: Rating): Boolean =
       rating is HeartRating && rating.isHeart
@@ -262,7 +262,7 @@ private abstract class RatingUiHelper(
     override fun unrated(): Rating = HeartRating()
   }
 
-  class Percentage(viewGroup: ViewGroup, controller: MediaController) :
+  class Percentage(viewGroup: ViewGroup, controller: MediaController?) :
     RatingUiHelper(viewGroup, controller) {
     private val percentageEditText: EditText = viewGroup.findViewById(R.id.rating_percentage)
 

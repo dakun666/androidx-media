@@ -161,17 +161,19 @@ public class EncoderCapabilityAnalysisTest {
 
         capabilities.put(
             "supports_hdr_editing",
-            Util.SDK_INT >= 33
-                && EncoderUtil.isFeatureSupported(
-                    encoderInfo, mimeType, MediaCodecInfo.CodecCapabilities.FEATURE_HdrEditing));
+//            Util.SDK_INT >= 33
+//                && EncoderUtil.isFeatureSupported(
+//                    encoderInfo, mimeType, MediaCodecInfo.CodecCapabilities.FEATURE_HdrEditing));
+              false);
 
         capabilities.put(
             "supports_encoding_statistics",
-            Util.SDK_INT >= 33
-                && EncoderUtil.isFeatureSupported(
-                    encoderInfo,
-                    mimeType,
-                    MediaCodecInfo.CodecCapabilities.FEATURE_EncodingStatistics));
+//            Util.SDK_INT >= 33
+//                && EncoderUtil.isFeatureSupported(
+//                    encoderInfo,
+//                    mimeType,
+//                    MediaCodecInfo.CodecCapabilities.FEATURE_EncodingStatistics));
+              false);
 
         encoderCapabilitiesForMimeType.add(capabilities);
       }

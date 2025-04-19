@@ -1285,13 +1285,13 @@ public class MediaCodecVideoRenderer extends MediaCodecRenderer
 
   @Override
   protected int getCodecBufferFlags(DecoderInputBuffer buffer) {
-    if (Util.SDK_INT >= 34 && tunneling && isBufferBeforeStartTime(buffer)) {
+//    if (Util.SDK_INT >= 34 && tunneling && isBufferBeforeStartTime(buffer)) {
       // The buffer likely needs to be dropped because its timestamp is less than the start time.
       // We can't decide to do this after decoding because we won't get the buffer back from the
       // codec in tunneling mode. This may not work perfectly, e.g. when the codec is doing frame
       // rate conversion, but it's still better than not dropping the buffers at all.
-      return MediaCodec.BUFFER_FLAG_DECODE_ONLY;
-    }
+//      return MediaCodec.BUFFER_FLAG_DECODE_ONLY;
+//    }
     return 0;
   }
 
@@ -1884,11 +1884,11 @@ public class MediaCodecVideoRenderer extends MediaCodecRenderer
       // If codec is null, then the importance will be set when initializing the codec.
       return;
     }
-    if (Util.SDK_INT >= 35) {
-      Bundle codecParameters = new Bundle();
-      codecParameters.putInt(MediaFormat.KEY_IMPORTANCE, max(0, -rendererPriority));
-      codec.setParameters(codecParameters);
-    }
+//    if (Util.SDK_INT >= 35) {
+//      Bundle codecParameters = new Bundle();
+//      codecParameters.putInt(MediaFormat.KEY_IMPORTANCE, max(0, -rendererPriority));
+//      codec.setParameters(codecParameters);
+//    }
   }
 
   private void maybeNotifyRenderedFirstFrame() {
@@ -1952,8 +1952,8 @@ public class MediaCodecVideoRenderer extends MediaCodecRenderer
   private void setOutputSurface(MediaCodecAdapter codec, @Nullable Surface surface) {
     if (Util.SDK_INT >= 23 && surface != null) {
       setOutputSurfaceV23(codec, surface);
-    } else if (Util.SDK_INT >= 35) {
-      detachOutputSurfaceV35(codec);
+//    } else if (Util.SDK_INT >= 35) {
+//      detachOutputSurfaceV35(codec);
     } else {
       throw new IllegalStateException();
     }
@@ -1964,10 +1964,10 @@ public class MediaCodecVideoRenderer extends MediaCodecRenderer
     codec.setOutputSurface(surface);
   }
 
-  @RequiresApi(35)
-  protected void detachOutputSurfaceV35(MediaCodecAdapter codec) {
-    codec.detachOutputSurface();
-  }
+//  @RequiresApi(35)
+//  protected void detachOutputSurfaceV35(MediaCodecAdapter codec) {
+//    codec.detachOutputSurface();
+//  }
 
   /**
    * Returns the framework {@link MediaFormat} that should be used to configure the decoder.
@@ -2030,9 +2030,9 @@ public class MediaCodecVideoRenderer extends MediaCodecRenderer
       mediaFormat.setFeatureEnabled(CodecCapabilities.FEATURE_TunneledPlayback, true);
       mediaFormat.setInteger(MediaFormat.KEY_AUDIO_SESSION_ID, tunnelingAudioSessionId);
     }
-    if (Util.SDK_INT >= 35) {
-      mediaFormat.setInteger(MediaFormat.KEY_IMPORTANCE, max(0, -rendererPriority));
-    }
+//    if (Util.SDK_INT >= 35) {
+//      mediaFormat.setInteger(MediaFormat.KEY_IMPORTANCE, max(0, -rendererPriority));
+//    }
     return mediaFormat;
   }
 

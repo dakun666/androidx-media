@@ -239,7 +239,7 @@ public final class ExoPlayerAssetLoader implements AssetLoader {
     if (videoDecoderName != null) {
       decoderNamesByTrackType.put(C.TRACK_TYPE_VIDEO, videoDecoderName);
     }
-    return decoderNamesByTrackType.buildOrThrow();
+    return decoderNamesByTrackType.build();
   }
 
   @Override

@@ -559,7 +559,8 @@ public final class DefaultVideoFrameProcessor implements VideoFrameProcessor {
     }
     if (ColorInfo.isTransferHdr(outputColorInfo)) {
       checkArgument(
-          Util.SDK_INT >= 34 && inputBitmap.hasGainmap(),
+//          Util.SDK_INT >= 34 && inputBitmap.hasGainmap(),
+          false,
           "VideoFrameProcessor configured for HDR output, but either received SDR input, or is on"
               + " an API level that doesn't support gainmaps. SDR to HDR tonemapping is not"
               + " supported.");
